@@ -1,0 +1,14 @@
+/.angular/
+/node_modules/
+/Test/
+/jusgado/
+/jusgado
+/userAdmin
+/userAdmin/
+/target/
+/.metadata/
+/.settings/
+/RemoteSystemsTempFiles/
+.classpath
+..classpath
+.project

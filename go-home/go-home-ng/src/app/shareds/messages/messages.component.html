@@ -1,0 +1,33 @@
+<div class="container">
+
+<!--     <div *ngFor="let m of messagesService.listMessages"
+    class="alert alert alert-dismissible msg-{{m.msgTipo}} fade show" role="alert">
+    {{ m.msgAlerta }}
+    <button type="button" class="close" aria-label="Close" (click)="closeAlert(m)">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+ -->
+
+ <div class="inner">
+    <div class="row">
+
+        
+            <div *ngFor="let m of messagesService.listMessages"  class="alert alert-{{m.msgTipo}} alert-dismissible" role="alert">
+                <strong></strong>   {{ m.msgAlerta }}   
+                <button type="button" class="close" aria-label="Close" (click)="closeAlert(m)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+       
+
+    
+     </div>
+
+ </div>
+
+
+
+
+
+</div>

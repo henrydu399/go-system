@@ -1,0 +1,88 @@
+
+        <!-- ========== HEADER ========== -->
+        <header>
+          <div class="container">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle mobile_menu_btn" data-toggle="collapse" data-target=".mobile_menu" aria-expanded="false">
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="index.html">
+                    GO-HOME
+                   
+                  </a>
+              </div>
+              <nav id="main_menu" class="mobile_menu navbar-collapse">
+                  <ul class="nav navbar-nav">
+                      <li class="mobile_menu_title" style="display:none;">MENU</li>
+                      <li class="dropdown simple_menu active">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Servicios <b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                              <li><a href="index.html"> Venta de inmuebles</a></li>
+                              <li><a href="index2.html">Arriendo de inmuebles</a></li>
+                              <li><a href="index2.html">Avaluos</a></li>
+
+                          </ul>
+                      </li>
+                      <li class="dropdown simple_menu">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">CALCULADORA <b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                              <li><a href="rooms-list.html">Simulador financiacion de vivienda</a></li>
+                              <li><a href="rooms-grid.html">Calculadora de seguros</a></li>
+                              <li><a href="rooms-block.html">Precio M2</a></li>
+                              <li><a href="room.html">Conoce el valor del inmueble</a></li>
+                          </ul>
+                      </li>
+  
+                      <li class="dropdown simple_menu"><a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">GUIAS <b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                              <li><a href="typography.html">Guia de arriendo</a></li>
+                              <li><a href="buttons.html">Guia de propiedad horizontal</a></li>
+                              <li><a href="icons.html">Guia de compra y venta </a></li>
+                              <li><a href="icons.html">Guia de credito </a></li>
+                              <li><a href="icons.html">Directorio</a></li>
+                          </ul>
+                      </li>
+
+                      <li *ngIf="menuService.getPrivilegios()==null" class="dropdown simple_menu"><a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">USUARIO <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a [routerLink]="'/register'">Registro</a></li>
+                            <li><a [routerLink]="'/login'">Login</a></li>          
+                        </ul>
+                    </li>
+                    <li *ngIf="menuService.getPrivilegios()!== null && menuService.getPrivilegios()?.length!==0" class="dropdown simple_menu"><a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true"> <i class="fa fa-user-circle" aria-hidden="true"></i> {{authService.getUser()?.email}} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li *ngFor="let item of menuService.getPrivilegios()">
+                                <a [routerLink]="item.privilegio.url" (click)="navbarService.changeTitle(item.privilegio.nombre)"> 
+                                <i [ngClass]="item.privilegio.iconoClass" aria-hidden="true"></i> <strong>&nbsp; {{item.privilegio.nombre}}</strong>
+                                </a>
+
+
+                                <ul>
+                                    
+                                    <li *ngFor="let subItem of item.listPrivilegios">
+                                        <a [routerLink]="subItem.privilegio.url" (click)="navbarService.changeTitle(item.privilegio.nombre)">  
+                                            &nbsp;  <i [ngClass]="subItem.privilegio.iconoClass" aria-hidden="true"></i> &nbsp;{{subItem.privilegio.nombre}}
+                                        </a>
+                                    </li>
+                                  
+                                </ul>
+
+                                
+
+                            </li>   
+                            
+                            <li><a (click)="authService.logout()"> <i class="fa fa-sign-out"></i> Salir</a></li>  
+                            
+                        </ul>
+                    </li>
+
+
+                      <li class="menu_button">
+                          <a href="booking-form.html" class="button  btn_yellow"><i class="fa fa-calendar"></i>Publica tu inmueble</a>
+                      </li>
+                  </ul>
+              </nav>
+          </div>
+      </header>

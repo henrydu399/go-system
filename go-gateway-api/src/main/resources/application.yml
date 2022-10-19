@@ -1,0 +1,44 @@
+server:
+ port: 8080
+eureka: 
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.1.150:8081/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 10
+logging:
+  file:
+    name: ./log/logInfo.log
+spring:
+  application:
+    name: gateway         
+
+  cloud:
+    gateway:
+      default-filters: 
+      - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+         '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"   
+      routes:
+       - id: adminUsersApi
+         uri: lb://adminUsersApi
+         predicates:
+         - Path=/adminUsers/**
+       - id: parametricasApi
+         uri: lb://parametricasApi
+         predicates:
+         - Path=/parametricas/**
+       - id: goHomeApi
+         uri: lb://goHomeApi
+         predicates:
+         - Path=/home/**
+       - id: goEmailApi
+         uri: lb://goEmailApi
+         predicates:
+         - Path=/email/**
+       
+          

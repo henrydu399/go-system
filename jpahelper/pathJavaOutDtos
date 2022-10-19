@@ -1,0 +1,16 @@
+usermanager.dtos
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UUserPKDTO   
+private  packageusermanager.entitys;prfijoPropertieClassNameDtos;
+private  importjava.io.Serializable;prfijoPropertieClassNameDtos;
+private  importjavax.persistence.*;prfijoPropertieClassNameDtos;
+private  classUUserPKimplementsSerializable{prfijoPropertieClassNameDtos;
+private int 	getUId(){prfijoPropertieClassNameDtos;
+private int 	voidsetUId(uId){prfijoPropertieClassNameDtos;
+private byte 	getUIdTipoIdentificacion(){prfijoPropertieClassNameDtos;
+private byte 	voidsetUIdTipoIdentificacion(uIdTipoIdentificacion){prfijoPropertieClassNameDtos;
+private  	StringgetUNumeroIdentificacion(){prfijoPropertieClassNameDtos;
+private  	voidsetUNumeroIdentificacion(StringuNumeroIdentificacion){prfijoPropertieClassNameDtos;

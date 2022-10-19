@@ -1,0 +1,234 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<!-- ========== HORIZONTAL BOOKING FORM ========== -->
+<div class="hbf">
+    <div class="container">
+        <div class="inner">
+            <form id="booking-form">
+
+
+
+                <div class="col-md-3 md_p5">
+                    <div class="form-group">
+                        <label>Departamento
+                            <a href="#" title="Departamento" data-toggle="popover" data-placement="top"
+                                data-trigger="hover"
+                                data-content="Por favor selecciones el Departamento de preferencia"> <i
+                                    class="label_icon_info fa fa-info-circle"></i></a>
+                        </label>
+                        <div class="form_select">
+                            <select id="departamento" name="departamento" class="form-control" title="Seleccione el departamento"
+                            data-header="Seleccione el departamento" data-live-search="true" data-size="5"
+                            tabindex="-98">
+                            <option class="bs-title-option" value="0">Seleccione el departamento</option>
+                            <option *ngFor="let item of listDepartamentos" value="item.id">{{item.nombre}}</option>
+
+                        </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3 md_p5">
+                    <div class="form-group">
+                        <label>Ciudad
+                            <a href="#" title="Ciudad" data-toggle="popover" data-placement="top" data-trigger="hover"
+                                data-content="Por fabor selecciones la ciudad de preferencia"> <i
+                                    class="label_icon_info fa fa-info-circle"></i></a>
+                        </label>
+                        <div class="form_select">
+                            <select id="ciudad" name="ciudad" class="form-control" title="Seleccione la ciudad"
+                            data-header="Seleccione la ciudad" data-live-search="true" data-size="5"
+                            tabindex="-98">
+                            <option class="bs-title-option" value="0">Seleccione la ciudad</option>
+                            <option *ngFor="let item of listCiudades" value="item.id.id">{{item.nombre}}</option>
+
+                        </select>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="col-md-3 md_p5">
+
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <div class="form_select" >
+                            
+                                <select id="barrio" name="barrio" class="form-control" title="Seleccione su barrio"
+                                    data-header="Seleccione su barrio" data-live-search="true" data-size="5"
+                                    tabindex="-98">
+                                    <option class="bs-title-option" value="0">Seleccione el barrio</option>
+                                    <option *ngFor="let item of listBarrios" value="item.id.id">{{item.nombre}}</option>
+
+                                </select>
+                            
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <div class="col-md-2 md_pl5">
+                    <button type="submit" class="button  btn_blue btn_full">BUSCAR INMUEBLE</button>
+                    <div class="advanced_form_link"> <a href="booking-form.html"> Busqueda avanzada </a> </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<section id="about_rooms">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div id="about">
+                    <div class="main_title mt_wave a_left">
+                        <h2>ABOUT HOTEL ZANTE</h2>
+                    </div>
+                    <p class="main_description a_left">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
+                        diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+                        ad minim veniam, quis nostrud exerci tation ullamcorper suscipit. Lorem ipsum dolor sit amet,
+                        consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna
+                        aliquam erat volutpat.</p>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div id="rooms">
+                    <div class="main_title mt_wave a_left">
+                        <h2>MEJORES OFERTAS! EN ARRIENDOS</h2>
+                    </div>
+                    <p class="main_description">Descubre esta semana las mejores ofertas para arrendar.</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <article class="room">
+                                <figure>
+                                    <div class="price">€89 <span>/ night</span></div>
+                                    <a class="hover_effect h_blue h_link" href="room.html">
+                                        <img src="assets/images/rooms/single-room.jpg" class="img-responsive"
+                                            alt="Image">
+                                    </a>
+                                    <figcaption>
+                                        <h5><a href="room.html">Single Room</a></h5>
+                                        <span class="f_right"><a href="rooms-list.html"
+                                                class="button btn_xs btn_blue">VIEW DETAILS</a></span>
+                                    </figcaption>
+                                </figure>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="room">
+                                <figure>
+                                    <div class="price">€129 <span>/ night</span></div>
+                                    <a class="hover_effect h_blue h_link" href="room.html">
+                                        <img src="assets/images/rooms/double-room.jpg" class="img-responsive"
+                                            alt="Image">
+                                    </a>
+                                    <figcaption>
+                                        <h5><a href="room.html">Double Room</a></h5>
+                                        <span class="f_right"><a href="room.html" class="button btn_xs btn_blue">VIEW
+                                                DETAILS</a></span>
+                                    </figcaption>
+                                </figure>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="room">
+                                <figure>
+                                    <div class="price"> € 189 <span>/ night</span></div>
+                                    <a class="hover_effect h_blue h_link" href="room.html">
+                                        <img src="assets/images/rooms/deluxe-room.jpg" class="img-responsive"
+                                            alt="Image">
+                                    </a>
+                                    <figcaption>
+                                        <h5><a href="room.html">Delux Room</a></h5>
+                                        <span class="f_right"><a href="room.html" class="button btn_xs btn_blue">VIEW
+                                                DETAILS</a></span>
+                                    </figcaption>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div id="rooms">
+                    <div class="main_title mt_wave a_left">
+                        <h2>MEJORES OFERTAS! EN VENTAS</h2>
+                    </div>
+                    <p class="main_description">Descubre esta semana las mejores ofertas para arrendar.</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <article class="room">
+                                <figure>
+                                    <div class="price">€89 <span>/ night</span></div>
+                                    <a class="hover_effect h_blue h_link" href="room.html">
+                                        <img src="assets/images/rooms/single-room.jpg" class="img-responsive"
+                                            alt="Image">
+                                    </a>
+                                    <figcaption>
+                                        <h5><a href="room.html">Single Room</a></h5>
+                                        <span class="f_right"><a href="rooms-list.html"
+                                                class="button btn_xs btn_blue">VIEW DETAILS</a></span>
+                                    </figcaption>
+                                </figure>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="room">
+                                <figure>
+                                    <div class="price">€129 <span>/ night</span></div>
+                                    <a class="hover_effect h_blue h_link" href="room.html">
+                                        <img src="assets/images/rooms/double-room.jpg" class="img-responsive"
+                                            alt="Image">
+                                    </a>
+                                    <figcaption>
+                                        <h5><a href="room.html">Double Room</a></h5>
+                                        <span class="f_right"><a href="room.html" class="button btn_xs btn_blue">VIEW
+                                                DETAILS</a></span>
+                                    </figcaption>
+                                </figure>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="room">
+                                <figure>
+                                    <div class="price"> € 189 <span>/ night</span></div>
+                                    <a class="hover_effect h_blue h_link" href="room.html">
+                                        <img src="assets/images/rooms/deluxe-room.jpg" class="img-responsive"
+                                            alt="Image">
+                                    </a>
+                                    <figcaption>
+                                        <h5><a href="room.html">Delux Room</a></h5>
+                                        <span class="f_right"><a href="room.html" class="button btn_xs btn_blue">VIEW
+                                                DETAILS</a></span>
+                                    </figcaption>
+                                </figure>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

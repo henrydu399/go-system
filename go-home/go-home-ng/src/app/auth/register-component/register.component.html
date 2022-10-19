@@ -1,0 +1,123 @@
+<main id="contact_page">
+  <div class="container">
+    <div class="row">
+
+
+      <div class="col-md-8">
+        <div class="main_title a_left">
+          <h2>REGISTRO</h2>
+        </div>
+        <form id="contact-form-page" [formGroup]="formRegister" (ngSubmit)="register()">
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6">
+              <div  class="form-group {{isvalidInput('nombres')}} has-feedback">
+                <label class="control-label">Nombres</label>
+                <input type="text" class="form-control " name="nombres" formControlName="nombres"
+                oninput="this.value = this.value.trimStart().replace(/[^a-zA-Z ]/,'')"
+                placeholder="Escribe tus nombres" aria-describedby="inputErrornombres">
+                <span *ngIf="submitted &&  f['nombres']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="false"></span>
+                <span *ngIf="submitted &&  f['nombres']?.errors?.['required']" id="inputErrornombres" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['nombres']?.errors?.['required']" >El campo<strong> nombres </strong> es requerido</label> 
+
+                <label *ngIf="submitted && f['nombres']?.errors?.['minlength'] " class="error invalid-feedback" style="display: inline;">
+                  Caracteres mínimos permitidos son: <strong>5</strong>
+                </label>
+                  
+                <label *ngIf="submitted && f['nombres']?.errors?.['maxlength'] " class="error invalid-feedback" style="display: inline;">
+                  Caracteres Maximos permitidos son:   <strong>60</strong>
+                </label>
+
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6">
+              <div  class="form-group {{isvalidInput('apellidos')}} has-feedback">
+                <label class="control-label">Apellidos</label>
+                <input type="text" class="form-control " name="apellidos" formControlName="apellidos"
+                oninput="this.value = this.value.trimStart().replace(/[^a-zA-Z ]/,'')"
+                placeholder="Escribe tus apellidos" aria-describedby="inputErrorapellidos">
+                <span *ngIf="submitted &&  f['apellidos']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="false"></span>
+                <span *ngIf="submitted &&  f['apellidos']?.errors?.['required']" id="inputErrorapellidos" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['apellidos']?.errors?.['required']" >El campo<strong> Apellidos </strong> es requerido</label> 
+
+                <label *ngIf="submitted && f['apellidos']?.errors?.['minlength'] " class="error invalid-feedback" style="display: inline;">
+                  Caracteres mínimos permitidos son: <strong>5</strong>
+                </label>
+                  
+                <label *ngIf="submitted && f['apellidos']?.errors?.['maxlength'] " class="error invalid-feedback" style="display: inline;">
+                  Caracteres Maximos permitidos son:   <strong>60</strong>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6">
+              <div  class="form-group {{isvalidInput('email')}} has-feedback">
+                <label class="control-label">Email</label>
+                <input type="text" class="form-control " name="email" formControlName="email"
+                placeholder="Escribe tu email" aria-describedby="inputErroremail">
+                <span *ngIf="submitted &&  f['email']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span *ngIf="submitted &&  f['email']?.errors?.['required']" id="inputErroremail" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['email']?.errors?.['required']" >El campo<strong> Email </strong> es requerido</label> 
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6">
+              <div  class="form-group {{isvalidInput('password')}} has-feedback">
+                <label class="control-label">Password</label>
+                <input type="text" class="form-control " name="password" formControlName="password"
+                placeholder="Escribe tu Password" aria-describedby="inputErrorpassword">
+                <span *ngIf="submitted &&  f['password']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span *ngIf="submitted &&  f['password']?.errors?.['required']" id="inputErrorpassword" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['password']?.errors?.['required']" >El campo<strong> password </strong> es requerido</label> 
+              </div>
+            </div>
+
+
+          </div>
+
+
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6">
+              <div  class="form-group {{isvalidInput('passwordtwo')}} has-feedback">
+                <label class="control-label">Re-Password</label>
+                <input type="text" class="form-control " name="passwordtwo" formControlName="passwordtwo"
+                placeholder="Escribe de nuevo tu Password" aria-describedby="inputErrorpasswordtwo">
+                <span *ngIf="submitted &&  f['passwordtwo']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span *ngIf="submitted &&  f['passwordtwo']?.errors?.['required']" id="inputErrorpasswordtwo" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['passwordtwo']?.errors?.['required']" >El campo<strong> password </strong> es requerido</label> 
+              </div>
+            </div>
+           
+
+
+
+
+          </div>
+
+          <div class="form-group col-md-12">
+            <button type="submit" class="button  btn_blue mt40 upper pull-right">
+              <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Registrar
+            </button>
+          </div>
+       
+        
+
+
+          
+        </form>
+      </div>
+
+      <div class="col-md-4">
+
+      </div>
+    </div>
+  </div>
+</main>

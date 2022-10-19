@@ -1,0 +1,6 @@
+NG-ANGULAR
+go-system:4000
+go-home-ng:4001
+go-services:4002
+
+gateway-api:8080

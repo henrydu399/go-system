@@ -1,0 +1,15 @@
+version: "2"
+services: 
+ java:
+  image: administrador-usuarios
+  command: ["java","-jar","administradorUsers.jar","/dev/null"]
+  ports:
+   - 8081:8081
+  privileged: true
+  volumes:
+    - back_dist_logs:/publicador-citas-externo/log
+  environment:
+    - LOGGING_FILE=/publicador-citas-externo/log/app.log
+  restart: always
+volumes:
+  back_dist_logs:
