@@ -13,8 +13,9 @@ public interface UserService extends IEntityDao<Usuario> {
 	 Optional<Usuario>	findByEmail(String email);
 	 
 	 public UsuarioDTO getUserForLogin(Usuario usuario) throws AdministradorUserException ;
+	  
+	 public UsuarioDTO saveUserSystem(UsuarioDTO usuario) throws AdministradorUserException ;
 	 
-	 
-	 public void saveUserSystem(UsuarioDTO usuario) throws AdministradorUserException ;
+	 public void confirmUser(UsuarioDTO usuario) throws AdministradorUserException ;
 
 }

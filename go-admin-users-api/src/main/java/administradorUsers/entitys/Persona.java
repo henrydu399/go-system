@@ -62,7 +62,7 @@ public class Persona implements Serializable {
 	
 	//bi-directional many-to-one association to TipoIdentificacion
 	
-	@JsonIgnore
+	
 	@ManyToOne()
 	@JoinColumn(name="ID_TIPO_IDENTIFICACION" , insertable = false , updatable = false)
 	private TipoIdentificacion tipoIdentificacion;

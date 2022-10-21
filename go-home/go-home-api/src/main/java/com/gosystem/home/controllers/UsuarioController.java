@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gosystem.commons.adminUsers.dto.UsuarioDTO;
+import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.exceptions.HomeException;
 import com.gosystem.commons.utils.UtilGson;
 import com.gosystem.commons.utils.UtilsLogs;
+import com.gosystem.home.client.services.IAdministracionClientUsers;
 import com.gosystem.home.services.IUserService;
 import com.gosystem.home.util.UtilToken;
 
@@ -39,6 +41,9 @@ private Logger logger;
 	
 	@Autowired
 	private IUserService Service;
+	
+	@Autowired
+	private IAdministracionClientUsers administracionClientUsers;
 	
 	@Autowired
 	private UtilToken utilToken;
@@ -189,6 +194,24 @@ private Logger logger;
 		}
 
 	} 	
+	
+	
+	@PostMapping(value = "/confirm/" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> confirmUser(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
+		logger.info(nameApp + " guardar :: INICIO ");
+		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
+		try {
+			this.administracionClientUsers.confirmUser(json);
+			return new ResponseEntity<Object>(null, HttpStatus.CREATED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }catch (Exception e) {
+	    	logger.severe(e.getMessage());
+	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	} 
 	
 	 //=======================================================================
     // ----- PUBLIC  -----

@@ -81,7 +81,10 @@ public class UsuarioMapper {
 					.persona(p)
 					.email(in.getEmail())
 					.movil(in.getMovil())
+					.activo(in.isActivo())
+					.confirmado(in.isConfirmado())
 					.password(in.getPassword())
+					.tokenActivate(in.getTokenActivate())
 					.sistema(in.getSistema())
 					.username(in.getUsername())
 					.listRolesUSuarios(roles)
@@ -106,12 +109,18 @@ public class UsuarioMapper {
 		UsuarioDTO  u= null;
 		try {		
 			if(Objects.nonNull(in.getPersona()) ) {
-				if(Objects.nonNull (in.getPersona().getTipoIdentificacion())) {
-					
+				
+				if(Objects.nonNull (in.getPersona().getTipoIdentificacion())     ) {
 					 t =  TipoIdentificacionDTO.builder()
-							.id(in.getPersona().getTipoIdentificacion().getId())
-							.nombre(  in.getPersona().getTipoIdentificacion().getNombre())
-					         .build();
+								.id(      in.getPersona().getTipoIdentificacion().getId())
+								.nombre(  in.getPersona().getTipoIdentificacion().getNombre())
+						         .build();
+					 
+					}
+				
+				if(Objects.nonNull (in.getPersona())   && Objects.nonNull (in.getPersona().getId())  ) {
+					
+					
 					 
 					 ppk = PersonaPKDTO.builder()
 							 .idTipoIdentificacion(in.getPersona().getId().getIdTipoIdentificacion())
@@ -157,10 +166,13 @@ public class UsuarioMapper {
 					.persona(p)
 					.email(in.getEmail())
 					.movil(in.getMovil())
+					.activo(in.isActivo())
+					.confirmado(in.isConfirmado())
 					.password(in.getPassword())
 					.sistema(in.getSistema())
 					.username(in.getUsername())
 					.listRolesUSuarios(roles)
+					.tokenActivate(in.getTokenActivate())
 					.privilegios(listPrivilegios)
 					.build();		
 

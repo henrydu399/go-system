@@ -14,7 +14,7 @@ public interface IAdministracionClientUsers {
 	
 	void createUser(UsuarioDTO user) throws HomeException;
 	
-	public void savePublic(UsuarioDTO usuario) throws HomeException ;
+	public UsuarioDTO savePublic(UsuarioDTO usuario) throws HomeException ;
 
 	
 	void edithUser(UsuarioDTO user) throws HomeException;
@@ -28,6 +28,8 @@ public interface IAdministracionClientUsers {
 	UsuarioDTO findUserForLogin(UsuarioDTO user) throws HomeException ;
 	
 	List<RolesSistemaDTO>getRolesBySystema (String systemaName) throws HomeException ;
+	
+	void confirmUser(UsuarioDTO usuario) throws HomeException ;
 	
 
 }

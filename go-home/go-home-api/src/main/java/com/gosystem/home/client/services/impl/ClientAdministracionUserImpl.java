@@ -58,7 +58,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	private String pathGetUserForLogin;
 	private String pathGetRolesBySistemaNamen;
 	private String urlGateway;
-	private String pathUserSaveForSystem;
+	private String pathUserConfirm;
 	private String pathUSerFindCustom;
 	
 	
@@ -81,7 +81,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 		this. pathSaveUserPublic = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_PUBLIC);
 		this. pathGetUserForLogin = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GET_USER_FOR_LOGIN);
 		this. pathGetRolesBySistemaNamen = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ROLES_USERS_BY_SISTEMA_NAME);
-		this. pathUserSaveForSystem = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_SAVE_FOR_SYSTEM);
+		this. pathUserConfirm = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_CONFIRM);
 		this. pathUSerFindCustom = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_FIND);
 		
 	
@@ -293,7 +293,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	}
 
 	@Override
-	public void savePublic(UsuarioDTO usuario) throws HomeException {
+	public UsuarioDTO savePublic(UsuarioDTO usuario) throws HomeException {
 		logger.info("METODO : savePublic() -> CREANDO USUARIO.... ");
 		String urlFull = this.urlGateway+ pathSaveUserPublic;
 		logger.info("METODO : savePublic() -> URL : "+urlFull);
@@ -302,15 +302,16 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 			  HttpHeaders headers = new HttpHeaders();
 		      headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
               HttpEntity<UsuarioDTO> request =  new HttpEntity<UsuarioDTO>(usuario, headers);		    
-			  ResponseEntity<String> responseEntityStr = restTemplate. postForEntity(urlFull, request, String.class);
+			  ResponseEntity<UsuarioDTO> responseEntityStr = restTemplate. postForEntity(urlFull, request, UsuarioDTO.class);
 			  logger.info("METODO : savePublic() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
 			  if( responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
 					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
 					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {
 				  logger.info("METODO : savePublic() -> RESPUESTA OK: ");
+				  return responseEntityStr.getBody();
 			  }else {
 				  if( Objects.nonNull(responseEntityStr.getBody())  ) {
-						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,responseEntityStr.getBody() );
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,UtilGson.SerializeObjet( responseEntityStr.getBody() ));
 				  }else {
 						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,ErrorConstantes.ERROR_GENERAL_GUARDANDO );
 				  }
@@ -318,7 +319,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 		}catch (Exception e) {
 			logger.severe(e.getMessage());
 			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
-		}	   
+		}	
 		
 	}
 
@@ -362,6 +363,36 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 			logger.severe(e.getMessage());
 			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
 		}
+	}
+
+	@Override
+	public void confirmUser(UsuarioDTO usuario) throws HomeException {
+		logger.info("METODO : confirmUser() -> CREANDO USUARIO.... ");
+		String urlFull = this.urlGateway+ pathUserConfirm;
+		logger.info("METODO : confirmUser() -> URL : "+urlFull);
+		this.restTemplate  = new RestTemplate();;
+		try {
+			  HttpHeaders headers = new HttpHeaders();
+		      headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+              HttpEntity<UsuarioDTO> request =  new HttpEntity<UsuarioDTO>(usuario, headers);		    
+			  ResponseEntity<String> responseEntityStr = restTemplate. postForEntity(urlFull, request, String.class);
+			  logger.info("METODO : confirmUser() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
+			  if( responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
+					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
+					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {
+				  logger.info("METODO : confirmUser() -> RESPUESTA OK: ");
+			  }else {
+				  if( Objects.nonNull(responseEntityStr.getBody())  ) {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,responseEntityStr.getBody() );
+				  }else {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,ErrorConstantes.ERROR_GENERAL_GUARDANDO );
+				  }
+			  }	  
+		}catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
+		}	  
+		
 	}
 
 }

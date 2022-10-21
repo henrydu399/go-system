@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { lstHeaders } from '../constants/httpConstants';
 import { Departamento } from '../models/Departamento';
+import { Usuario } from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,13 @@ export class UserService {
   public getAllUsuarios(): Observable<any> {
     return this.http.get<any>(environment.getAllUsuarios,{ 'headers': lstHeaders } );
   }
+  
+
+  public confirmUSer(usuario: Usuario): Observable<any> {
+    //let body = JSON.stringify(data).toString();
+    return this.http.post<any>(environment.confirmUser, usuario, { 'headers': lstHeaders });
+  }
+
 
  /*  public getActive(): Observable<any> {
     return this.http.get<any>(environment.urlConciliacionResultado + 'active/');

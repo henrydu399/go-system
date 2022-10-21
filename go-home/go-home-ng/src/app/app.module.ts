@@ -17,6 +17,8 @@ import { AuthModule } from './auth/auth.module';
 import { AuthInterceptor } from './shareds/interceptors/authInterceptos';
 import { HomeComponent } from './pages/home/home.component';
 
+import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,11 +39,16 @@ import { HomeComponent } from './pages/home/home.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxUiLoaderModule,
+    AuthModule,
 
-    AuthModule
+    NgxUiLoaderModule,
+    NgxPaginationModule
 
     
+  ],
+  exports:[
+    NgxUiLoaderModule,
+    NgxPaginationModule
   ],
   providers: [AuthInterceptor],
   bootstrap: [AppComponent]

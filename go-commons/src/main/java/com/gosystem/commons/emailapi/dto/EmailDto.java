@@ -41,6 +41,8 @@ public class EmailDto {
 	
 	private String parametersString;
 	
+	private int intentos;
+	
 	
 	
 	private List<String> destinatareos;

@@ -8,6 +8,8 @@ import { AdminUserComponent } from './user/admin-user/admin-user.component';
 import { CreateUserComponent } from './user/create-user/create-user.component';
 import { EdithUserComponent } from './user/edith-user/edith-user.component';
 import { NavbarComponent } from '../Layers/navbar/navbar.component';
+import { FiltroUsuarioPipe } from '../pipes/filtro-usuario.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -19,7 +21,10 @@ import { NavbarComponent } from '../Layers/navbar/navbar.component';
     AdminUserComponent,
     CreateUserComponent,
     EdithUserComponent,
-    NavbarComponent
+    NavbarComponent,
+
+
+    FiltroUsuarioPipe
   ],
   exports: [
     PagesComponent,
@@ -31,7 +36,9 @@ import { NavbarComponent } from '../Layers/navbar/navbar.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+
     NgxUiLoaderModule,
+    NgxPaginationModule
   ],
   providers: [
   ]

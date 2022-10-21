@@ -10,7 +10,9 @@ public class KeyParametrosConstantes {
 	public static final String PATH_GO_ROLES_USERS_BY_SISTEMA_NAME = "PATH_GO_ROLES_USERS_BY_SISTEMA_NAME";
 	public static final String PATH_GO_ADMIN_USER_SAVE_FOR_SYSTEM = "PATH_GO_ADMIN_USER_SAVE_FOR_SYSTEM";
 	public static final String PATH_GO_ADMIN_USER_FIND = "PATH_GO_ADMIN_USER_FIND";
-	public static final String EMAIL_FROM_GO_HOME = "EMAIL_FROM_GO_HOME";
+	
+	public static final String PATH_GO_ADMIN_USER_CONFIRM = "PATH_GO_ADMIN_USER_CONFIRM";
+	
 	
 	
 	//API EMAIL
@@ -26,8 +28,11 @@ public class KeyParametrosConstantes {
 	
 	
 	
-	
-	
+	//api-externa- send emails
+	public static final String URL_SENDBLUEMAILS = "URL_SENDBLUEMAILS";	
+	public static final String KEY_SENDBLUEMAILS = "KEY_SENDBLUEMAILS";	
+	public static final String EMAIL_FROM_GO_HOME = "EMAIL_FROM_GO_HOME";
+	public static final String NAME_FROM_GO_HOME = "NAME_FROM_GO_HOME";
 	
 	//nombres de los systemas
 	public static final String GO_HOME = "GO-HOME";

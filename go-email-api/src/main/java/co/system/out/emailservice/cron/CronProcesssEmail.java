@@ -2,7 +2,6 @@ package co.system.out.emailservice.cron;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,6 +37,7 @@ import co.system.out.emailservice.model.User;
 import co.system.out.emailservice.repository.IEmailsRepository;
 import co.system.out.emailservice.repository.IPlantillasRepository;
 import co.system.out.emailservice.repository.IUsuariosRepository;
+import co.system.out.emailservice.services.ISendBlueService;
 import co.system.out.emailservice.services.PlantillaService;
 import co.system.out.emailservice.util.UtilFile;
 
@@ -50,6 +50,9 @@ public class CronProcesssEmail {
 	
 	@Autowired
 	PlantillaService planillaService;
+	
+	@Autowired
+	ISendBlueService sendBlueService;
 	
 	@Autowired
 	IPlantillasRepository plantillasRepository;
@@ -67,7 +70,7 @@ public class CronProcesssEmail {
 	 @Scheduled(fixedRate = 20000)
 	    public void run() {
 		 
-		 List<Email>  listEmails =  emailsRepository.findAll();
+		 List<Email>  listEmails =  emailsRepository.getAllIntentos();
 		 
 		 if( listEmails != null) {
 			 for (Email email : listEmails ) {
@@ -85,12 +88,17 @@ public class CronProcesssEmail {
 						 emailDto.setParameters(   gson.fromJson(parametresString, Map.class) );
 					 }
 					 
-					 this.sendEmail(emailDto);
-					  emailsRepository.delete(email);
+					 this.sendBlueService.sendEmail(emailDto);
+					 //throw new Exception("error");
+					 this.emailsRepository.delete(email);
 				} catch (Exception e) {
+					email.setDestinatarios(tempDEstinatarios);
+					email.setParameters(parametresString);
 					email.setStatus(StatusEmailEnum.ERROR_AL_ENVIAR.name());
 					email.setErrorTecnico(e.getMessage());
+					email.setIntentos(email.getIntentos() +1);
 					e.printStackTrace();
+					emailsRepository.save(email);
 				}finally {
 					emailsRepository.flush();
 				}

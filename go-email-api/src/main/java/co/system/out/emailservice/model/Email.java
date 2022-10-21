@@ -61,6 +61,8 @@ public class Email {
 	
 	private String destinatarios;
 	
+	private int intentos;
+	
 	@Transient
 	private List<String> listDestinatarios;
 	

@@ -18,6 +18,11 @@ export class AdminUserComponent implements OnInit {
 
   public listUser:Usuario[]=[];
 
+  // ###TABLE CONTROL## //
+  public wordSearhUsuario:string = "";
+  public pages: number = 1;
+  public total: number = 0;
+   // ####################### //
   constructor(
 
     private loader: NgxUiLoaderService,
@@ -33,7 +38,9 @@ export class AdminUserComponent implements OnInit {
   }
 
 
-
+  public buscarUsuario(value : string){
+    this.wordSearhUsuario = value;
+  }
 
 
 

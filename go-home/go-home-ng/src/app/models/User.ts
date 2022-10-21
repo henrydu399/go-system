@@ -14,7 +14,13 @@ export class Usuario {
     password!: string| null;
     persona!: Persona| null;
 
+    activo!:boolean;
+	
+	confirmado!:boolean;
+
     token!: string| null;
+    tokenActivate!:string;
+
     roles!: string| null;
     sistema:string| null;
 

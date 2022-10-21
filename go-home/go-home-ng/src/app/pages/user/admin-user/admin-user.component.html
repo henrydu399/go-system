@@ -59,21 +59,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>CC</td>
-                                    <td>1090472353</td>
-                                    <td>Administrador</td>
-                                    <td>Jose Henry</td>
-                                    <td>Duarte Castellanos</td>
-                                    <td>Activo</td>
+                                <tr   *ngFor="let item of listUser | filtroUsuario:wordSearhUsuario | paginate: {
+                                    id: 'conexionPagination',
+                                    itemsPerPage: 5,
+                                    currentPage: pages,
+                                    totalItems: total } ">
+                                    <td>{{item.persona?.tipoIdentificacion?.prefijo}}</td>
+                                    <td>{{item.persona?.id?.numeroIdentificacion}}</td>
                                     <td>
-                                        <button class="button btn_sm btn_yellow"><i class="fa fa-pencil fa-lg"
+                                        
+                                        <button class="button btn_sm  "><i class="fa fa-eye fa-lg"
+                                            aria-hidden="true" aria-details="ver"></i></button>
+                                    </td>
+                                    <td>{{item.persona?.nombres}}</td>
+                                    <td>{{item.persona?.apellidos}}</td>
+                                    <td>{{item.activo}}</td>
+                                    <td>
+                                        <button class="button btn_sm  "><i class="fa fa-pencil fa-lg"
                                                 aria-hidden="true"></i></button>
                                         &nbsp;
-                                        <button class="button btn_sm btn_yellow"><i class="fa fa-trash fa-lg"
+                                        <button class="button btn_sm  "><i class="fa fa-trash fa-lg"
                                                 aria-hidden="true"></i></button>
                                         &nbsp;
-                                        <button class="button btn_sm btn_yellow"><i class="fa fa-toggle-on fa-lg"
+                                        <button class="button btn_sm  "><i class="fa fa-toggle-on fa-lg"
                                                 aria-hidden="true"></i></button>
 
                                     </td>
@@ -82,6 +90,11 @@
 
 
                         </table>
+                    </div>
+
+                    <div *ngIf="listUser != null && listUser.length > 0">
+                        <pagination-controls id="conexionPagination" (pageChange)="pages = $event"
+                            style="text-align: right;" nextLabel="" previousLabel=""></pagination-controls>
                     </div>
                     <!-- #####3 -->
 

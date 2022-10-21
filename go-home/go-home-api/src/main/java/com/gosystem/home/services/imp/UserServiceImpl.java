@@ -82,7 +82,11 @@ public class UserServiceImpl  implements IUserService {
 	public List<UsuarioDTO> getAll() throws HomeException {
 		logger.info(UtilsLogs.getInfo(MethodsEnum.GETALL, EntityEnum.USUARIO , null));
 		try {
-			return clientAdministracionUsers.getAll();			
+			List<UsuarioDTO> out = clientAdministracionUsers.getAll();	
+			for(UsuarioDTO userDto :  out) {
+				userDto.setPassword(null);
+			}
+			return 	out;
 		}catch (HomeException e) {
 	    	logger.severe(e.getMessage());
 	    	throw e;
@@ -232,9 +236,14 @@ public class UserServiceImpl  implements IUserService {
 				usuario.setRol(rol);
 					
 				
-				this.clientAdministracionUsers.savePublic(usuario);
+				UsuarioDTO usuarioDto = this.clientAdministracionUsers.savePublic(usuario);
+				if( Objects.nonNull(usuarioDto) ) {
+					this.sendEmail(usuarioDto );
+				}else {
+					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL);
+				}
 				
-				this.sendEmail(usuario);
+				
 				
 				logger.info("METODO : savePublic() : USUARIO CREADO CORRECTAMENTE ....");
 			}else {
@@ -256,7 +265,7 @@ public class UserServiceImpl  implements IUserService {
 		
 	}
 	
-	private void sendEmail(UsuarioDTO usuario) throws HomeException {
+	private void sendEmail(UsuarioDTO usuario ) throws HomeException {
 		String[] destinos =  {usuario.getEmail()};
 		
 		
@@ -266,6 +275,12 @@ public class UserServiceImpl  implements IUserService {
 		
 		HashMap<String, String> parametros = new HashMap<>();
 		parametros.put("{nombres}", usuario.getPersona().getNombres());
+		parametros.put("{idUsuario}", String.valueOf( usuario.getId().getId() )  );
+		parametros.put("{idTipoIdentificacion}", String.valueOf(  usuario.getId().getIdTipoIdentificacion() ) );
+		parametros.put("{numeroIdentificacion}", usuario.getId().getNumeroIdentificacion()  );
+		parametros.put("{token}", usuario.getTokenActivate());
+		
+
 				
 		EmailDto mail = EmailDto.builder()
 				.asunto("REGISTRO DE USUARIO GO-HOME")

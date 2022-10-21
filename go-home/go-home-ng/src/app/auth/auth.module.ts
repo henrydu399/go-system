@@ -9,10 +9,11 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RegisterComponent } from './register-component/register.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { ConfirmarUserComponent } from './confirmar-user/confirmar-user.component';
 
 
 @NgModule({
-  declarations: [LoginComponent, NotFoundComponent, RegisterComponent],
+  declarations: [LoginComponent, NotFoundComponent, RegisterComponent, ConfirmarUserComponent],
   exports: [LoginComponent, NotFoundComponent],
   imports: [
     CommonModule,
