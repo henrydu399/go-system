@@ -41,7 +41,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		try {
 			
 			String pathInfo = request.getRequestURL().toString(); 
-			if(!pathInfo.contains("login")) {
+			if(!pathInfo.contains("login") || !pathInfo.contains("home") ) {
 				if (existeJWTToken(request, response)) {
 					Claims claims = validateToken(request);
 					if (claims.get("authorities") != null) {

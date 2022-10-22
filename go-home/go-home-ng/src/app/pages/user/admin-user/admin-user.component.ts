@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { mensaje } from 'src/app/constants/menssagesConstants';
 import { Usuario } from 'src/app/models/User';
@@ -28,7 +29,8 @@ export class AdminUserComponent implements OnInit {
     private loader: NgxUiLoaderService,
     private msgService: MessagesService,
     private userService:UserService,
-    private utilHttpService:UtilHttpService
+    private utilHttpService:UtilHttpService,
+    private router: Router,
 
   ) { }
 
@@ -40,6 +42,10 @@ export class AdminUserComponent implements OnInit {
 
   public buscarUsuario(value : string){
     this.wordSearhUsuario = value;
+  }
+
+  public crear(){
+    this.router.navigate(['/app/createUser']);
   }
 
 

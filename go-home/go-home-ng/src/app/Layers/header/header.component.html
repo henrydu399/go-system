@@ -54,7 +54,7 @@
                     <li *ngIf="menuService.getPrivilegios()!== null && menuService.getPrivilegios()?.length!==0" class="dropdown simple_menu"><a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true"> <i class="fa fa-user-circle" aria-hidden="true"></i> {{authService.getUser()?.email}} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li *ngFor="let item of menuService.getPrivilegios()">
-                                <a [routerLink]="item.privilegio.url" (click)="navbarService.changeTitle(item.privilegio.nombre)"> 
+                                <a [routerLink]="item.privilegio.url" (click)="navbarService.change(item)" c> 
                                 <i [ngClass]="item.privilegio.iconoClass" aria-hidden="true"></i> <strong>&nbsp; {{item.privilegio.nombre}}</strong>
                                 </a>
 
@@ -62,7 +62,7 @@
                                 <ul>
                                     
                                     <li *ngFor="let subItem of item.listPrivilegios">
-                                        <a [routerLink]="subItem.privilegio.url" (click)="navbarService.changeTitle(item.privilegio.nombre)">  
+                                        <a [routerLink]="subItem.privilegio.url" (click)="navbarService.change(item)">  
                                             &nbsp;  <i [ngClass]="subItem.privilegio.iconoClass" aria-hidden="true"></i> &nbsp;{{subItem.privilegio.nombre}}
                                         </a>
                                     </li>
@@ -82,6 +82,358 @@
                       <li class="menu_button">
                           <a href="booking-form.html" class="button  btn_yellow"><i class="fa fa-calendar"></i>Publica tu inmueble</a>
                       </li>
+
+                      <li class="dropdown mega_menu mega_menu_fullwidth"><a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">APPS <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+                            
+<div class="row">
+
+  
+
+
+    <div class="col-xl-2 col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="row" style="padding: 20px;">
+  
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+              <div class="mx-auto d-flex justify-content-center">
+                <img class="card-img-top img-fluid" src="assets/img/home.png"
+                  style="max-height: 100px ; max-width: 100px;" alt="home">
+              </div>
+            </div>
+  
+            <div class="col-xl-6 col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="d-flex justify-content-center">
+  
+                <h4 class="card-title">GO-HOME</h4>
+  
+              </div>
+  
+  
+  
+  
+  
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <hr class="m-0">
+            <p class="card-text">Una aplicación completa para administrar soluciones de vivienda.</p>
+            <ul class="list-group">
+              <li class="list-group-item">
+                1. Ventas.
+              </li>
+              <li class="list-group-item">
+                2. Arriendos.
+              </li>
+  
+            </ul>
+            <br>
+  
+            <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-primary">GO</a>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+  
+    <div class="col-xl-2 col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="row" style="padding: 20px;">
+  
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+              <div class="mx-auto d-flex justify-content-center">
+                <img class="card-img-top img-fluid" src="assets/img/services.png"
+                  style="max-height: 100px ; max-width: 100px;" alt="home">
+              </div>
+            </div>
+  
+            <div class="col-xl-6 col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="d-flex justify-content-center">
+  
+                <h4 class="card-title">GO-SERVICES</h4>
+  
+              </div>
+  
+  
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <hr class="m-0">
+            <p class="card-text"> Encuentre un servicio técnico o domestico para su hogar rapido y de forma segura..</p>
+  
+            <ul class="list-group">
+              <li class="list-group-item">
+                1. Plomero.
+              </li>
+              <li class="list-group-item">
+                2. Electrisista.
+              </li>
+              <li class="list-group-item">
+                3. Aseo General.
+              </li>
+              <li class="list-group-item">
+                4. Maestro de obra.
+              </li>
+  
+            </ul>
+  
+            <br>
+  
+            <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-primary">GO</a>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+  
+    <div class="col-xl-2 col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="row" style="padding: 20px;">
+  
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+              <div class="mx-auto d-flex justify-content-center">
+                <img class="card-img-top img-fluid" src="assets/img/key.png"
+                  style="max-height: 100px ; max-width: 100px;" alt="home">
+              </div>
+            </div>
+  
+            <div class="col-xl-6 col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="d-flex justify-content-center">
+  
+                <h4 class="card-title">GO-KEYS</h4>
+  
+              </div>
+  
+  
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <hr class="m-0">
+            <p class="card-text"> Administre todas sus claves y contraseñas de todas sus plataformas de forma segura..</p>
+  
+            <ul class="list-group">
+              <li class="list-group-item">
+                1. Redes Sociales.
+              </li>
+              <li class="list-group-item">
+                2. Bancos.
+              </li>
+              <li class="list-group-item">
+                3. Correos electronicos.
+              </li>
+              <li class="list-group-item">
+                4. etc.
+              </li>
+  
+            </ul>
+  
+            <br>
+  
+            <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-primary">GO</a>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+    <div class="col-xl-2 col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="row" style="padding: 20px;">
+  
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+              <div class="mx-auto d-flex justify-content-center">
+                <img class="card-img-top img-fluid" src="assets/img/cmr.png"
+                  style="max-height: 100px ; max-width: 100px;" alt="home">
+              </div>
+            </div>
+  
+            <div class="col-xl-6 col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="d-flex justify-content-center">
+  
+                <h4 class="card-title">GO-CMR</h4>
+  
+              </div>
+  
+  
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <hr class="m-0">
+            <p class="card-text"> Un CRM es una solución de gestión de las relaciones con clientes, orientada normalmente a gestionar tres áreas básicas: la gestión comercial, el marketing y el servicio postventa o de atención al cliente.</p>
+  
+            <ul class="list-group">
+              <li class="list-group-item">
+                1. Redes Sociales.
+              </li>
+              <li class="list-group-item">
+                2. Bancos.
+              </li>
+              <li class="list-group-item">
+                3. Correos electronicos.
+              </li>
+              <li class="list-group-item">
+                4. etc.
+              </li>
+  
+            </ul>
+  
+            <br>
+  
+            <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-primary">GO</a>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+    <div class="col-xl-2 col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="row" style="padding: 20px;">
+  
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+              <div class="mx-auto d-flex justify-content-center">
+                <img class="card-img-top img-fluid" src="assets/img/place-play.png"
+                  style="max-height: 100px ; max-width: 100px;" alt="home">
+              </div>
+            </div>
+  
+            <div class="col-xl-6 col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="d-flex justify-content-center">
+  
+                <h4 class="card-title">GO-PLACE-PLAY</h4>
+  
+              </div>
+  
+  
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <hr class="m-0">
+            <p class="card-text"> Administre canchas y escenarios deportivos .</p>
+  
+            <ul class="list-group">
+              <li class="list-group-item">
+                1. Reservas.
+              </li>
+              <li class="list-group-item">
+                2. clientes.
+              </li>
+              <li class="list-group-item">
+                3. Control Eventos.
+              </li>
+            </ul>
+  
+            <br>
+  
+            <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-primary">GO</a>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+    <div class="col-xl-2 col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="row" style="padding: 20px;">
+  
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+              <div class="mx-auto d-flex justify-content-center">
+                <img class="card-img-top img-fluid" src="assets/img/room.png"
+                  style="max-height: 100px ; max-width: 100px;" alt="home">
+              </div>
+            </div>
+  
+            <div class="col-xl-6 col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="d-flex justify-content-center">
+  
+                <h4 class="card-title">GO-ROOMS</h4>
+  
+              </div>
+  
+  
+            </div>
+          </div>
+  
+          <div class="card-body">
+            <hr class="m-0">
+            <p class="card-text"> Administre espacios y eventos.</p>
+  
+            <ul class="list-group">
+              <li class="list-group-item">
+                1. Reservas Espacio.
+              </li>
+              <li class="list-group-item">
+                2. Administracion evento.
+              </li>
+              <li class="list-group-item">
+                3. Control Eventos.
+              </li>
+            </ul>
+  
+            <br>
+  
+            <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-primary">GO</a>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>
+  
+  
+
+                        </ul>
+                    </li>
+
                   </ul>
               </nav>
           </div>

@@ -3,7 +3,7 @@ server:
 eureka: 
   client:
     serviceUrl:
-      defaultZone: http://192.168.1.150:8081/eureka
+      defaultZone: http://localhost:8081/eureka
   instance:
     lease-renewal-interval-in-seconds: 10
 logging:

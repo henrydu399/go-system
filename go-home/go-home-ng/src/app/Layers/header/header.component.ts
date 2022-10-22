@@ -1,3 +1,4 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MenuService } from 'src/app/services/menu.service';
@@ -17,7 +18,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-   
+    this.authService.logout();
   }
 
 }

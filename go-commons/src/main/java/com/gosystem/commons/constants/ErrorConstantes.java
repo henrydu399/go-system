@@ -58,6 +58,7 @@ public class ErrorConstantes {
 	
 	//ERRORES GENERALES
 	public static final String ERROR_GENERAL = "Error general";
+	public static final String ERROR_PRIVILEGIOS = "Error el usuario no tiene privilegios para esta operacion";
 	public static final String ERROR_GENERAL_GUARDANDO = "Error general GUARDANDO";
 	public static final String ERROR_PARAMETROS_BUSQUEDA = "ERROR_PARAMETROS_BUSQUEDA";
 	

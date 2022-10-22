@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NgxUiLoaderService } from "ngx-ui-loader";
+import { PrivilegioRolUsuario } from "../models/PrivilegioRolUsuario";
 
 @Injectable({
     providedIn: 'root'
@@ -7,14 +8,16 @@ import { NgxUiLoaderService } from "ngx-ui-loader";
   export class NavbarService {
 
     private  TITLE_KEY:string = 'parameters-title';
+    private  PRIVILEGIO:string = 'parameters-privilegio';
+    private privilegioRolUsuario!:PrivilegioRolUsuario;
   
-   public title:string = "";
+   
   
     constructor(private loader: NgxUiLoaderService) { }
   
-    public changeTitle(value:string){
-      this.title = value;
-      this.saveTitle(value);
+    public change(privilegio: PrivilegioRolUsuario){
+      this.saveTitle(privilegio.privilegio.nombre);
+      this.savePrivilegio(privilegio);
     }
 
 
@@ -26,6 +29,26 @@ import { NgxUiLoaderService } from "ngx-ui-loader";
 
   public getTitle(): string {
     return sessionStorage.getItem(this.TITLE_KEY)!;
+  }
+
+
+  public savePrivilegio(privilegio: PrivilegioRolUsuario) {
+    window.sessionStorage.removeItem(this.PRIVILEGIO);
+    window.sessionStorage.setItem(this.PRIVILEGIO, JSON.stringify(privilegio) );
+  }
+
+  public getPrivilegio(): PrivilegioRolUsuario {
+    let privilegio: PrivilegioRolUsuario = JSON.parse(sessionStorage.getItem(this.PRIVILEGIO)!);
+    return privilegio;
+  }
+
+  public getPrivilegioString(): string  {
+    let privilegio: string | null = "";
+    privilegio = sessionStorage.getItem(this.PRIVILEGIO)
+    if(privilegio === null){
+      return "";
+    }
+    return privilegio;
   }
 
   }

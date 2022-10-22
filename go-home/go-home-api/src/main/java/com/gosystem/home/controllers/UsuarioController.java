@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gosystem.commons.adminUsers.dto.UsuarioDTO;
+import com.gosystem.commons.enums.PrivilegioOperacion;
 import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.exceptions.HomeException;
 import com.gosystem.commons.utils.UtilGson;
 import com.gosystem.commons.utils.UtilsLogs;
 import com.gosystem.home.client.services.IAdministracionClientUsers;
 import com.gosystem.home.services.IUserService;
+import com.gosystem.home.util.UtilPrivilegioMetodo;
 import com.gosystem.home.util.UtilToken;
 
 
@@ -40,7 +42,7 @@ public class UsuarioController {
 private Logger logger;
 	
 	@Autowired
-	private IUserService Service;
+	private IUserService service;
 	
 	@Autowired
 	private IAdministracionClientUsers administracionClientUsers;
@@ -66,7 +68,7 @@ private Logger logger;
 		logger.info(nameApp + " guardar :: INICIO ");
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
 		try {
-			Service.save(json);
+			service.save(json);
 			return new ResponseEntity<Object>(null, HttpStatus.CREATED);
 		}catch (HomeException e) {
 			logger.severe(e.getMessage());
@@ -85,7 +87,7 @@ private Logger logger;
 		logger.info(nameApp + " Editar :: INICIO ");	
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
 		try {
-			Service.edith(json);
+			service.edith(json);
 			return new ResponseEntity<Object>(null, HttpStatus.OK);
 
 		}catch (HomeException e) {
@@ -104,8 +106,18 @@ private Logger logger;
 	@GetMapping(value = "/")
 	public ResponseEntity<Object> consultarAll(HttpServletRequest req ) {
 		logger.info(nameApp + " GET ALL :: INICIO ");	
-		List<UsuarioDTO> list =   Service.getAll();
-		return new ResponseEntity<Object>(list, HttpStatus.OK);
+		try {
+			UtilPrivilegioMetodo.isPrivilegioOk(req, PrivilegioOperacion.getAll);
+			List<UsuarioDTO> list =   service.getAll();
+			return new ResponseEntity<Object>(list, HttpStatus.OK);
+		}catch (HomeException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }catch (Exception e) {
+	    	logger.severe(e.getMessage());
+	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
+		}
+
 
 	} 
 	
@@ -116,7 +128,7 @@ private Logger logger;
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
 
 		try {
-			UsuarioDTO e = Service.find(json);
+			UsuarioDTO e = service.find(json);
 			return new ResponseEntity<Object>(e, HttpStatus.OK);
 			
 		}catch (HomeException e) {
@@ -137,7 +149,7 @@ private Logger logger;
 		logger.info(nameApp + " FIND CUSTUM :: INICIO ");
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
 		try {
-			List<UsuarioDTO> personas = Service.findAll(json);
+			List<UsuarioDTO> personas = service.findAll(json);
 			return new ResponseEntity<Object>(personas, HttpStatus.OK);
 			
 		}catch (HomeException e) {
@@ -185,7 +197,7 @@ private Logger logger;
 		logger.info(nameApp + " guardar :: INICIO ");
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
 		try {
-			Service.savePublic(json);
+			service.savePublic(json);
 			return new ResponseEntity<Object>(null, HttpStatus.CREATED);
 		}catch (HomeException e) {
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);

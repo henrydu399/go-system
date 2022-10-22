@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Usuario } from '../models/User';
 
 @Injectable({
@@ -9,7 +10,7 @@ export class AutentificacionService {
   private  TOKEN_KEY:string = 'auth-token';
   private  USER_KEY:string = 'auth-user';
 
-  constructor() { }
+  constructor(private router: Router,) { }
 
 
   signOut() {

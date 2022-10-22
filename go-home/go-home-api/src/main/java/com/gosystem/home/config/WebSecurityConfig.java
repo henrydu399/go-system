@@ -36,8 +36,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		 .csrf().disable()
 		 .authorizeRequests()	
 		 .antMatchers(HttpMethod.POST, "/login/**").permitAll()
-		 .antMatchers(HttpMethod.POST, "/usuario/**").permitAll()
-		 .antMatchers(HttpMethod.GET, "/usuario/**").permitAll()
 		 .antMatchers(HttpMethod.GET, "/ciudad/**").permitAll()
 		 .antMatchers(HttpMethod.GET, "/departamento/**").permitAll()
 		 .antMatchers(HttpMethod.GET, "/barrio/**").permitAll()

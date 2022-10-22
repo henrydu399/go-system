@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Usuario } from '../models/User';
 import { MenuService } from '../services/menu.service';
+import { AutentificacionService } from '../services/autentificacion.service';
 
 
 @Injectable({
@@ -20,7 +21,8 @@ export class AuthService {
   constructor(private http: HttpClient,
     private router: Router,
     private loader: NgxUiLoaderService,
-    private menuService:MenuService
+    private menuService:MenuService ,
+    private autentificacionService :AutentificacionService
   ) { }
  
 
@@ -48,7 +50,11 @@ export class AuthService {
    
     sessionStorage.clear();
     window.sessionStorage.clear();
+
+    this.autentificacionService.signOut();
     this.loader.stop(this.CONS_TASK_METODO_LOGOUT)
+
+    this.router.navigate(['/']);
   }
 
 

@@ -10,6 +10,8 @@ import { EdithUserComponent } from './user/edith-user/edith-user.component';
 import { NavbarComponent } from '../Layers/navbar/navbar.component';
 import { FiltroUsuarioPipe } from '../pipes/filtro-usuario.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AuthInterceptor } from '../shareds/interceptors/authInterceptos';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 
@@ -41,6 +43,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NgxPaginationModule
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 })
 export class PagesModule { }
