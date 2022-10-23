@@ -20,7 +20,7 @@
 
 
 
-                    <form>
+                    <form [formGroup]="fromUsuario" (ngSubmit)="crear()">
 
                         <div class="panel " style="padding: 5%;">
 
@@ -32,10 +32,12 @@
                                         <label for="exampleInputAmount">TIPO IDENTIFICACION <span style="color: red;">*</span></label>
 
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                            <input type="text" class="form-control" id="tipoIdentificacion" formControlName="tipoIdentificacion"
                                                 placeholder="CC">
-                                            <div class="input-group-addon">
-                                                <a> <i class="fa fa-search " aria-hidden="true"
+                                            <div class="input-group-addon" data-toggle="modal" data-target="#idModalTipoIdentificacion">
+
+                                                <a > 
+                                                    <i class="fa fa-search " aria-hidden="true"
                                                         aria-details="ver"></i></a>
 
                                             </div>
@@ -244,3 +246,6 @@
         </div>
     </div>
 </main>
+
+
+<app-tipo-identificacion (newItemEvent)="update($event)"></app-tipo-identificacion>

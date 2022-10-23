@@ -1,0 +1,80 @@
+<!-- Modal TIPO IDENTIFICACION-->
+<div class="modal fade" id="idModalTipoIdentificacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar Tipo Documento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 350px;">
+                        <input type="text" name="table_search" class="form-control float-right"
+                            oninput="this.value = this.value.trimStart().replace(/[^a-zA-Z0-9-_ ]/,'')"
+                            placeholder="Buscar" [value]="txtBuscar" #txtBuscar (keyup)="buscar(txtBuscar.value)">
+                    </div>
+                </div>
+
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-sm text-nowrap table-hover">
+                        <thead>
+                            <tr>
+                                <th>Accion</th>
+                                <th>Prefijo</th>
+                                <th>Tipo</th>
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listTiposDocumentos | filtroTipoIdentificacion: search  | paginate: {
+                            id: 'tiposIdentificacionPagination',
+                            itemsPerPage: 10,
+                            currentPage: page,
+                            totalItems: total } ">
+
+
+                                <td>
+                                    <div class="row">
+                                        <button type="button" class="btn btn-sm" data-dismiss="modal"
+                                            title="Seguimiento" (click)="seleccionar(item)">
+                                            <i class="fa fa-check-circle fa-lg"></i>
+                                        </button>
+                                        &nbsp;
+
+                                    </div>
+                                </td>
+
+                                <td>{{item.prefijo}}</td>
+                                <td>{{item.nombre}}</td>
+
+
+
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <pagination-controls id="tiposIdentificacionPagination" (pageChange)="page = $event"
+                    style="text-align: right;" nextLabel="" previousLabel="">
+                </pagination-controls>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal USUARIOS-->

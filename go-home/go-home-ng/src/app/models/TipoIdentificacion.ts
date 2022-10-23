@@ -1,13 +1,13 @@
 export class TipoIdentificacion{
 
 	id:number;
+	nombre:string;
 	prefijo:string;
-	tipo:string;
 
-    constructor (_id : number , _prefijo : string , _tipo:string){
+    constructor (_id : number , _nombre : string , _prefijo:string){
         this.id= _id;
+        this.nombre = _nombre;
         this.prefijo = _prefijo;
-        this.tipo = _tipo;
     }
 
 }

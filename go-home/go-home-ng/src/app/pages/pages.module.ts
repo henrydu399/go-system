@@ -12,6 +12,8 @@ import { FiltroUsuarioPipe } from '../pipes/filtro-usuario.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthInterceptor } from '../shareds/interceptors/authInterceptos';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TipoIdentificacionComponent } from '../modals/tipo-identificacion/tipo-identificacion.component';
+import { FiltroTipoIdentificacionPipe } from '../pipes/filtro-tipoIdentificacion.pipe';
 
 
 
@@ -24,8 +26,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     CreateUserComponent,
     EdithUserComponent,
     NavbarComponent,
+    TipoIdentificacionComponent,
 
-
+    FiltroTipoIdentificacionPipe,
     FiltroUsuarioPipe
   ],
   exports: [

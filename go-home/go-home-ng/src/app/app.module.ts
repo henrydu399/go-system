@@ -22,7 +22,6 @@ import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
 @NgModule({
   declarations: [
     AppComponent,
-    TipoIdentificacionComponent,
     HeaderComponent,
     TopbarComponent,
     MessagesComponent,

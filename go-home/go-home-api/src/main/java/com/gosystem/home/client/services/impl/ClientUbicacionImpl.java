@@ -31,7 +31,7 @@ import com.gosystem.home.client.services.IUbicacionClienteService;
 import com.gosystem.home.enums.EntityHomeEnum;
 
 @Service
-public class UbicacionClientImpl implements IUbicacionClienteService{
+public class ClientUbicacionImpl implements IUbicacionClienteService{
 
 	
 	private Logger logger;
@@ -77,7 +77,7 @@ public class UbicacionClientImpl implements IUbicacionClienteService{
 	
 	
 	
-	public UbicacionClientImpl() {
+	public ClientUbicacionImpl() {
 		logger = UtilsLogs.getLogger(ClientParametrizacionServiceImpl.class.getName());
 	}
 	

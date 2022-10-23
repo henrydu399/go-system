@@ -15,6 +15,7 @@ export const environment = {
   getAllDepartamentos: Global.gateway +'/home/departamento/',
   getAllCiudades: Global.gateway +'/home/ciudad/',
   getAllBarrios: Global.gateway +'/home/barrio/',
+  getAllTipoDocumentos: Global.gateway +'/home/tipoDocumento/',
   login: Global.gateway +'/home/login/',
   register: Global.gateway +'/home/usuario/public/',
 
