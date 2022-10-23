@@ -25,6 +25,7 @@ export class RegisterComponent implements OnInit {
     nombres: ['', [Validators.required,Validators.minLength(5), Validators.maxLength(60)]],
     apellidos: ['', [Validators.required,Validators.minLength(5), Validators.maxLength(60)]],
     email: ['', [Validators.required , Validators.pattern(environment.patternEmail)]],
+    movil: ['',[Validators.required]],
     password :['', [Validators.required]],
     passwordtwo :['', [Validators.required]],
 
@@ -98,6 +99,7 @@ export class RegisterComponent implements OnInit {
     this.usuario.persona.nombres =  this.formRegister.get('nombres')!.value;
     this.usuario.persona.apellidos = this.formRegister.get('apellidos')!.value;
     this.usuario.email = this.formRegister.get('email')!.value;
+    this.usuario.movil = this.formRegister.get('movil')!.value;
     this.usuario.password = this.formRegister.get('password')!.value;
 
   }

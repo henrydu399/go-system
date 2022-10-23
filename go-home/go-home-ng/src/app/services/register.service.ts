@@ -18,7 +18,7 @@ import { Usuario } from "../models/User";
     public register(usuario: Usuario): Observable<any> {
         let body = JSON.stringify(usuario).toString();
   
-        return this.http.post<any>(environment.register, body, { 'headers': lstHeaders });
+        return this.http.post<any>(environment.register, usuario, { 'headers': lstHeaders });
       }
 
   

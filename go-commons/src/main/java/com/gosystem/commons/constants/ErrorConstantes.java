@@ -68,6 +68,7 @@ public class ErrorConstantes {
 	public static final String NO_EXISTE_EL_USUARIO_O_CREDECIALES_INVALIDAS = "Error de usuario o password invalida";
 	public static final String NO_EXISTE_ROLES_USUARIOS = "Actualmente no tiene asignado ningun rol, consulte con su administrador";
 	public static final String NO_EXISTE_PRIVILEGIOS_USUARIOS = "Actualmente no tiene asignado ningun privilegio, consulte con su administrador";
+	public static final String USUARIO_NO_CONFIRMADO = "Actualmente el usuario no ha confirmado su cuenta , verifique su email o movil";
 	
 	
 	

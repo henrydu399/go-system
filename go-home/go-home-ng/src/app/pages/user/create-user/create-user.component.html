@@ -8,7 +8,7 @@
                     <div class="row">
 
                         <div class="col-md-8" style="padding-top: 8px;">
-                            <h2 class="panel-title">Crear Usuarios</h2>
+                            <h2 class="panel-title">Crear Usuario</h2>
 
                         </div>
 
@@ -22,39 +22,208 @@
 
                     <form>
 
-                        <div class="panel panel-default">
-                            <div class="form-inline">
+                        <div class="panel " style="padding: 5%;">
 
+                            <div class="row">
+                                <div class="form-inline">
 
-                                <div class="form-group">
+                                    <div class="form-group">
 
-                                    <label for="exampleInputAmount">TIPO IDENTIFICACION</label>
+                                        <label for="exampleInputAmount">TIPO IDENTIFICACION <span style="color: red;">*</span></label>
 
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="exampleInputAmount"
-                                            placeholder="CC">
-                                        <div class="input-group-addon">
-                                            <a  > <i class="fa fa-search " aria-hidden="true" aria-details="ver"></i></a>
-                                           
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="CC">
+                                            <div class="input-group-addon">
+                                                <a> <i class="fa fa-search " aria-hidden="true"
+                                                        aria-details="ver"></i></a>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
 
-                                <div class="form-group">
+                                    <div class="form-group">
 
-                                    <label for="exampleInputAmount">NUMERO IDENTIFICACION</label>
+                                        <label for="exampleInputAmount">NUMERO IDENTIFICACION <span style="color: red;">*</span> </label>
 
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="exampleInputAmount"
-                                            placeholder="1.802.225.202">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="1.802.225.202">
+                                        </div>
                                     </div>
+
                                 </div>
-
-
-
-
                             </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">NOMBRES <span style="color: red;">*</span></label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">APELLIDOS <span style="color: red;">*</span></label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">CORREO ELECTRONICO <span style="color: red;">*</span></label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">NUMERO CELULAR <span style="color: red;">*</span></label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">ROL <span style="color: red;">*</span></label>
+
+                                        <div class="input-group">
+                                            <select class="form-control">
+                                                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                                                <option value="ASESOR">ASESOR</option>
+                                                <option value="CLIENTE">CLIENTE</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">FECHA NACIMIENTO <span style="color: red;">*</span></label>
+
+                                        <div class="input-group">
+                                            <input type="date" class="form-control" id="exampleInputAmount"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">EDAD </label>
+
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="exampleInputAmount"
+                                                placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">SEXO </label>
+
+                                        <div class="input-group">
+                                            <select class="form-control">
+                                                <option value="M">MASCULINO</option>
+                                                <option value="F">FEMENINO</option>
+                                                <option value="N">NO BINARIO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">ESTADO CIVIL </label>
+
+                                        <div class="input-group">
+                                            <select class="form-control">
+                                                <option value="INICIAL">SOLTERO</option>
+                                                <option value="PRIMARIA">CASADO</option>
+                                                <option value="SECUNDARIA">DIVORCIADO</option>
+                                                <option value="SUPERIOS">UNION LIBRE</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">PROFESION </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="exampleInputAmount">NIVEL DE ESCOLARIDAD </label>
+
+                                        <div class="input-group">
+                                            <select class="form-control">
+                                                <option value="INICIAL">INICIAL</option>
+                                                <option value="PRIMARIA">PRIMARIA</option>
+                                                <option value="SECUNDARIA">SECUNDARIA</option>
+                                                <option value="SUPERIOS">SUPERIOR</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <br>
+
+                            <button class="button btn_sm " (click)="cerrar()"><i class="fa fa-window-close-o fa-lg"
+                                    aria-hidden="true"></i>
+                                &nbsp;Cerrar</button>
+
+                            <button class="button btn_sm btn_yellow" style="float:right;" (click)="crear()"><i
+                                    class="fa fa-save fa-lg" aria-hidden="true"></i>
+                                &nbsp;Crear</button>
+
                         </div>
 
                     </form>

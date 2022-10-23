@@ -20,7 +20,10 @@ import com.gosystem.commons.adminUsers.dto.PrivilegiosRolUsuarioDTO;
 import com.gosystem.commons.adminUsers.dto.RolesUsuarioDTO;
 import com.gosystem.commons.adminUsers.dto.UsuarioDTO;
 import com.gosystem.commons.constants.ErrorConstantes;
+import com.gosystem.commons.enums.LayerEnum;
+import com.gosystem.commons.enums.MethodsEnum;
 import com.gosystem.commons.exceptions.AdministradorUserException;
+import com.gosystem.commons.exceptions.HomeException;
 import com.gosystem.home.client.services.IAdministracionClientUsers;
 import com.gosystem.home.util.BCryptPasswordEncoder;
 import com.gosystem.home.validations.LoginValidation;
@@ -61,7 +64,14 @@ public class LoginController {
         	
     		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         		
-        	if( Objects.nonNull(usuarioOpt) ) {   
+        	if( Objects.nonNull(usuarioOpt) ) { 
+        		
+				if(!usuarioOpt.isConfirmado()) {
+
+					
+					return ResponseEntity.status(400)
+    						.body(ErrorConstantes.USUARIO_NO_CONFIRMADO.toString());
+				}
         		
         		UsuarioDTO usuario = usuarioOpt;
         		// ** verificar password *** 

@@ -68,13 +68,13 @@
             </div>
 
             <div class="col-md-6 col-sm-6">
-              <div  class="form-group {{isvalidInput('password')}} has-feedback">
-                <label class="control-label">Password</label>
-                <input type="text" class="form-control " name="password" formControlName="password"
-                placeholder="Escribe tu Password" aria-describedby="inputErrorpassword">
-                <span *ngIf="submitted &&  f['password']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                <span *ngIf="submitted &&  f['password']?.errors?.['required']" id="inputErrorpassword" class="sr-only"></span>
-                <label *ngIf="submitted &&  f['password']?.errors?.['required']" >El campo<strong> password </strong> es requerido</label> 
+              <div  class="form-group {{isvalidInput('movil')}} has-feedback">
+                <label class="control-label">Movil</label>
+                <input type="text" class="form-control " name="movil" formControlName="movil"
+                placeholder="Escribe tu Movil" aria-describedby="inputErrorpassword">
+                <span *ngIf="submitted &&  f['movil']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span *ngIf="submitted &&  f['movil']?.errors?.['required']" id="inputErrorpassword" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['movil']?.errors?.['required']" >El campo<strong> Movil </strong> es requerido</label> 
               </div>
             </div>
 
@@ -84,6 +84,17 @@
 
 
           <div class="row">
+
+            <div class="col-md-6 col-sm-6">
+              <div  class="form-group {{isvalidInput('password')}} has-feedback">
+                <label class="control-label">Password</label>
+                <input type="text" class="form-control " name="password" formControlName="password"
+                placeholder="Escribe tu Password" aria-describedby="inputErrorpassword">
+                <span *ngIf="submitted &&  f['password']?.errors?.['required']" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span *ngIf="submitted &&  f['password']?.errors?.['required']" id="inputErrorpassword" class="sr-only"></span>
+                <label *ngIf="submitted &&  f['password']?.errors?.['required']" >El campo<strong> password </strong> es requerido</label> 
+              </div>
+            </div>
 
             <div class="col-md-6 col-sm-6">
               <div  class="form-group {{isvalidInput('passwordtwo')}} has-feedback">

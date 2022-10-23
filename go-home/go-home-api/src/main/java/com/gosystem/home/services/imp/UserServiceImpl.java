@@ -227,6 +227,8 @@ public class UserServiceImpl  implements IUserService {
 			userForFind = this.clientAdministracionUsers.findUser(userForFind);
 			
 			if( Objects.isNull(userForFind) ) {
+				
+				
 				//ENCODE PASSWORD 
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 				usuario.setPassword( passwordEncoder.encode(usuario.getPassword() ) );

@@ -12,4 +12,15 @@ export class CreateUserComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+
+
+  public crear(){
+
+  }
+
+  public  cerrar(){
+
+  }
+
 }

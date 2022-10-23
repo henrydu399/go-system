@@ -2,6 +2,8 @@ package com.gosystem.home.filters;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
@@ -15,6 +17,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+
+import com.gosystem.commons.enums.EntityEnum;
+import com.gosystem.commons.enums.MethodsEnum;
+import com.gosystem.commons.utils.UtilsLogs;
+import com.gosystem.home.services.imp.UserServiceImpl;
+import com.gosystem.home.util.BCryptPasswordEncoder;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -33,7 +42,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	@Value("${jwt.key}")
 	private String secretKey;
 	
+	private Logger logger;
 	
+	
+	public JWTAuthorizationFilter() {
+		logger = UtilsLogs.getLogger(UserServiceImpl.class.getName());
+	}
 	
 
 	@Override
@@ -41,16 +55,20 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		try {
 			
 			String pathInfo = request.getRequestURL().toString(); 
-			if(!pathInfo.contains("login") || !pathInfo.contains("home") ) {
-				if (existeJWTToken(request, response)) {
-					Claims claims = validateToken(request);
-					if (claims.get("authorities") != null) {
-						setUpSpringAuthentication(claims);
+			if( pathInfo.contains("home") ) {
+				if(!pathInfo.contains("public") || !pathInfo.contains("login") || !pathInfo.contains("confirm")   ) {
+					if (existeJWTToken(request, response)) {
+						Claims claims = validateToken(request);
+						if (Objects.nonNull(claims) && claims.get("authorities") != null) {
+							setUpSpringAuthentication(claims);
+						} else {
+							SecurityContextHolder.clearContext();
+							logger.info("EL TOKEN NO TIENE LA PROPIEDAD authorities ,");
+						}
 					} else {
-						SecurityContextHolder.clearContext();
+						logger.info("NO EXISTE TOKEN Y EL RECURSO NO ES LOGIN NI HOME ,");
+							SecurityContextHolder.clearContext();
 					}
-				} else {
-						SecurityContextHolder.clearContext();
 				}
 			}
 
