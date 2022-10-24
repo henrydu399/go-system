@@ -76,7 +76,7 @@ public class TipoIdentificacionClientImpl implements ITipoIdentificacionClient {
 	
 	@Override
 	public List<TipoIdentificacionDTO> getAll() throws HomeException {
-		logger.info("METODO : getAll() ->Consultando departamentos");	
+		logger.info("METODO : getAll() ->Consultando tipos identificacion");	
 		try {
 				this.restTemplate = new RestTemplate();
 				URI uri = new URI(this.urlGateway + this. pathTipoIdentificacion);

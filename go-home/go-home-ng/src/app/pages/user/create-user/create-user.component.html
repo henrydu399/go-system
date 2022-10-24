@@ -22,65 +22,41 @@
 
                     <form [formGroup]="fromUsuario" (ngSubmit)="crear()">
 
-                        <div class="panel " style="padding: 5%;">
+                        <div class="panel " >
 
                             <div class="row">
-                                <div class="form-inline">
+                                <div class="form-inline" >
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-6 col-sm-6">
 
-                                        <label for="exampleInputAmount">TIPO IDENTIFICACION <span style="color: red;">*</span></label>
+                                        <label for="tipoIdentificacion">TIPO IDENTIFICACION <span style="color: red;">*</span></label>
 
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="tipoIdentificacion" formControlName="tipoIdentificacion"
-                                                placeholder="CC">
+                                        <div class="input-group {{isvalidInput('tipoIdentificacion')}}">
+
+                                            <input type="text" class="form-control" id="tipoIdentificacion" formControlName="tipoIdentificacion" placeholder="" readonly>
+
                                             <div class="input-group-addon" data-toggle="modal" data-target="#idModalTipoIdentificacion">
-
-                                                <a > 
-                                                    <i class="fa fa-search " aria-hidden="true"
-                                                        aria-details="ver"></i></a>
-
-                                            </div>
+                                                <a >   <i class="fa fa-search " aria-hidden="true" aria-details="ver"></i></a>   
+                                            </div>  
+                                                                         
                                         </div>
+
+                                        <label *ngIf="submitted &&  f['tipoIdentificacion']?.errors?.['required']" >El campo<strong> TIPO IDENTIFICACION </strong> es requerido</label>   
+
+
+
                                     </div>
 
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-6 col-sm-6">
 
-                                        <label for="exampleInputAmount">NUMERO IDENTIFICACION <span style="color: red;">*</span> </label>
+                                        <label for="numeroIdentificacion">NUMERO IDENTIFICACION <span style="color: red;">*</span> </label>
 
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
-                                                placeholder="1.802.225.202">
+                                        <div class="input-group {{isvalidInput('numeroIdentificacion')}}">
+                                            <input type="text" class="form-control" id="numeroIdentificacion"  formControlName="numeroIdentificacion" placeholder="">
                                         </div>
-                                    </div>
+                                        <label *ngIf="submitted &&  f['numeroIdentificacion']?.errors?.['required']" >El campo<strong> TIPO IDENTIFICACION </strong> es requerido</label>   
 
-                                </div>
-                            </div>
-
-
-                            <br>
-                            <div class="row">
-                                <div class="form-inline">
-
-                                    <div class="form-group">
-
-                                        <label for="exampleInputAmount">NOMBRES <span style="color: red;">*</span></label>
-
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
-                                                placeholder="">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="exampleInputAmount">APELLIDOS <span style="color: red;">*</span></label>
-
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
-                                                placeholder="">
-                                        </div>
                                     </div>
 
                                 </div>
@@ -91,37 +67,71 @@
                             <div class="row">
                                 <div class="form-inline">
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-6 col-sm-6">
 
-                                        <label for="exampleInputAmount">CORREO ELECTRONICO <span style="color: red;">*</span></label>
+                                        <label for="nombres">NOMBRES <span style="color: red;">*</span></label>
 
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                        <div class="input-group {{isvalidInput('nombres')}}">
+                                            <input type="text" class="form-control" id="nombres" formControlName="nombres"
                                                 placeholder="">
                                         </div>
+                                        <label *ngIf="submitted &&  f['nombres']?.errors?.['required']" >El campo<strong>  NOMBRES </strong> es requerido</label>   
+
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-6 col-sm-6">
 
-                                        <label for="exampleInputAmount">NUMERO CELULAR <span style="color: red;">*</span></label>
+                                        <label for="apellidos">APELLIDOS <span style="color: red;">*</span></label>
 
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                        <div class="input-group {{isvalidInput('apellidos')}}">
+                                            <input type="text" class="form-control" id="apellidos" formControlName="apellidos"
                                                 placeholder="">
                                         </div>
+                                        <label *ngIf="submitted &&  f['apellidos']?.errors?.['required']" >El campo<strong>  APELLIDOS </strong> es requerido</label> 
                                     </div>
 
-                                    <div class="form-group">
+                                </div>
+                            </div>
 
-                                        <label for="exampleInputAmount">ROL <span style="color: red;">*</span></label>
 
-                                        <div class="input-group">
-                                            <select class="form-control">
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="email">CORREO ELECTRONICO <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('email')}}">
+                                            <input type="text" class="form-control" id="email" formControlName="email"
+                                                placeholder="">
+                                        </div>
+                                        <label *ngIf="submitted &&  f['email']?.errors?.['required']" >El campo<strong>  CORREO ELECTRONICO </strong> es requerido</label> 
+                                    </div>
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="movil">NUMERO CELULAR <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('movil')}}">
+                                            <input type="text" class="form-control" id="movil" formControlName="movil"
+                                                placeholder="">
+                                        </div>
+                                        <label *ngIf="submitted &&  f['movil']?.errors?.['required']" >El campo<strong>  NUMERO CELULAR  </strong> es requerido</label> 
+                                    </div>
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="rol">ROL <span style="color: red;">*</span></label>
+
+                                        <div class="input-group  ">
+                                            <select class="form-control" id="rol" formControlName="rol">
                                                 <option value="ADMINISTRADOR">ADMINISTRADOR</option>
                                                 <option value="ASESOR">ASESOR</option>
                                                 <option value="CLIENTE">CLIENTE</option>
                                             </select>
                                         </div>
+  
                                     </div>
 
                                 </div>
@@ -131,33 +141,33 @@
                             <div class="row">
                                 <div class="form-inline">
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="exampleInputAmount">FECHA NACIMIENTO <span style="color: red;">*</span></label>
+                                        <label for="fechaNacimiento">FECHA NACIMIENTO <span style="color: red;">*</span></label>
 
                                         <div class="input-group">
-                                            <input type="date" class="form-control" id="exampleInputAmount"
+                                            <input type="date" class="form-control" id="fechaNacimiento"  formControlName="fechaNacimiento"
                                                 placeholder="">
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="exampleInputAmount">EDAD </label>
+                                        <label for="edad">EDAD </label>
 
                                         <div class="input-group">
-                                            <input type="number" class="form-control" id="exampleInputAmount"
+                                            <input type="number" class="form-control" id="edad" formControlName="edad"
                                                 placeholder="" readonly>
                                         </div>
                                     </div>
 
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="exampleInputAmount">SEXO </label>
+                                        <label for="sexo">SEXO </label>
 
                                         <div class="input-group">
-                                            <select class="form-control">
+                                            <select class="form-control" formControlName="sexo" id="sexo">
                                                 <option value="M">MASCULINO</option>
                                                 <option value="F">FEMENINO</option>
                                                 <option value="N">NO BINARIO</option>
@@ -172,12 +182,12 @@
                             <div class="row">
                                 <div class="form-inline">
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="exampleInputAmount">ESTADO CIVIL </label>
+                                        <label for="estadoCivil">ESTADO CIVIL </label>
 
                                         <div class="input-group">
-                                            <select class="form-control">
+                                            <select class="form-control" formControlName="estadoCivil" id="estadoCivil">
                                                 <option value="INICIAL">SOLTERO</option>
                                                 <option value="PRIMARIA">CASADO</option>
                                                 <option value="SECUNDARIA">DIVORCIADO</option>
@@ -186,23 +196,23 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="exampleInputAmount">PROFESION </label>
+                                        <label for="profesion">PROFESION </label>
 
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="exampleInputAmount"
+                                            <input type="text" class="form-control" id="profesion" formControlName="profesion"
                                                 placeholder="">
                                         </div>
                                     </div>
 
 
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="exampleInputAmount">NIVEL DE ESCOLARIDAD </label>
+                                        <label for="nivelEscolaridad">NIVEL DE ESCOLARIDAD </label>
 
                                         <div class="input-group">
-                                            <select class="form-control">
+                                            <select class="form-control" id="nivelEscolaridad" formControlName="nivelEscolaridad">
                                                 <option value="INICIAL">INICIAL</option>
                                                 <option value="PRIMARIA">PRIMARIA</option>
                                                 <option value="SECUNDARIA">SECUNDARIA</option>
@@ -211,6 +221,52 @@
                                         </div>
                                     </div>
 
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="departamento">DEPARTAMENTO </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="departamento" formControlName="departamento"
+                                                placeholder="">
+                                            <div class="input-group-addon" data-toggle="modal" data-target="#departamento">
+                                                <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="ciudad">CIUDAD </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="ciudad"
+                                                placeholder="">
+                                                <div class="input-group-addon" data-toggle="modal" data-target="#ciudad">
+                                                    <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="direccion">DIRECCION  </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="direccion" formControlName="direccion"
+                                                placeholder="">
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -248,4 +304,4 @@
 </main>
 
 
-<app-tipo-identificacion (newItemEvent)="update($event)"></app-tipo-identificacion>
+<app-tipo-identificacion (newItemEvent)="updateTipoIdentificacion($event)"></app-tipo-identificacion>
