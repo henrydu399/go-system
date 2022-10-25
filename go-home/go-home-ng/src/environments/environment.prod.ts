@@ -11,6 +11,7 @@ export const environment = {
   url :Global.gateway,
   production: true,
   confirmUser:Global.gateway +'/home/usuario/confirm/',
+  getAllRolesSistema: Global.gateway + '/home/rolesSistema/',
   getAllUsuarios:Global.gateway +'/home/usuario/',
   getAllDepartamentos: Global.gateway +'/home/departamento/',
   getAllCiudades: Global.gateway +'/home/ciudad/',

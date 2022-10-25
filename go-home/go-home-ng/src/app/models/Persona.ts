@@ -11,7 +11,7 @@ export class Persona{
 
 	 estadoCivil!: string;
 
-	 fecha_nacimiento!: Date;
+	 fechaNacimiento!: Date;
 
 	 fechaCreacion!: Date;
 

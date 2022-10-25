@@ -4,6 +4,7 @@ import { mensaje } from 'src/app/constants/menssagesConstants';
 import { Barrio } from 'src/app/models/Barrio';
 import { Ciudad } from 'src/app/models/Ciudad';
 import { Departamento } from 'src/app/models/Departamento';
+import { CacheService } from 'src/app/services/cache.service';
 import { HomeService } from 'src/app/services/home.service';
 import { MessagesService } from 'src/app/services/menssages.service';
 
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit , AfterViewInit {
     private homeService :HomeService ,
     private loader: NgxUiLoaderService,
     private msgService: MessagesService,
+    private cacheService:CacheService
              ) 
   { }
 
@@ -65,6 +67,7 @@ export class HomeComponent implements OnInit , AfterViewInit {
       this.homeService.getAllDepartamentos().subscribe({
         next: (result) => {        
           this.listDepartamentos = result;  
+          this.cacheService.saveDepartamentos(result);
           this.loader.stop(this.TASK_GET_ALL_DEPARTAMENTOS);
         },
         error: (error) => {
@@ -81,6 +84,7 @@ export class HomeComponent implements OnInit , AfterViewInit {
           this.homeService.getAllCiudades().subscribe({
             next: (result) => {        
               this.listCiudades = result;  
+              this.cacheService.saveCiudades(result);
               this.loader.stop(this.TASK_GET_ALL_CIUDADES);
             },
             error: (error) => {
@@ -100,6 +104,7 @@ export class HomeComponent implements OnInit , AfterViewInit {
           this.homeService.getAllBarrios().subscribe({
             next: (result) => {     
               this.listBarrios = result; 
+              this.cacheService.saveBarrios(result);
               this.loader.stop(this.TASK_GET_BARRIOS);
               console.log(" BARRIOS CARGADOS CORRECTAMENTE")             
             },

@@ -327,7 +327,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	 * Metodo que busca los Roles del systema GO-HOME
 	 */
 	public List<RolesSistemaDTO> getRolesBySystema(String systemaName) throws HomeException {
-		logger.info("METODO : findUserForLogin() -> CREANDO USUARIO.... ");
+		logger.info("METODO : getRolesBySystema() -> CREANDO USUARIO.... ");
 		String urlFull = this.urlGateway  + this.pathGetRolesBySistemaNamen;
 		URI url = null;
 		try {
@@ -337,13 +337,13 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,ErrorConstantes.ERROR_CON_URL + urlFull );			
 		}
 		
-		logger.info("METODO : findUserForLogin() -> URL : "+url.toString());
+		logger.info("METODO : getRolesBySystema() -> URL : "+url.toString());
 		this.restTemplate  = new RestTemplate();
 		
 		try {
 
 			  ResponseEntity<RolesSistemaDTO []> responseEntityStr = restTemplate.getForEntity(url, RolesSistemaDTO[].class);
-			  logger.info("METODO : findUserForLogin() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
+			  logger.info("METODO : getRolesBySystema() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
 			  if( responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
 					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
 					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {

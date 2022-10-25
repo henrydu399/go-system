@@ -3,12 +3,20 @@
         <div class="row">
 
 
-            <div class="panel panel-default">
+            <div class="panel panel-warning">
+                <!-- Default panel contents -->
+                <div class="panel-heading"> <i class="fa fa-info fa-lg" aria-hidden="true"></i>  Informacion</div>
+                <div class="panel-body">
+                  <p>La password por defecto es la cedula, debera realizar el cambio de contraseña desde su perfil.</p>
+                </div>
+              </div>
+
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="row">
 
                         <div class="col-md-8" style="padding-top: 8px;">
-                            <h2 class="panel-title">Crear Usuario</h2>
+                            <h2 class="panel-title"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i> Crear Usuario</h2>
 
                         </div>
 
@@ -126,9 +134,9 @@
 
                                         <div class="input-group  ">
                                             <select class="form-control" id="rol" formControlName="rol">
-                                                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                                                <option value="ASESOR">ASESOR</option>
-                                                <option value="CLIENTE">CLIENTE</option>
+                                                <option value="">SELECCIONAR</option>
+                                                <option *ngFor="let item of listRolesSistema" value="{{item.id}}">{{item.id.nombreRol}}</option>
+
                                             </select>
                                         </div>
   
@@ -146,7 +154,8 @@
                                         <label for="fechaNacimiento">FECHA NACIMIENTO <span style="color: red;">*</span></label>
 
                                         <div class="input-group">
-                                            <input type="date" class="form-control" id="fechaNacimiento"  formControlName="fechaNacimiento"
+                                            <input type="date" class="form-control" id="fechaNacimiento" (change)="calcularEdad()"
+                                              formControlName="fechaNacimiento" data-inputmask-inputformat="dd/mm/yyyy" data-mask data-inputmask-alias="datetime"
                                                 placeholder="">
                                         </div>
                                     </div>
@@ -237,7 +246,7 @@
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="departamento" formControlName="departamento"
                                                 placeholder="">
-                                            <div class="input-group-addon" data-toggle="modal" data-target="#departamento">
+                                            <div class="input-group-addon" data-toggle="modal" data-target="#idModalDepartamento">
                                                 <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
                                             </div>
                                         </div>
@@ -249,9 +258,9 @@
                                         <label for="ciudad">CIUDAD </label>
 
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="ciudad"
+                                            <input type="text" class="form-control" id="ciudad" formControlName="ciudad"
                                                 placeholder="">
-                                                <div class="input-group-addon" data-toggle="modal" data-target="#ciudad">
+                                                <div class="input-group-addon" data-toggle="modal" data-target="#idModalCiudad">
                                                     <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
                                                 </div>
                                         </div>
@@ -260,13 +269,39 @@
                                     
                                     <div class="form-group col-md-4 col-sm-4">
 
-                                        <label for="direccion">DIRECCION  </label>
+                                        <label for="barrio">BARRIO </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="ciubarriodad" formControlName="barrio"
+                                                placeholder="">
+                                                <div class="input-group-addon" data-toggle="modal" data-target="#idModalBarrio">
+                                                    <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-6 col-sm-6">
+
+                                        <label for="estadoCivil">DIRECCION</label>
 
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="direccion" formControlName="direccion"
-                                                placeholder="">
+                                            placeholder="">
                                         </div>
                                     </div>
+
+                           
+
+
+
 
                                 </div>
                             </div>
@@ -278,7 +313,7 @@
                                     aria-hidden="true"></i>
                                 &nbsp;Cerrar</button>
 
-                            <button class="button btn_sm btn_yellow" style="float:right;" (click)="crear()"><i
+                            <button class="button btn_sm btn_yellow" style="float:right;" type="submit"><i
                                     class="fa fa-save fa-lg" aria-hidden="true"></i>
                                 &nbsp;Crear</button>
 
@@ -305,3 +340,10 @@
 
 
 <app-tipo-identificacion (newItemEvent)="updateTipoIdentificacion($event)"></app-tipo-identificacion>
+
+<app-departamento (newItemEvent)="updateDepartamento($event)"></app-departamento>
+
+<app-ciudad (newItemEvent)="updateCiudad($event)"></app-ciudad>
+
+<app-barrio (newItemEvent)="updateBarrio($event)"></app-barrio>
+

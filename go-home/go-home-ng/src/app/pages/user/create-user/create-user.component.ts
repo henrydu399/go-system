@@ -1,13 +1,20 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { mensaje } from 'src/app/constants/menssagesConstants';
+import { Barrio } from 'src/app/models/Barrio';
+import { Ciudad } from 'src/app/models/Ciudad';
+import { Departamento } from 'src/app/models/Departamento';
 import { Persona } from 'src/app/models/Persona';
 import { PersonaPK } from 'src/app/models/PersonaPK';
+import { RolSistema } from 'src/app/models/RolSistema';
 import { TipoIdentificacion } from 'src/app/models/TipoIdentificacion';
 import { Usuario } from 'src/app/models/User';
+import { CacheService } from 'src/app/services/cache.service';
 import { MessagesService } from 'src/app/services/menssages.service';
+import { RolSistemaService } from 'src/app/services/rol-systema.service';
 import { UserService } from 'src/app/services/user.service';
 import { UtilHttpService } from 'src/app/utils/utilHttp.service';
 import { environment } from 'src/environments/environment.prod';
@@ -20,6 +27,16 @@ import { environment } from 'src/environments/environment.prod';
 export class CreateUserComponent implements OnInit {
 
    public tipoIdentificacionSeleccionado!:TipoIdentificacion;
+   public departamentoSeleccionado!:Departamento | null;
+   public ciudadSeleccionada!:Ciudad | null;
+   public barrioSeleccionado!:Barrio | null;
+
+
+   public listBarrios:Barrio[] = [];
+   public listCiudad:Ciudad[] = [];
+   public listDepartamentos:Departamento[] = [];
+
+   public listRolesSistema!:RolSistema[];
    public submitted:boolean = false;
    private usuario!:Usuario ;
   
@@ -31,7 +48,7 @@ export class CreateUserComponent implements OnInit {
     apellidos: ['', [Validators.required,Validators.minLength(5), Validators.maxLength(60)]],
     email: ['', [Validators.required , Validators.pattern(environment.patternEmail)]],
     movil: ['',[Validators.required]],
-    fechaNacimiento: ['',],
+    fechaNacimiento: [formatDate(new Date(), 'dd/MM/yyyy', 'en'), [Validators.required]],
     rol: ['',],
     edad: ['',],
     sexo: ['',],
@@ -40,9 +57,8 @@ export class CreateUserComponent implements OnInit {
     nivelEscolaridad: ['',],
     departamento: ['',],
     ciudad: ['',],
-    direccion: ['',],
-    password :['', [Validators.required]],
-    passwordtwo :['', [Validators.required]],
+    barrio:['',],
+    direccion: ['',]
 
   });
 
@@ -54,9 +70,15 @@ export class CreateUserComponent implements OnInit {
     private utilHttpService:UtilHttpService,
     private router: Router,
     private formBuilder: FormBuilder,
+    private rolSistemaService:RolSistemaService,
+    private cacheService :CacheService,
   ) { }
 
   ngOnInit(): void {
+    this.getAllRolesSistema();
+    this.listCiudad =  this.cacheService.getCiudades();
+    this.listDepartamentos = this.cacheService.getDepartamentos();
+    this.listBarrios = this.cacheService.getBarrios();
   }
 
 
@@ -65,6 +87,61 @@ export class CreateUserComponent implements OnInit {
     this.tipoIdentificacionSeleccionado = _tipoIdentificacion;
     this.fromUsuario.get('tipoIdentificacion')?.setValue(_tipoIdentificacion.nombre);
   }
+
+  public updateDepartamento(_departamento:Departamento){
+    ////LIMPIANDO
+    this.ciudadSeleccionada = null;
+    this.fromUsuario.get('ciudad')?.setValue('');
+    this.barrioSeleccionado = null;
+    this.fromUsuario.get('barrio')?.setValue('');
+    /// ###### //////
+
+    this.departamentoSeleccionado = _departamento;
+    this.fromUsuario.get('departamento')?.setValue(_departamento.nombre);
+
+  }
+
+  public updateCiudad(_ciudad:Ciudad){
+
+
+       ////LIMPIANDO
+       this.departamentoSeleccionado = null;
+       this.fromUsuario.get('departamento')?.setValue('');
+       this.barrioSeleccionado = null;
+       this.fromUsuario.get('barrio')?.setValue('');
+       /// ###### //////
+
+    this.ciudadSeleccionada = _ciudad;
+
+    let departamento = this.listDepartamentos.find( elemento => elemento.id = _ciudad.id.idDepartamento);
+    if( departamento !== undefined  && departamento !== null){
+      this.departamentoSeleccionado = departamento!;
+      this.fromUsuario.get('departamento')?.setValue(departamento.nombre);
+    }
+
+    this.fromUsuario.get('ciudad')?.setValue(_ciudad.nombre);
+  }
+
+  public updateBarrio(_barrio:Barrio){
+    this.ciudadSeleccionada = _barrio;
+    this.fromUsuario.get('barrio')?.setValue(_barrio.nombre);
+
+    let departamento = this.listDepartamentos.find( elemento => elemento.id = _barrio.id.idDepartamento);
+    if( departamento !== undefined  && departamento !== null){
+      this.departamentoSeleccionado = departamento!;
+      this.fromUsuario.get('departamento')?.setValue(departamento.nombre);
+    }
+
+    let ciudad = this.listCiudad.find( elemento => elemento.id.id = _barrio.id.idCiudad);
+    if( ciudad !== undefined  && ciudad !== null){
+      this.ciudadSeleccionada = ciudad!;
+      this.fromUsuario.get('ciudad')?.setValue(ciudad.nombre);
+    }
+
+  }
+
+  
+
   //########
 
 
@@ -85,6 +162,7 @@ export class CreateUserComponent implements OnInit {
   
   private CONS_TASK_METODO_CREAR: string = "CONS_TASK_METODO_CREAR";
   public crear(){
+    
     this.submitted = true;
     this.loader.start(this.CONS_TASK_METODO_CREAR);
 
@@ -105,6 +183,26 @@ export class CreateUserComponent implements OnInit {
 
   }
 
+  public calcularEdad(){
+    let fechaNacimiento:string | null | undefined = this.fromUsuario.get('fechaNacimiento')?.value;
+    if( fechaNacimiento !== undefined && fechaNacimiento !== null){
+      
+      
+      var hoy = new Date();
+      var cumpleanos = new Date(fechaNacimiento);
+      var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+      var m = hoy.getMonth() - cumpleanos.getMonth();
+  
+      if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+          edad--;
+      }
+      console.log(edad)
+      this.fromUsuario.get('edad')?.setValue( String (edad) );
+      //return edad;
+
+    }
+  }
+
 
   public build(){
     let numeroIdentificacion:string = this.fromUsuario.get('numeroIdentificacion')?.value!;
@@ -115,8 +213,14 @@ export class CreateUserComponent implements OnInit {
     persona.id=personaPk;
     persona.nombres = this.fromUsuario.get('nombres')?.value!;
     persona.apellidos = this.fromUsuario.get('apellidos')?.value!;
-    persona.fecha_nacimiento = Date.parse(this.fromUsuario.get('fechaNacimiento')?.value!);
-    persona.
+    
+    let fechaNacimiento:string | null | undefined = this.fromUsuario.get('fechaNacimiento')?.value;
+    if( fechaNacimiento !== undefined && fechaNacimiento !== null){
+      persona.fechaNacimiento = new Date(fechaNacimiento);
+    }
+
+    console.log( persona.fechaNacimiento);
+   
 
     this.usuario = new Usuario();
 
@@ -126,5 +230,25 @@ export class CreateUserComponent implements OnInit {
   public  cerrar(){
 
   }
+
+
+
+        //METODO QUE CONSULTA LOS ROLES
+        TASK_GET_ROL_SISTEMA = "TASK_GET_ROL_SISTEMA";
+        private getAllRolesSistema(){
+          console.log("CARGANDO ROLES DE SISTEMA..")
+          this.loader.start(this.TASK_GET_ROL_SISTEMA);
+          this.rolSistemaService.getAllRolSistema().subscribe({
+            next: (result) => {     
+              this.listRolesSistema = result; 
+              this.loader.stop(this.TASK_GET_ROL_SISTEMA);
+              console.log(" ROLES DE SISTEMA CARGADOS CORRECTAMENTE")             
+            },
+            error: (error:any) => {
+              this.utilHttpService.errorManager(error,this.TASK_GET_ROL_SISTEMA);
+              console.log(" ERROR CARGANDO ")
+            }
+          });
+        }
 
 }

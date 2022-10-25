@@ -13,7 +13,7 @@ import { UtilHttpService } from 'src/app/utils/utilHttp.service';
 export class TipoIdentificacionComponent implements OnInit {
 
   public listTiposDocumentos:TipoIdentificacion[] = [];
-  public txtBuscar:string="";
+  public txtBuscarTipoDocumento:string="";
 
     //TABLA 
   public search: string = "";
@@ -38,7 +38,7 @@ export class TipoIdentificacionComponent implements OnInit {
 
 
   public buscar(value :string){
-    this.txtBuscar = value;
+    this.txtBuscarTipoDocumento = value;
   }
 
   public seleccionar(tipoIdentificacion:TipoIdentificacion){

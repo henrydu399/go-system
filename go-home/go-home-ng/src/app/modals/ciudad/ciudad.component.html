@@ -1,5 +1,5 @@
 <!-- Modal TIPO IDENTIFICACION-->
-<div class="modal fade" id="idModalTipoIdentificacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="idModalCiudad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -11,7 +11,7 @@
                 <div class="row">
 
                     <div class="col-md-8" style="padding-top: 8px;">
-                        <h2 class="panel-title">Lista Tipos De Documentos</h2>
+                        <h2 class="panel-title">Lista De Ciudades</h2>
 
                     </div>
 
@@ -22,7 +22,10 @@
                                 <div class="search">
                                     <form method="get" class="widget_search">
                                         
-                                        <input type="search" placeholder="Empiece a buscar..."  [(ngModel)]="txtBuscarTipoDocumento"  name="txtBuscarTipoDocumento"  id="txtBuscarTipoDocumento" >
+                                        <input type="search" placeholder="Empiece a buscar..." 
+                                         [(ngModel)]="txtBuscarCiudad"  
+                                         name="txtBuscarDepartamento"  
+                                         id="txtBuscarDepartamento" >
                                         <button class="search_btn"  type="button">
                                             <i class="fa fa-search"></i>
                                         </button>
@@ -47,8 +50,9 @@
                         <thead>
                             <tr>
                                 <th>Accion</th>
-                                <th>Prefijo</th>
-                                <th>Tipo</th>
+                                <th>Id</th>
+                                <th>Ciudad</th>
+                                <th>Departamento</th>
 
 
 
@@ -56,8 +60,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of listTiposDocumentos | filtroTipoIdentificacion: txtBuscarTipoDocumento  | paginate: {
-                            id: 'tiposIdentificacionPagination',
+                            <tr *ngFor="let item of listCiudad | filtroCiudad: txtBuscarCiudad  | paginate: {
+                            id: 'ciudadPagination',
                             itemsPerPage: 10,
                             currentPage: page,
                             totalItems: total } ">
@@ -74,8 +78,9 @@
                                     </div>
                                 </td>
 
-                                <td>{{item.prefijo}}</td>
+                                <td>{{item.id.id}}</td>
                                 <td>{{item.nombre}}</td>
+                                <td>{{getNameDepartamento(item.id.idDepartamento)}}</td>
 
 
 
@@ -84,7 +89,7 @@
                         </tbody>
                     </table>
                 </div>
-                <pagination-controls id="tiposIdentificacionPagination" (pageChange)="page = $event"
+                <pagination-controls id="ciudadPagination" (pageChange)="page = $event"
                     style="text-align: right;" nextLabel="" previousLabel="">
                 </pagination-controls>
 

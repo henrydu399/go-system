@@ -17,7 +17,10 @@ import { AuthModule } from './auth/auth.module';
 import { AuthInterceptor } from './shareds/interceptors/authInterceptos';
 import { HomeComponent } from './pages/home/home.component';
 
-import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CiudadComponent } from './modals/ciudad/ciudad.component';
+import { BarrioComponent } from './modals/barrio/barrio.component';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
     HeaderComponent,
     TopbarComponent,
     MessagesComponent,
-    HomeComponent
+    HomeComponent,
+
+
   ],
   imports: [
     

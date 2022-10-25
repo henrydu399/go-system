@@ -14,6 +14,13 @@ import { AuthInterceptor } from '../shareds/interceptors/authInterceptos';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TipoIdentificacionComponent } from '../modals/tipo-identificacion/tipo-identificacion.component';
 import { FiltroTipoIdentificacionPipe } from '../pipes/filtro-tipoIdentificacion.pipe';
+import { Departamento } from '../models/Departamento';
+import { DepartamentoComponent } from '../modals/departamento/departamento.component';
+import { CiudadComponent } from '../modals/ciudad/ciudad.component';
+import { BarrioComponent } from '../modals/barrio/barrio.component';
+import { FiltroDepartamentoipe } from '../pipes/filtro-departamento.pipe';
+import { FiltroCiudadPipe } from '../pipes/filtro-ciudad.pipe';
+import { FiltroBarrioPipe } from '../pipes/filtro-barrio';
 
 
 
@@ -27,7 +34,14 @@ import { FiltroTipoIdentificacionPipe } from '../pipes/filtro-tipoIdentificacion
     EdithUserComponent,
     NavbarComponent,
     TipoIdentificacionComponent,
+    DepartamentoComponent,
+    CiudadComponent,
+    BarrioComponent,
 
+
+    FiltroCiudadPipe,
+    FiltroBarrioPipe,
+    FiltroDepartamentoipe,
     FiltroTipoIdentificacionPipe,
     FiltroUsuarioPipe
   ],
