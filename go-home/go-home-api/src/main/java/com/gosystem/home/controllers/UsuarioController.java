@@ -187,17 +187,15 @@ private Logger logger;
     //=======================================================================
 	
 	/**
-	 * Metodo que permite crear Usuarios con Roles no administradores 
-	 * @param json
-	 * @param req
-	 * @return
+	 * Metodo que permite crear Usuarios desde la paguina publica
+	 * @SEGURIDAD NO 
 	 */
 	@PostMapping(value = "/public/" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> guardarPublic(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
+	public ResponseEntity<Object> saveForSystemPublic(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
 		logger.info(nameApp + " guardar :: INICIO ");
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
 		try {
-			service.savePublic(json);
+			service.saveForSystemPublic(json);
 			return new ResponseEntity<Object>(null, HttpStatus.CREATED);
 		}catch (HomeException e) {
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -206,6 +204,25 @@ private Logger logger;
 		}
 
 	} 	
+	
+	/**
+	 * Metodo que permite crear Usuarios + persona + persona contacto + rol Usuariio
+	 * @SEGURIDAD SI 
+	 */
+	@PostMapping(value = "/saveForSystem/" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> saveForSystem(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
+		logger.info(nameApp + " guardar :: INICIO ");
+		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
+		try {
+			service.saveForSystem(json);
+			return new ResponseEntity<Object>(null, HttpStatus.CREATED);
+		}catch (HomeException e) {
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }catch (Exception e) {
+	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	}
 	
 	
 	@PostMapping(value = "/confirm/" , produces = MediaType.APPLICATION_JSON_VALUE)

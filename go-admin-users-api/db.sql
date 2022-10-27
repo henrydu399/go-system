@@ -51,6 +51,9 @@ CREATE TABLE `persona_contacto` (
   `direccion` varchar(100) DEFAULT NULL,
   `activo` bit(1) NOT NULL,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_departamento` bigint(20) DEFAULT NULL,
+  `id_ciudad` bigint(20) DEFAULT NULL,
+  `id_barrio` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`,`id_tipo_identificacion`,`numero_identificacion`),
   KEY `persona_contacto_FK` (`id_tipo_identificacion`,`numero_identificacion`),
   CONSTRAINT `persona_contacto_FK` FOREIGN KEY (`id_tipo_identificacion`, `numero_identificacion`) REFERENCES `persona` (`ID_TIPO_IDENTIFICACION`, `NUMERO_IDENTIFICACION`) ON UPDATE CASCADE

@@ -1,10 +1,10 @@
 export class UsuarioPK{
 
-    public id: number;
+    public id: number | null;
     public idTipoIdentificacion : number;
     public numeroIdentificacion: string;
 
-    constructor(public _id: number ,public  _idTipoIdentificacion : number ,public  _numeroIdentificacion : string){
+    constructor(public _id: number | null ,public  _idTipoIdentificacion : number ,public  _numeroIdentificacion : string){
         this.id = _id;
         this.idTipoIdentificacion = _idTipoIdentificacion;
         this.numeroIdentificacion = _numeroIdentificacion;

@@ -39,11 +39,13 @@ public class PersonaDTO implements Serializable {
 	private String nombres;
 
 	
-	private int numeroHijos;
-
 	private String profesion;
 
 	private String sexo;
+
+	private String religion;
+	
+	private String nivelEscolaridad;
 
 	
 	private TipoIdentificacionDTO tipoIdentificacion;

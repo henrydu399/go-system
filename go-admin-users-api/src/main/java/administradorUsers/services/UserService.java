@@ -14,6 +14,8 @@ public interface UserService extends IEntityDao<Usuario> {
 	 
 	 public UsuarioDTO getUserForLogin(Usuario usuario) throws AdministradorUserException ;
 	  
+	 public UsuarioDTO saveUserSystemPublic(UsuarioDTO usuario) throws AdministradorUserException ;
+	 
 	 public UsuarioDTO saveUserSystem(UsuarioDTO usuario) throws AdministradorUserException ;
 	 
 	 public void confirmUser(UsuarioDTO usuario) throws AdministradorUserException ;

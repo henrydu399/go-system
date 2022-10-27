@@ -1,7 +1,10 @@
 
 import { environment, Global } from "src/environments/environment.prod";
 import { Persona } from "./Persona";
+import { PersonaContacto } from "./PersonaContacto";
 import { PrivilegioRolUsuario } from "./PrivilegioRolUsuario";
+import { RolesUsuario } from "./RolesUsuario";
+import { RolSistema } from "./RolSistema";
 import { UsuarioPK } from "./UsuarioPK";
 
 export class Usuario {
@@ -23,6 +26,10 @@ export class Usuario {
 
     roles!: string| null;
     sistema:string| null;
+
+    rol! :RolSistema;
+
+    personaContacto! :PersonaContacto;
 
     privilegios!:PrivilegioRolUsuario[];
 

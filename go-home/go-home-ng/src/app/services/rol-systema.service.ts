@@ -15,6 +15,6 @@ export class RolSistemaService {
 
 
   public getAllRolSistema(): Observable<any> {
-    return this.http.get<any>(environment.getAllRolesSistema,{ 'headers': lstHeaders } );
+    return this.http.get<any>(environment.pathRolesSistema,{ 'headers': lstHeaders } );
   }
 }

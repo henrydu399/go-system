@@ -8,10 +8,15 @@ import { Barrio } from 'src/app/models/Barrio';
 import { Ciudad } from 'src/app/models/Ciudad';
 import { Departamento } from 'src/app/models/Departamento';
 import { Persona } from 'src/app/models/Persona';
+import { PersonaContacto } from 'src/app/models/PersonaContacto';
+import { PersonaContactoPK } from 'src/app/models/PersonaContactoPK';
 import { PersonaPK } from 'src/app/models/PersonaPK';
+import { RolesUsuario } from 'src/app/models/RolesUsuario';
+import { RolesUsuarioPK } from 'src/app/models/RolesUsuarioPK';
 import { RolSistema } from 'src/app/models/RolSistema';
 import { TipoIdentificacion } from 'src/app/models/TipoIdentificacion';
 import { Usuario } from 'src/app/models/User';
+import { UsuarioPK } from 'src/app/models/UsuarioPK';
 import { CacheService } from 'src/app/services/cache.service';
 import { MessagesService } from 'src/app/services/menssages.service';
 import { RolSistemaService } from 'src/app/services/rol-systema.service';
@@ -30,6 +35,7 @@ export class CreateUserComponent implements OnInit {
    public departamentoSeleccionado!:Departamento | null;
    public ciudadSeleccionada!:Ciudad | null;
    public barrioSeleccionado!:Barrio | null;
+   public rolSistemaSeleccionado!: RolSistema;
 
 
    public listBarrios:Barrio[] = [];
@@ -123,7 +129,7 @@ export class CreateUserComponent implements OnInit {
   }
 
   public updateBarrio(_barrio:Barrio){
-    this.ciudadSeleccionada = _barrio;
+    this.barrioSeleccionado = _barrio;
     this.fromUsuario.get('barrio')?.setValue(_barrio.nombre);
 
     let departamento = this.listDepartamentos.find( elemento => elemento.id = _barrio.id.idDepartamento);
@@ -139,10 +145,18 @@ export class CreateUserComponent implements OnInit {
     }
 
   }
-
-  
-
   //########
+
+  public changeRol(){
+    let rolName:string = this.fromUsuario.get('rol')?.value!;
+    for( let rolSistema of this.listRolesSistema){
+      if( rolSistema.id.nombreRol === rolName){
+          this.rolSistemaSeleccionado = new RolSistema();
+          this.rolSistemaSeleccionado = rolSistema;
+          break;
+      } 
+    }
+  }
 
 
   //METODO QUE DEVUELVE EL VALOR DEL FORMULARIO
@@ -159,6 +173,9 @@ export class CreateUserComponent implements OnInit {
     return '';
   }
   ///////////////////////////////////////
+
+
+ 
   
   private CONS_TASK_METODO_CREAR: string = "CONS_TASK_METODO_CREAR";
   public crear(){
@@ -180,6 +197,19 @@ export class CreateUserComponent implements OnInit {
 
     this.build();
 
+    this.userService.saveForSystem(this.usuario).subscribe({
+      next: (result) => {
+        this.loader.stop(this.CONS_TASK_METODO_CREAR);
+        this.msgService.lanzarAlerta(mensaje.SUCCESS, "Proceso exitoso !",200); 
+        this.router.navigate(['/app/adminUser']);
+      },
+      error: (error) => {
+        this.utilHttpService.errorManager(error,this.CONS_TASK_METODO_CREAR);
+      },
+      complete: () => {
+        this.loader.stop(this.CONS_TASK_METODO_CREAR);
+      }
+    });
 
   }
 
@@ -205,30 +235,62 @@ export class CreateUserComponent implements OnInit {
 
 
   public build(){
-    let numeroIdentificacion:string = this.fromUsuario.get('numeroIdentificacion')?.value!;
-    let personaPk :PersonaPK = new PersonaPK(numeroIdentificacion,this.tipoIdentificacionSeleccionado.id);
 
 
-    let persona:Persona = new Persona();
-    persona.id=personaPk;
-    persona.nombres = this.fromUsuario.get('nombres')?.value!;
-    persona.apellidos = this.fromUsuario.get('apellidos')?.value!;
-    
-    let fechaNacimiento:string | null | undefined = this.fromUsuario.get('fechaNacimiento')?.value;
-    if( fechaNacimiento !== undefined && fechaNacimiento !== null){
-      persona.fechaNacimiento = new Date(fechaNacimiento);
+    try {
+
+      let numeroIdentificacion:string = this.fromUsuario.get('numeroIdentificacion')?.value!;
+      let personaPk :PersonaPK = new PersonaPK(numeroIdentificacion,this.tipoIdentificacionSeleccionado.id);
+  
+  
+      let persona:Persona = new Persona();
+      persona.id=personaPk;
+      persona.nombres = this.fromUsuario.get('nombres')?.value!;
+      persona.apellidos = this.fromUsuario.get('apellidos')?.value!;
+      
+      let fechaNacimiento:string | null | undefined = this.fromUsuario.get('fechaNacimiento')?.value;
+      if( fechaNacimiento !== undefined && fechaNacimiento !== null){
+        persona.fechaNacimiento = new Date(fechaNacimiento);
+      }
+  
+      console.log( persona.fechaNacimiento);
+     
+  
+      let personaContactoPK:PersonaContactoPK =  new PersonaContactoPK();
+      personaContactoPK.idTipoIdentificacion = persona.id.idTipoIdentificacion;
+      personaContactoPK.numeroIdentificacion = persona.id.numeroIdentificacion;
+
+      let personaContacto : PersonaContacto = new PersonaContacto();
+      personaContacto.id= personaContactoPK;
+      personaContacto.idDepartamento = this.departamentoSeleccionado?.id!;
+      personaContacto.idCiudad = this.ciudadSeleccionada?.id!.id!;
+      personaContacto.idBarrio = this.barrioSeleccionado?.id.id!;
+      personaContacto.direccion = this.fromUsuario.get('direccion')?.value!;
+      
+  
+      let usuarioPk = new UsuarioPK(null,this.tipoIdentificacionSeleccionado.id,numeroIdentificacion );
+      this.usuario = new Usuario();
+      this.usuario.id= usuarioPk;
+      this.usuario.persona = persona;
+      this.usuario.email = this.fromUsuario.get('email')?.value!;
+      this.usuario.movil = this.fromUsuario.get('movil')?.value!;
+      this.usuario.rol = this.rolSistemaSeleccionado;
+      this.usuario.personaContacto = personaContacto;
+  
+      
+    } catch (error) {
+      console.log(error)
+      this.loader.stop(this.CONS_TASK_METODO_CREAR);
     }
+    
+  
 
-    console.log( persona.fechaNacimiento);
-   
-
-    this.usuario = new Usuario();
 
   }
 
 
   public  cerrar(){
-
+    this.router.navigate(['/app/adminUser']);
   }
 
 

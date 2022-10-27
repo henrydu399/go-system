@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.gosystem.commons.adminUsers.dto.RolesSistemaDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,6 +56,15 @@ public class Usuario implements Serializable {
 	private String sistema;
 	@Transient
 	private List<PrivilegiosRolUsuario> privilegios;
+	
+	@Transient
+	private RolesSistemaDTO rol;
+	
+	@Transient
+	private RolesUsuario rolUsuario;
+	
+	@Transient
+	private PersonaContacto personaContacto;
 
 	//bi-directional many-to-one association to Persona
 	@ManyToOne()

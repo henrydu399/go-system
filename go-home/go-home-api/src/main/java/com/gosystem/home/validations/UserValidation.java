@@ -24,7 +24,13 @@ public class UserValidation {
 	
 	private final String ERROR_CAMPO_EMAIL = "El Campo email es requerido y obligatorio";
 	
+	private final String ERROR_CAMPO_MOVIL = "El Campo movil es requerido y obligatorio";
+	
 	private final String ERROR_CAMPO_NOMBRE = "El campo nombre es requerido y obligatorio";
+	
+	private final String ERROR_CAMPO_APELLIDOS = "El campo apellidos es requerido y obligatorio";
+	
+	private final String ERROR_CAMPO_FECHA_NACIMIENTO = "El campo Fecha de nacimeinto es requerido y obligatorio";
 	
 	//private final String ERROR_CAMPO_EMAIL_FORMATO_INCORRECTO = "Formato incorrecto con el campo email ";
 	
@@ -36,6 +42,7 @@ public class UserValidation {
 	
 	
 	public void save(UsuarioDTO e) throws HomeException{
+		
 		if( Objects.isNull(e)) {
 			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_ENTIDAD_NULL_O_VACIA);
 		}
@@ -43,15 +50,24 @@ public class UserValidation {
 		if(Objects.isNull(e.getEmail()) || e.getEmail().isEmpty() ) {
 			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_EMAIL);
 		}
-		
-		if(Objects.isNull(e.getPassword()) || e.getPassword().isEmpty() ) {
-			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_PASSWORD);
+		if(Objects.isNull(e.getMovil()) || e.getMovil().isEmpty() ) {
+			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_MOVIL);
 		}
+		
+
 		
 
 		
 		if( Objects.isNull(e.getPersona()) || Objects.isNull(e.getPersona().getNombres()) || e.getPersona().getNombres().isEmpty() ) {
 			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_NOMBRE);
+		}
+		
+		if( Objects.isNull(e.getPersona()) || Objects.isNull(e.getPersona().getApellidos()) || e.getPersona().getApellidos().isEmpty() ) {
+			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_APELLIDOS);
+		}
+		
+		if( Objects.isNull(e.getPersona()) || Objects.isNull(e.getPersona().getFechaNacimiento())  ) {
+			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_FECHA_NACIMIENTO);
 		}
 		
 	}

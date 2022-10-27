@@ -12,6 +12,8 @@ public interface IUserService extends IEntityDao<UsuarioDTO> {
 	
 	 Optional<UsuarioDTO>	findByEmail(String email) throws HomeException ;
 	 
-	 public void savePublic(UsuarioDTO usuario) throws HomeException ;
+	 public void saveForSystemPublic(UsuarioDTO usuario) throws HomeException ;
+	 
+	 public void saveForSystem(UsuarioDTO usuario) throws HomeException ;
 
 }

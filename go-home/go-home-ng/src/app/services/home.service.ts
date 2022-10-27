@@ -15,15 +15,15 @@ export class HomeService {
 
 
   public getAllDepartamentos(): Observable<any> {
-    return this.http.get<Departamento>(environment.getAllDepartamentos ,{ 'headers': lstHeaders });
+    return this.http.get<Departamento>(environment.pathDepartamentos ,{ 'headers': lstHeaders });
   }
 
   public getAllCiudades(): Observable<any> {
-    return this.http.get<any>(environment.getAllCiudades ,{ 'headers': lstHeaders });
+    return this.http.get<any>(environment.pathCiudades ,{ 'headers': lstHeaders });
   }
 
   public getAllBarrios(): Observable<any> {
-    return this.http.get<any>(environment.getAllBarrios,{ 'headers': lstHeaders } );
+    return this.http.get<any>(environment.pathBarrios,{ 'headers': lstHeaders } );
   }
 
  /*  public getActive(): Observable<any> {

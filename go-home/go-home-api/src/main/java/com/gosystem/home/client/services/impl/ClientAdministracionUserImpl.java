@@ -54,7 +54,11 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	private Logger logger;
 	
 	private String pathGoAdminUserUsuario;
-	private String pathSaveUserPublic;
+	
+	private String pathSaveUserSystemPublic;
+	private String pathSaveUserSystem;
+	
+	private String pathSaveUser;
 	private String pathGetUserForLogin;
 	private String pathGetRolesBySistemaNamen;
 	private String urlGateway;
@@ -78,7 +82,10 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 		
 		this. urlGateway = parametrizacionService.getParametro(KeyParametrosConstantes.URL_GATEWAY);
 		this. pathGoAdminUserUsuario = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO);
-		this. pathSaveUserPublic = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_PUBLIC);
+		
+		this. pathSaveUserSystemPublic = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_SYSTEM_PUBLIC);
+		this. pathSaveUserSystem = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_SYSTEM);
+	
 		this. pathGetUserForLogin = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GET_USER_FOR_LOGIN);
 		this. pathGetRolesBySistemaNamen = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ROLES_USERS_BY_SISTEMA_NAME);
 		this. pathUserConfirm = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_CONFIRM);
@@ -125,7 +132,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	@Override
 	public void createUser(UsuarioDTO user) throws HomeException {
 		logger.info("METODO : createUSer() -> CREANDO USUARIO.... ");
-		String urlFull = this.urlGateway+ pathSaveUserPublic;
+		String urlFull = this.urlGateway+ pathGoAdminUserUsuario;
 		logger.info("METODO : createUSer() -> URL : "+urlFull);
 		this.restTemplate  = new RestTemplate();;
 		try {
@@ -293,9 +300,9 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	}
 
 	@Override
-	public UsuarioDTO savePublic(UsuarioDTO usuario) throws HomeException {
+	public UsuarioDTO saveForSystemPublic(UsuarioDTO usuario) throws HomeException {
 		logger.info("METODO : savePublic() -> CREANDO USUARIO.... ");
-		String urlFull = this.urlGateway+ pathSaveUserPublic;
+		String urlFull = this.urlGateway+ pathSaveUserSystemPublic;
 		logger.info("METODO : savePublic() -> URL : "+urlFull);
 		this.restTemplate  = new RestTemplate();;
 		try {
@@ -322,6 +329,43 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 		}	
 		
 	}
+	
+	
+	@Override
+	public UsuarioDTO saveForSystem(UsuarioDTO usuario) throws HomeException {
+		logger.info("METODO : savePublic() -> CREANDO USUARIO.... ");
+		String urlFull = this.urlGateway+ pathSaveUserSystem;
+		logger.info("METODO : savePublic() -> URL : "+urlFull);
+		this.restTemplate  = new RestTemplate();;
+		try {
+			  HttpHeaders headers = new HttpHeaders();
+		      headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+              HttpEntity<UsuarioDTO> request =  new HttpEntity<UsuarioDTO>(usuario, headers);		    
+			  ResponseEntity<UsuarioDTO> responseEntityStr = restTemplate. postForEntity(urlFull, request, UsuarioDTO.class);
+			  logger.info("METODO : savePublic() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
+			  if( responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
+					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
+					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {
+				  logger.info("METODO : savePublic() -> RESPUESTA OK: ");
+				  return responseEntityStr.getBody();
+			  }else {
+				  if( Objects.nonNull(responseEntityStr.getBody())  ) {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,UtilGson.SerializeObjet( responseEntityStr.getBody() ));
+				  }else {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,ErrorConstantes.ERROR_GENERAL_GUARDANDO );
+				  }
+			  }	  
+		}catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
+		}	
+		
+	}
+	
+	
+	
+	
+	
 
 	/**
 	 * Metodo que busca los Roles del systema GO-HOME

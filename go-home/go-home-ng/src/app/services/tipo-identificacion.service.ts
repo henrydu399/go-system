@@ -15,6 +15,6 @@ export class TipoIdentificacionService {
 
 
   public getAllTiposIdentificacion(): Observable<any> {
-    return this.http.get<any>(environment.getAllTipoDocumentos,{ 'headers': lstHeaders } );
+    return this.http.get<any>(environment.pathTipoDocumentos,{ 'headers': lstHeaders } );
   }
 }

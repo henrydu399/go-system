@@ -17,7 +17,7 @@ export class UserService {
 
 
   public getAllUsuarios(): Observable<any> {
-    return this.http.get<any>(environment.getAllUsuarios,{ 'headers': lstHeaders } );
+    return this.http.get<any>(environment.pathUsuarios,{ 'headers': lstHeaders } );
   }
   
 
@@ -25,6 +25,23 @@ export class UserService {
     //let body = JSON.stringify(data).toString();
     return this.http.post<any>(environment.confirmUser, usuario, { 'headers': lstHeaders });
   }
+
+
+
+
+  public save(usuario: Usuario): Observable<any> {
+    let body = JSON.stringify(usuario).toString();
+    return this.http.post<any>(environment.pathUsuarios, body, { 'headers': lstHeaders });
+  }
+
+  public saveForSystem(usuario: Usuario): Observable<any> {
+    let body = JSON.stringify(usuario).toString();
+    return this.http.post<any>(environment.pathUsuariosSystem, body, { 'headers': lstHeaders });
+  }
+
+
+
+  
 
 
  /*  public getActive(): Observable<any> {
@@ -42,10 +59,7 @@ export class UserService {
   }
 
 
-  public save(data: ConConciliacionResultado): Observable<any> {
-    let body = JSON.stringify(data).toString();
-    return this.http.post<any>(environment.urlConciliacionResultado, body, { 'headers': this.lstHeaders });
-  }
+
 
 
 

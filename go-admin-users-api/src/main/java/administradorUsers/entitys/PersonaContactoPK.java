@@ -1,10 +1,29 @@
 package administradorUsers.entitys;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.gosystem.commons.adminUsers.dto.PersonaDTO;
+import com.gosystem.commons.adminUsers.dto.PersonaPKDTO;
+import com.gosystem.commons.adminUsers.dto.TipoIdentificacionDTO;
+import com.gosystem.commons.adminUsers.dto.UsuarioDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Embeddable
 public class PersonaContactoPK implements Serializable {
 
@@ -26,47 +45,7 @@ public class PersonaContactoPK implements Serializable {
 	
 	
 	
-	
-	
 
-	public PersonaContactoPK(Long id, String numeroIdentificacion, int idTipoIdentificacion) {
-		super();
-		this.id = id;
-		this.numeroIdentificacion = numeroIdentificacion;
-		this.idTipoIdentificacion = idTipoIdentificacion;
-	}
-
-	public PersonaContactoPK() {
-		
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	
-	
-
-	public String getNumeroIdentificacion() {
-		return numeroIdentificacion;
-	}
-
-	public void setNumeroIdentificacion(String numeroIdentificacion) {
-		this.numeroIdentificacion = numeroIdentificacion;
-	}
-
-	public int getIdTipoIdentificacion() {
-		return idTipoIdentificacion;
-	}
-
-	public void setIdTipoIdentificacion(int idTipoIdentificacion) {
-		this.idTipoIdentificacion = idTipoIdentificacion;
-	}
-	
 	
 	
 	

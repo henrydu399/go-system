@@ -199,6 +199,23 @@ private Logger logger;
 	
 
 	
+	@PostMapping(value = "/saveforsystemPublic/" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> saveUserSystemPublic(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
+		logger.info(nameApp + " guardar :: INICIO ");
+		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
+		try {
+			UsuarioDTO user =service.saveUserSystemPublic(json);
+			return new ResponseEntity<Object>(user, HttpStatus.CREATED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }catch (Exception e) {
+	    	logger.severe(e.getMessage());
+	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	} 
+	
 	@PostMapping(value = "/saveforsystem/" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveUserSystem(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
 		logger.info(nameApp + " guardar :: INICIO ");

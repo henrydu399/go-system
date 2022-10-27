@@ -14,7 +14,11 @@ public interface IAdministracionClientUsers {
 	
 	void createUser(UsuarioDTO user) throws HomeException;
 	
-	public UsuarioDTO savePublic(UsuarioDTO usuario) throws HomeException ;
+	UsuarioDTO saveForSystemPublic(UsuarioDTO user) throws HomeException;
+	
+	UsuarioDTO saveForSystem(UsuarioDTO user) throws HomeException;
+	
+
 
 	
 	void edithUser(UsuarioDTO user) throws HomeException;

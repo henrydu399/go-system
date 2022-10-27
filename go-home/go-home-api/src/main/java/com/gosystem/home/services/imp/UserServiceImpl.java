@@ -102,12 +102,19 @@ public class UserServiceImpl  implements IUserService {
 	public void save(UsuarioDTO usuario) throws HomeException {
 		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
 		try {					
-
+			logger.info("METODO : save() : REGISTRANDO USUARIO ....");
+			logger.info("METODO : save() : VALIDANDO ....");
+			usuario.setConfirmado(false);
+			usuario.setActivo(true);
 			userValidation.save(usuario);
-
+			logger.info("METODO : save() : REGISTRANDO USUARIO ....");
+			//ENCODE PASSWORD 
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			usuario.setPassword( passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion() ) );
+			///
 			
-						
-			
+			this.clientAdministracionUsers.createUser(usuario);	
+			logger.info("METODO : save() : REGISTRADO CON EXITO ....");	
 		}catch (PersistenceException e) {
 			logger.severe(e.getMessage());
 			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_GUARDAR);
@@ -208,18 +215,63 @@ public class UserServiceImpl  implements IUserService {
     // ----- PUBLIC  -----
     //=======================================================================
 	
+	/**
+	 * Metodo para registrar Usuarios de rol USER_NORMAL
+	 */
+	@Override
+	public void saveForSystemPublic(UsuarioDTO usuario) throws HomeException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
+		try {					
+			 logger.info("METODO : saveForSystemPublic() : REGISTRANDO USUARIO ....");
+			 logger.info("METODO : saveForSystemPublic() : VALIDANDO ....");
+			 this.userValidation.save(usuario);
+			 logger.info("METODO : saveForSystemPublic() : VALIDADO CORRECTAMENTE ....");
+			 UsuarioDTO userForFind = UsuarioDTO.builder()
+					.email(usuario.getEmail())
+					.sistema(this.sistemaName)
+					.build();
+			userForFind = this.clientAdministracionUsers.findUser(userForFind);
+	
+			if( Objects.isNull(userForFind) ) {
+				//ENCODE PASSWORD 
+				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+				usuario.setPassword( passwordEncoder.encode(usuario.getPassword() ) );
+				///		
+				RolesSistemaDTO rol = rolUsuariosStream.findBySistemName(rolUSerNormal);
+				usuario.setRol(rol);	
+				UsuarioDTO usuarioDto = this.clientAdministracionUsers.saveForSystemPublic(usuario);
+				if( Objects.nonNull(usuarioDto) ) {
+					this.sendEmail(usuarioDto );
+				}else {
+					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL);
+				}	
+				logger.info("METODO : saveForSystemPublic() : USUARIO CREADO CORRECTAMENTE ....");
+			}else {
+				logger.warning("METODO : saveForSystemPublic() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE );
+				throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
+			}
+		}catch (HomeException e) {
+	    	logger.severe(e.getMessage());
+	    	throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.severe(e.getMessage());
+			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+		}		
+	}
 	
 	/**
 	 * Metodo para registrar Usuarios de rol USER_NORMAL
 	 */
 	@Override
-	public void savePublic(UsuarioDTO usuario) throws HomeException {
+	public void saveForSystem(UsuarioDTO usuario) throws HomeException {
 		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
 		try {					
-			 logger.info("METODO : savePublic() : REGISTRANDO USUARIO ....");
-			 logger.info("METODO : savePublic() : VALIDANDO ....");
+			 logger.info("METODO : saveForSystem() : REGISTRANDO USUARIO ....");
+			 logger.info("METODO : saveForSystem() : VALIDANDO ....");
 			 this.userValidation.save(usuario);
-			 logger.info("METODO : savePublic() : VALIDADO CORRECTAMENTE ....");
+			 logger.info("METODO : saveForSystem() : VALIDADO CORRECTAMENTE ....");
 			 UsuarioDTO userForFind = UsuarioDTO.builder()
 					.email(usuario.getEmail())
 					.sistema(this.sistemaName)
@@ -228,28 +280,26 @@ public class UserServiceImpl  implements IUserService {
 			
 			if( Objects.isNull(userForFind) ) {
 				
+				//CAMBIAMOS EL ESTADO A ACTIVO
+				usuario.getPersonaContacto().setActivo(true);
 				
 				//ENCODE PASSWORD 
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-				usuario.setPassword( passwordEncoder.encode(usuario.getPassword() ) );
-				///
-				
+				usuario.setPassword( passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion() ) );
+				///	
 				RolesSistemaDTO rol = rolUsuariosStream.findBySistemName(rolUSerNormal);
-				usuario.setRol(rol);
-					
+				usuario.setRol(rol);		
 				
-				UsuarioDTO usuarioDto = this.clientAdministracionUsers.savePublic(usuario);
+				UsuarioDTO usuarioDto = this.clientAdministracionUsers.saveForSystem(usuario);
 				if( Objects.nonNull(usuarioDto) ) {
 					this.sendEmail(usuarioDto );
 				}else {
 					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL);
-				}
-				
-				
-				
-				logger.info("METODO : savePublic() : USUARIO CREADO CORRECTAMENTE ....");
+				}				
+						
+				logger.info("METODO : saveForSystem() : USUARIO CREADO CORRECTAMENTE ....");
 			}else {
-				logger.warning("METODO : savePublic() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE );
+				logger.warning("METODO : saveForSystem() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE );
 				throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
 			}
 					

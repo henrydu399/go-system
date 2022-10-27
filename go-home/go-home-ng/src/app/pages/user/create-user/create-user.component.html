@@ -8,6 +8,7 @@
                 <div class="panel-heading"> <i class="fa fa-info fa-lg" aria-hidden="true"></i>  Informacion</div>
                 <div class="panel-body">
                   <p>La password por defecto es la cedula, debera realizar el cambio de contraseña desde su perfil.</p>
+                  <p>El rol de administrador solo puede ser asignado por un <strong>Administrador</strong>.</p>
                 </div>
               </div>
 
@@ -133,9 +134,9 @@
                                         <label for="rol">ROL <span style="color: red;">*</span></label>
 
                                         <div class="input-group  ">
-                                            <select class="form-control" id="rol" formControlName="rol">
+                                            <select class="form-control" id="rol" (change)="changeRol()" formControlName="rol">
                                                 <option value="">SELECCIONAR</option>
-                                                <option *ngFor="let item of listRolesSistema" value="{{item.id}}">{{item.id.nombreRol}}</option>
+                                                <option *ngFor="let item of listRolesSistema" value="{{item.id.nombreRol}}"   >{{item.id.nombreRol}}</option>
 
                                             </select>
                                         </div>
@@ -309,15 +310,17 @@
                             <br>
                             <br>
 
-                            <button class="button btn_sm " (click)="cerrar()"><i class="fa fa-window-close-o fa-lg"
-                                    aria-hidden="true"></i>
-                                &nbsp;Cerrar</button>
 
-                            <button class="button btn_sm btn_yellow" style="float:right;" type="submit"><i
-                                    class="fa fa-save fa-lg" aria-hidden="true"></i>
-                                &nbsp;Crear</button>
 
                         </div>
+
+                        <button class="button btn_sm " (click)="cerrar()"><i class="fa fa-window-close-o fa-lg"
+                            aria-hidden="true"></i>
+                        &nbsp;Cerrar</button>
+
+                    <button class="button btn_sm btn_yellow" style="float:right;" type="submit"><i
+                            class="fa fa-save fa-lg" aria-hidden="true"></i>
+                        &nbsp;Crear</button>
 
                     </form>
 

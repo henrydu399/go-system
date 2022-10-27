@@ -31,8 +31,15 @@ export class UtilHttpService {
         
 
       }else{
+        
         if(error.error !== undefined && error.error !== null){
-          this.msgService.lanzarAlerta(mensaje.ERROR, error.error,0);
+
+          if( error.error.message !== undefined || error.error.message !== null){
+            this.msgService.lanzarAlerta(mensaje.ERROR, error.error.message,0);
+          }else{
+            this.msgService.lanzarAlerta(mensaje.ERROR, error.error,0);
+          }
+         
         }else{
           this.msgService.lanzarAlerta(mensaje.ERROR, error.message,500);
         }

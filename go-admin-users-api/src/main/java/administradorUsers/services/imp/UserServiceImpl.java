@@ -25,6 +25,8 @@ import com.gosystem.commons.utils.UtilsLogs;
 
 import administradorUsers.components.UserComponent;
 import administradorUsers.entitys.Persona;
+import administradorUsers.entitys.PersonaContacto;
+import administradorUsers.entitys.PersonaContactoPK;
 import administradorUsers.entitys.PersonaPK;
 import administradorUsers.entitys.RolesUsuario;
 import administradorUsers.entitys.RolesUsuarioPK;
@@ -33,6 +35,7 @@ import administradorUsers.entitys.Usuario;
 import administradorUsers.entitys.UsuarioPK;
 import administradorUsers.enums.MethodsAdminUSerEnum;
 import administradorUsers.mappers.UsuarioMapper;
+import administradorUsers.repository.IPersonaContactoRepository;
 import administradorUsers.repository.IPersonaRepository;
 import administradorUsers.repository.IPrivilegiosRolUsuarioRepository;
 import administradorUsers.repository.IUsuariosRepository;
@@ -50,6 +53,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private IPersonaRepository personaRepository;
+	
+	@Autowired
+	private IPersonaContactoRepository personaContactoRepository;
 
 	@Autowired
 	private IPrivilegiosRolUsuarioRepository privilegiosRolUsuarioRepository;
@@ -120,6 +126,12 @@ public class UserServiceImpl implements UserService {
 			usuario.setPassword(passwordEncrip);
 			///
 			this.repository.save(usuario);
+			this.repository.flush();
+			
+			this.personaContactoRepository.save(usuario.getPersonaContacto());
+			this.personaContactoRepository.flush();
+			
+			
 
 		} catch (PersistenceException e) {
 			logger.severe(e.getMessage());
@@ -296,15 +308,71 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Metodo que guarda el usuario completo
-	 * 
 	 * @Params Usuario
-	 * @Requeride MINIMO PARA LA CREACION DE UN USUARIO TipoIDentificacion id
-	 *            Persona TipoIdentificacion NumeroIdentifcacion Nombre
-	 * 
 	 * @Return void O AdministradorUserException
 	 */
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public UsuarioDTO saveUserSystem(UsuarioDTO usuario) throws AdministradorUserException {
+
+		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.GET_USER_FOR_LOGIN, EntityEnum.USUARIO, usuario));
+		try {
+
+			Usuario u = userComponent.BuildUSerForSavePublic(usuario);
+
+			personaRepository.saveAndFlush(u.getPersona());
+			
+			String token = TokenGenerator.generateToken(u.getEmail());
+			u.setTokenActivate(token);
+
+			repository.saveAndFlush(u);
+
+			RolesUsuarioPK rolPk = RolesUsuarioPK.builder().idSistema(usuario.getRol().getId().getIdSistema())
+					.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
+					.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
+					.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
+
+			RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
+
+			rolesUsuarioRepository.saveAndFlush(rol);
+			
+			PersonaContactoPK personaContactoPk = PersonaContactoPK.builder()
+					.idTipoIdentificacion(u.getPersona().getId().getIdTipoIdentificacion())
+					.numeroIdentificacion(u.getPersona().getId().getNumeroIdentificacion())
+					.build();
+			
+			PersonaContacto personaContacto =  PersonaContacto.builder()
+					.id(personaContactoPk)
+					.direccion(usuario.getPersonaContacto().getDireccion())
+					.activo(usuario.getPersonaContacto().getActivo())
+					.movil(  usuario.getPersonaContacto().getMovil())
+					.idDepartamento( usuario.getPersonaContacto().getIdDepartamento())
+					.idCiudad(usuario.getPersonaContacto().getIdCiudad() )
+					.idBarrio( usuario.getPersonaContacto().getIdBarrio())
+					.build();
+			
+			personaContactoRepository.save(personaContacto);
+			
+			
+			
+			UsuarioDTO userU = UsuarioMapper.Mapper(u, false);
+			
+			
+			return userU;
+
+		} catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.severe(e.getMessage());
+			throw new AdministradorUserException(EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_INTENTAR_GUARDAR);
+		}
+	}
+
+	
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
+	public UsuarioDTO saveUserSystemPublic(UsuarioDTO usuario) throws AdministradorUserException {
 
 		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.GET_USER_FOR_LOGIN, EntityEnum.USUARIO, usuario));
 		try {
@@ -343,7 +411,8 @@ public class UserServiceImpl implements UserService {
 					ErrorConstantes.ERROR_INTENTAR_GUARDAR);
 		}
 	}
-
+	
+	
 	/**
 	 * Metodo para confirmar usuario despues de su registro
 	 */

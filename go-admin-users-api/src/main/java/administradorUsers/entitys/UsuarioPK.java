@@ -25,10 +25,10 @@ public class UsuarioPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="id")
-	private long id;
+	private Long id;
 
 	@Column(name="ID_TIPO_IDENTIFICACION")
-	private int idTipoIdentificacion;
+	private Integer idTipoIdentificacion;
 
 	@Column(name="NUMERO_IDENTIFICACION")
 	private String numeroIdentificacion;

@@ -46,6 +46,11 @@ public class UsuarioDTO implements Serializable {
 	private boolean confirmado;
 	
 	private String tokenActivate;
+	
+
+	private RolesUsuarioDTO rolUsuario;
+	
+	private PersonaContactoDTO personaContacto;
 
 
 	private PersonaDTO persona;
