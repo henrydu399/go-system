@@ -18,7 +18,7 @@ public class HomeException extends RuntimeException{
 	// private String codeError;
 	 
 	 private AdministradorUserExceptionDto data;
-	 private String mensaje;
+	
 	
 	
 	
@@ -51,15 +51,7 @@ public class HomeException extends RuntimeException{
 
 	
 	
-	public String getMensaje() {
-		return UtilGson.SerializeObjet(data);
-	}
 
-
-
-	public void setMensaje(String mensaje) {
-		this.mensaje = mensaje;
-	}
 
 
 

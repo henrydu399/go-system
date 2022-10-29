@@ -66,9 +66,7 @@ public class UserValidation {
 			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_APELLIDOS);
 		}
 		
-		if( Objects.isNull(e.getPersona()) || Objects.isNull(e.getPersona().getFechaNacimiento())  ) {
-			throw new HomeException( entity, MethodsEnum.SAVE, LayerEnum.VALIDATE , ERROR_CAMPO_FECHA_NACIMIENTO);
-		}
+		
 		
 	}
 

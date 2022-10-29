@@ -18,6 +18,8 @@ public interface IAdministracionClientUsers {
 	
 	UsuarioDTO saveForSystem(UsuarioDTO user) throws HomeException;
 	
+	UsuarioDTO edithForSystem(UsuarioDTO user) throws HomeException;
+	
 
 
 	

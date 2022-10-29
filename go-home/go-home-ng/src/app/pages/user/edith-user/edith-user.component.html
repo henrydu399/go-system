@@ -1,1 +1,353 @@
-<p>edith-user works!</p>
+<main id="rooms_block_view">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="panel panel-warning">
+                <!-- Default panel contents -->
+                <div class="panel-heading"> <i class="fa fa-info fa-lg" aria-hidden="true"></i>  Informacion</div>
+                <div class="panel-body">
+                  <p>La password por defecto es la cedula, debera realizar el cambio de contraseña desde su perfil.</p>
+                  <p>El rol de administrador solo puede ser asignado por un <strong>Administrador</strong>.</p>
+                </div>
+              </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="row">
+
+                        <div class="col-md-8" style="padding-top: 8px;">
+                            <h2 class="panel-title"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i> Editar Usuario</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="panel-body">
+
+
+
+                    <form [formGroup]="fromUsuario" (ngSubmit)="crear()">
+
+                        <div class="panel " >
+
+                            <div class="row">
+                                <div class="form-inline" >
+
+                                    <div class="form-group col-md-6 col-sm-6">
+
+                                        <label for="tipoIdentificacion">TIPO IDENTIFICACION <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('tipoIdentificacion')}}">
+
+                                            <input type="text" class="form-control" id="tipoIdentificacion" formControlName="tipoIdentificacion" placeholder="" readonly>
+
+                                            <div class="input-group-addon" >
+                                                <a >   <i class="fa fa-search " aria-hidden="true" aria-details="ver"></i></a>   
+                                            </div>  
+                                                                         
+                                        </div>
+
+                                        <label *ngIf="submitted &&  f['tipoIdentificacion']?.errors?.['required']" >El campo<strong> TIPO IDENTIFICACION </strong> es requerido</label>   
+
+
+
+                                    </div>
+
+
+                                    <div class="form-group col-md-6 col-sm-6">
+
+                                        <label for="numeroIdentificacion">NUMERO IDENTIFICACION <span style="color: red;">*</span> </label>
+
+                                        <div class="input-group {{isvalidInput('numeroIdentificacion')}}">
+                                            <input type="text" class="form-control" id="numeroIdentificacion"  formControlName="numeroIdentificacion" placeholder="" readonly>
+                                        </div>
+                                        <label *ngIf="submitted &&  f['numeroIdentificacion']?.errors?.['required']" >El campo<strong> TIPO IDENTIFICACION </strong> es requerido</label>   
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-6 col-sm-6">
+
+                                        <label for="nombres">NOMBRES <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('nombres')}}">
+                                            <input type="text" class="form-control" id="nombres" formControlName="nombres"
+                                                placeholder="">
+                                        </div>
+                                        <label *ngIf="submitted &&  f['nombres']?.errors?.['required']" >El campo<strong>  NOMBRES </strong> es requerido</label>   
+
+                                    </div>
+
+                                    <div class="form-group col-md-6 col-sm-6">
+
+                                        <label for="apellidos">APELLIDOS <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('apellidos')}}">
+                                            <input type="text" class="form-control" id="apellidos" formControlName="apellidos"
+                                                placeholder="">
+                                        </div>
+                                        <label *ngIf="submitted &&  f['apellidos']?.errors?.['required']" >El campo<strong>  APELLIDOS </strong> es requerido</label> 
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="email">CORREO ELECTRONICO <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('email')}}">
+                                            <input type="text" class="form-control" id="email" formControlName="email"
+                                                placeholder="">
+                                        </div>
+                                        <label *ngIf="submitted &&  f['email']?.errors?.['required']" >El campo<strong>  CORREO ELECTRONICO </strong> es requerido</label> 
+                                    </div>
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="movil">NUMERO CELULAR <span style="color: red;">*</span></label>
+
+                                        <div class="input-group {{isvalidInput('movil')}}">
+                                            <input type="text" class="form-control" id="movil" formControlName="movil"
+                                                placeholder="">
+                                        </div>
+                                        <label *ngIf="submitted &&  f['movil']?.errors?.['required']" >El campo<strong>  NUMERO CELULAR  </strong> es requerido</label> 
+                                    </div>
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="rol">ROL <span style="color: red;">*</span></label>
+
+                                        <div class="input-group  ">
+                                            <select class="form-control" id="rol" (change)="changeRol()" formControlName="rol">
+                                                <option value="">SELECCIONAR</option>
+                                                <option *ngFor="let item of listRolesSistema" value="{{item.id.nombreRol}}"   >{{item.id.nombreRol}}</option>
+
+                                            </select>
+                                        </div>
+  
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="fechaNacimiento">FECHA NACIMIENTO </label>
+
+                                        <div class="input-group ">
+                                            <input type="date" class="form-control" id="fechaNacimiento" (change)="calcularEdad()"
+                                              formControlName="fechaNacimiento" data-inputmask-inputformat="dd/MM/yyyy" data-mask data-inputmask-alias="datetime"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="edad">EDAD </label>
+
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="edad" formControlName="edad"
+                                                placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="sexo">SEXO </label>
+
+                                        <div class="input-group">
+                                            <select class="form-control" formControlName="sexo" id="sexo">
+                                                <option value="M">MASCULINO</option>
+                                                <option value="F">FEMENINO</option>
+                                                <option value="N">NO BINARIO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="estadoCivil">ESTADO CIVIL </label>
+
+                                        <div class="input-group">
+                                            <select class="form-control" formControlName="estadoCivil" id="estadoCivil">
+                                                <option value="INICIAL">SOLTERO</option>
+                                                <option value="PRIMARIA">CASADO</option>
+                                                <option value="SECUNDARIA">DIVORCIADO</option>
+                                                <option value="SUPERIOS">UNION LIBRE</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="profesion">PROFESION </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="profesion" formControlName="profesion"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="nivelEscolaridad">NIVEL DE ESCOLARIDAD </label>
+
+                                        <div class="input-group">
+                                            <select class="form-control" id="nivelEscolaridad" formControlName="nivelEscolaridad">
+                                                <option value="INICIAL">INICIAL</option>
+                                                <option value="PRIMARIA">PRIMARIA</option>
+                                                <option value="SECUNDARIA">SECUNDARIA</option>
+                                                <option value="SUPERIOR">SUPERIOR</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="departamento">DEPARTAMENTO </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="departamento" formControlName="departamento"
+                                                placeholder="">
+                                            <div class="input-group-addon" data-toggle="modal" data-target="#idModalDepartamento">
+                                                <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="ciudad">CIUDAD </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="ciudad" formControlName="ciudad"
+                                                placeholder="">
+                                                <div class="input-group-addon" data-toggle="modal" data-target="#idModalCiudad">
+                                                    <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    
+                                    <div class="form-group col-md-4 col-sm-4">
+
+                                        <label for="barrio">BARRIO </label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="ciubarriodad" formControlName="barrio"
+                                                placeholder="">
+                                                <div class="input-group-addon" data-toggle="modal" data-target="#idModalBarrio">
+                                                    <a >  <i class="fa fa-search " aria-hidden="true"   aria-details="ver"></i></a>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <div class="row">
+                                <div class="form-inline">
+
+                                    <div class="form-group col-md-6 col-sm-6">
+
+                                        <label for="estadoCivil">DIRECCION</label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="direccion" formControlName="direccion"
+                                            placeholder="">
+                                        </div>
+                                    </div>
+
+                           
+
+
+
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <br>
+
+
+
+                        </div>
+
+                        <button class="button btn_sm " (click)="cerrar()"><i class="fa fa-window-close-o fa-lg"
+                            aria-hidden="true"></i>
+                        &nbsp;Cerrar</button>
+
+                    <button class="button btn_sm btn_yellow" style="float:right;" type="submit"><i
+                            class="fa fa-save fa-lg" aria-hidden="true"></i>
+                        &nbsp;Editar</button>
+
+                    </form>
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</main>
+
+
+<app-tipo-identificacion (newItemEvent)="updateTipoIdentificacion($event)"></app-tipo-identificacion>
+
+<app-departamento (newItemEvent)="updateDepartamento($event)"></app-departamento>
+
+<app-ciudad (newItemEvent)="updateCiudad($event)"></app-ciudad>
+
+<app-barrio (newItemEvent)="updateBarrio($event)"></app-barrio>
+
+

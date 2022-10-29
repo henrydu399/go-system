@@ -6,13 +6,15 @@ import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@EqualsAndHashCode
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,6 +52,10 @@ public class PersonaDTO implements Serializable {
 	
 	private TipoIdentificacionDTO tipoIdentificacion;
 
+	
+	
+	private List<PersonaContactoDTO> listPersonaContacto;
+	
 	
 	private List<UsuarioDTO> usuarios;
 

@@ -36,12 +36,20 @@ export class UserService {
 
   public saveForSystem(usuario: Usuario): Observable<any> {
     let body = JSON.stringify(usuario).toString();
-    return this.http.post<any>(environment.pathUsuariosSystem, body, { 'headers': lstHeaders });
+    return this.http.post<any>(environment.pathSaveForSystem, body, { 'headers': lstHeaders });
+  }
+
+  public edithForSystem(usuario: Usuario): Observable<any> {
+    let body = JSON.stringify(usuario).toString();
+    return this.http.post<any>(environment.pathEdithForSystem, body, { 'headers': lstHeaders });
   }
 
 
 
-  
+  public findCustom(usuario: Usuario): Observable<any> {
+    let body = JSON.stringify(usuario).toString();
+    return this.http.post<any>(environment.findUser, body, { 'headers': lstHeaders });
+  }
 
 
  /*  public getActive(): Observable<any> {

@@ -3,6 +3,7 @@ package administradorUsers.enums;
 public enum MethodsAdminUSerEnum  {
 	
 	GET_USER_FOR_LOGIN("GET_USER_FOR_LOGIN"),
+	EDITH_USER_SYSTEM("EDITH_USER_SYSTEM"),
 
 	
 	FIND_ROL_SISTEM_BY_SYSTEMA_NAME("FIND_ROL_SISTEM_BY_SYSTEMA_NAME"),

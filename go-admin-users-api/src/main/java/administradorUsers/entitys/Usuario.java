@@ -50,8 +50,10 @@ public class Usuario implements Serializable {
 	
 	@Transient
 	private String token;
+	
 	@Transient
 	private String roles;
+	
 	@Transient
 	private String sistema;
 	@Transient

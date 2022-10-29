@@ -24,12 +24,13 @@ export class Usuario {
     token!: string| null;
     tokenActivate!:string;
 
-    roles!: string| null;
+    roles!: string| RolesUsuario[] |null;
+
     sistema:string| null;
 
     rol! :RolSistema;
 
-    personaContacto! :PersonaContacto;
+   
 
     privilegios!:PrivilegioRolUsuario[];
 

@@ -132,30 +132,6 @@ public class UserServiceImpl  implements IUserService {
 	}
 
 	@Override
-	public void edith(UsuarioDTO usuario) throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO , usuario));
-		
-		try {	
-			
-			
-			
-		}catch (PersistenceException e) {
-			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_MODIFICAR);
-		
-	    }catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
-			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
-		}
-
-		
-	}
-
-	@Override
 	public List<UsuarioDTO> findAll(UsuarioDTO usuario) throws HomeException {
 		
 		logger.info(UtilsLogs.getInfo(MethodsEnum.FIND_CUSTOM, EntityEnum.USUARIO , usuario));
@@ -182,13 +158,9 @@ public class UserServiceImpl  implements IUserService {
 		
 		logger.info(UtilsLogs.getInfo(MethodsEnum.FIND_CUSTOM, EntityEnum.USUARIO ,obj));
 		try {
-			return null;	
-			
-		}catch (PersistenceException e) {
-			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.DAO, ErrorConstantes.ERROR_CONSULTANDO_EL_REGISTROS);
-		
-	    }catch (HomeException e) {
+			UsuarioDTO u =this.clientAdministracionUsers.findUser(obj)	;
+					return u;
+		}catch (HomeException e) {
 	    	logger.severe(e.getMessage());
 	    	throw e;
 		}
@@ -197,6 +169,31 @@ public class UserServiceImpl  implements IUserService {
 			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC , null);
 		}
 	}
+
+	@Override
+	public void edith(UsuarioDTO usuario) throws HomeException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO , usuario));
+		
+		try {	
+			
+			
+			
+		}catch (PersistenceException e) {
+			logger.severe(e.getMessage());
+			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_MODIFICAR);
+		
+	    }catch (HomeException e) {
+	    	logger.severe(e.getMessage());
+	    	throw e;
+		}
+		catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+		}
+	
+		
+	}
+
 
 	@Override
 	public void delete(UsuarioDTO p) throws HomeException {
@@ -262,7 +259,7 @@ public class UserServiceImpl  implements IUserService {
 	}
 	
 	/**
-	 * Metodo para registrar Usuarios de rol USER_NORMAL
+	 * Metodo para registrar Usuarios FULL
 	 */
 	@Override
 	public void saveForSystem(UsuarioDTO usuario) throws HomeException {
@@ -277,33 +274,23 @@ public class UserServiceImpl  implements IUserService {
 					.sistema(this.sistemaName)
 					.build();
 			userForFind = this.clientAdministracionUsers.findUser(userForFind);
-			
-			if( Objects.isNull(userForFind) ) {
-				
+			if( Objects.isNull(userForFind) ) { //BUSCAMOS QUE NO EXISTA UN USUARIO CON ESE EMAIL
 				//CAMBIAMOS EL ESTADO A ACTIVO
 				usuario.getPersonaContacto().setActivo(true);
-				
 				//ENCODE PASSWORD 
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 				usuario.setPassword( passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion() ) );
-				///	
-				RolesSistemaDTO rol = rolUsuariosStream.findBySistemName(rolUSerNormal);
-				usuario.setRol(rol);		
-				
 				UsuarioDTO usuarioDto = this.clientAdministracionUsers.saveForSystem(usuario);
 				if( Objects.nonNull(usuarioDto) ) {
 					this.sendEmail(usuarioDto );
 				}else {
 					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL);
-				}				
-						
+				}					
 				logger.info("METODO : saveForSystem() : USUARIO CREADO CORRECTAMENTE ....");
 			}else {
 				logger.warning("METODO : saveForSystem() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE );
 				throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
 			}
-					
-			
 		}catch (HomeException e) {
 	    	logger.severe(e.getMessage());
 	    	throw e;
@@ -313,11 +300,44 @@ public class UserServiceImpl  implements IUserService {
 			logger.severe(e.getMessage());
 			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
 		}
-
-		
 	}
 	
-	private void sendEmail(UsuarioDTO usuario ) throws HomeException {
+	/**
+	 * Metodo para editar Usuarios FULL
+	 */
+	@Override
+	public void edithForSystem(UsuarioDTO usuario) throws HomeException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
+		try {					
+			 logger.info("METODO : edithForSystem() : REGISTRANDO USUARIO ....");
+			 logger.info("METODO : edithForSystem() : VALIDANDO ....");
+			 this.userValidation.save(usuario);
+			 logger.info("METODO : edithForSystem() : VALIDADO CORRECTAMENTE ....");
+			 UsuarioDTO userForFind = UsuarioDTO.builder()
+					.email(usuario.getEmail())
+					.sistema(this.sistemaName)
+					.build();
+			userForFind = this.clientAdministracionUsers.findUser(userForFind);
+			if( Objects.nonNull(userForFind) ) {
+				if( !userForFind.getId().equals(usuario.getId()))
+					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_YA_EXISTE_USUARIO_CON_EMAIL);
+			}
+				
+			UsuarioDTO usuarioDto = this.clientAdministracionUsers.edithForSystem(usuario);				
+			logger.info("METODO : edithForSystem() : USUARIO EDITADO CORRECTAMENTE CORRECTAMENTE ....");
+
+		}catch (HomeException e) {
+	    	logger.severe(e.getMessage());
+	    	throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.severe(e.getMessage());
+			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+		}
+	}
+	
+	private void sendEmail(UsuarioDTO usuario ) {
 		String[] destinos =  {usuario.getEmail()};
 		
 		
@@ -345,8 +365,12 @@ public class UserServiceImpl  implements IUserService {
 				.sistema(this.sistemaName)
 				.isHtml(true)
 				.build();
-		
-		emailClientService.send(mail);
+		try {
+			emailClientService.send(mail);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 
 }

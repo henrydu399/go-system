@@ -14,6 +14,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gosystem.commons.adminUsers.dto.PersonaContactoDTO;
 import com.gosystem.commons.adminUsers.dto.UsuarioDTO;
 import com.gosystem.commons.constants.ErrorConstantes;
 import com.gosystem.commons.enums.EntityEnum;
@@ -21,6 +22,7 @@ import com.gosystem.commons.enums.LayerEnum;
 import com.gosystem.commons.enums.MethodsEnum;
 import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.utils.TokenGenerator;
+import com.gosystem.commons.utils.UtilGson;
 import com.gosystem.commons.utils.UtilsLogs;
 
 import administradorUsers.components.UserComponent;
@@ -34,7 +36,11 @@ import administradorUsers.entitys.Systema;
 import administradorUsers.entitys.Usuario;
 import administradorUsers.entitys.UsuarioPK;
 import administradorUsers.enums.MethodsAdminUSerEnum;
+import administradorUsers.mappers.PersonaContactoMapper;
+import administradorUsers.mappers.PersonaContactoPKMapper;
+import administradorUsers.mappers.RolesUsuarioMapper;
 import administradorUsers.mappers.UsuarioMapper;
+import administradorUsers.mappers.UsuarioPKMapper;
 import administradorUsers.repository.IPersonaContactoRepository;
 import administradorUsers.repository.IPersonaRepository;
 import administradorUsers.repository.IPrivilegiosRolUsuarioRepository;
@@ -216,23 +222,53 @@ public class UserServiceImpl implements UserService {
 		List<Usuario> list = new ArrayList<>();
 		try {
 
-			if (Objects.nonNull(obj.getSistema())) {
-				Optional<Usuario> u = this.repository.findUserForLogin(obj.getEmail(), obj.getSistema());
-				if (u.isPresent()) {
-					list.add(u.get());
+			if(Objects.nonNull(obj.getId() )) {// BUSCAMOS POR LA PK SI VIENE 
+				if(Objects.nonNull(obj.getId().getId()) && 
+						Objects.nonNull(obj.getId().getIdTipoIdentificacion()) &&
+						Objects.nonNull(obj.getId().getNumeroIdentificacion()) ) {
+					Optional<Usuario> u = this.repository.findById( obj.getId());
+					
+					
+					RolesUsuarioPK rolesUsuarioPk = RolesUsuarioPK.builder()
+							.idTipoIdentificacion(  obj.getId().getIdTipoIdentificacion()  )
+							.numeroIdentificacion(  obj.getId().getNumeroIdentificacion()   )
+							.idUsuario(  obj.getId().getId()  )
+							.build();
+							
+							
+					
+					List<RolesUsuario> listRolesUsuario =  this.rolesUsuarioRepository.findByUsuario(obj);
+					if( Objects.nonNull(listRolesUsuario) ) {
+						listRolesUsuario.get(0).setUsuario(null);
+						u.get().setRoles( UtilGson.SerializeObjet( RolesUsuarioMapper.mapper(listRolesUsuario.get(0))  ) );
+					}
+					
+					
+					if( u.isPresent()) {
+						return u.get();
+					}
 				}
-
-			} else {
-				Usuario usuario = (Usuario) obj;
-				Example<Usuario> entityFind = Example.of(usuario);
-				list = this.repository.findAll(entityFind);
+				
+			}else {
+				
+				if (Objects.nonNull(obj.getSistema())) {
+					Optional<Usuario> u = this.repository.findUserForLogin(obj.getEmail(), obj.getSistema());
+					if (u.isPresent()) {
+						list.add(u.get());
+					}
+				} else {
+					Usuario usuario = (Usuario) obj;
+					Example<Usuario> entityFind = Example.of(usuario);
+					list = this.repository.findAll(entityFind);
+				}
+				
 			}
+
 
 			if (list != null && list.size() > 0) {
 				return list.get(0);
-			} else {
-				return null;
 			}
+			
 
 		} catch (AdministradorUserException e) {
 			logger.severe(e.getMessage());
@@ -242,6 +278,7 @@ public class UserServiceImpl implements UserService {
 			logger.severe(e.getMessage());
 			throw new AdministradorUserException(EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC, null);
 		}
+		return null;
 	}
 
 	@Override
@@ -307,58 +344,33 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Metodo que guarda el usuario completo
+	 * Metodo que guarda el usuario + persona + persona contacto + rol
 	 * @Params Usuario
 	 * @Return void O AdministradorUserException
 	 */
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public UsuarioDTO saveUserSystem(UsuarioDTO usuario) throws AdministradorUserException {
-
 		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.GET_USER_FOR_LOGIN, EntityEnum.USUARIO, usuario));
 		try {
-
-			Usuario u = userComponent.BuildUSerForSavePublic(usuario);
-
+			Usuario u = userComponent.BuildUSerForSave(usuario);
 			personaRepository.saveAndFlush(u.getPersona());
-			
 			String token = TokenGenerator.generateToken(u.getEmail());
 			u.setTokenActivate(token);
-
 			repository.saveAndFlush(u);
-
-			RolesUsuarioPK rolPk = RolesUsuarioPK.builder().idSistema(usuario.getRol().getId().getIdSistema())
+			RolesUsuarioPK rolPk = RolesUsuarioPK.builder().
+					 idSistema(usuario.getRol().getId().getIdSistema())
 					.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
 					.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
 					.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
 
 			RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
-
 			rolesUsuarioRepository.saveAndFlush(rol);
-			
-			PersonaContactoPK personaContactoPk = PersonaContactoPK.builder()
-					.idTipoIdentificacion(u.getPersona().getId().getIdTipoIdentificacion())
-					.numeroIdentificacion(u.getPersona().getId().getNumeroIdentificacion())
-					.build();
-			
-			PersonaContacto personaContacto =  PersonaContacto.builder()
-					.id(personaContactoPk)
-					.direccion(usuario.getPersonaContacto().getDireccion())
-					.activo(usuario.getPersonaContacto().getActivo())
-					.movil(  usuario.getPersonaContacto().getMovil())
-					.idDepartamento( usuario.getPersonaContacto().getIdDepartamento())
-					.idCiudad(usuario.getPersonaContacto().getIdCiudad() )
-					.idBarrio( usuario.getPersonaContacto().getIdBarrio())
-					.build();
-			
-			personaContactoRepository.save(personaContacto);
-			
-			
-			
+			if( Objects.nonNull(usuario.getPersona().getListPersonaContacto())  && usuario.getPersona().getListPersonaContacto().size() > 0 ) {
+				PersonaContacto personaContacto = PersonaContactoMapper.mapper(usuario.getPersona().getListPersonaContacto().get(0)) ;
+				personaContactoRepository.save(personaContacto);
+			}
 			UsuarioDTO userU = UsuarioMapper.Mapper(u, false);
-			
-			
 			return userU;
-
 		} catch (AdministradorUserException e) {
 			logger.severe(e.getMessage());
 			throw e;
@@ -366,6 +378,84 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			logger.severe(e.getMessage());
 			throw new AdministradorUserException(EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_INTENTAR_GUARDAR);
+		}
+	}
+	
+	/**
+	 * Metodo que edita el usuario + persona + persona contacto + rol
+	 * @Params Usuario
+	 * @Return void O AdministradorUserException
+	 */
+	@SuppressWarnings("deprecation")
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
+	public UsuarioDTO edithUserSystem(UsuarioDTO usuario) throws AdministradorUserException {
+		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.EDITH_USER_SYSTEM, EntityEnum.USUARIO, usuario,null));
+		try {
+			
+			Optional<Usuario> userExist =  repository.findById(UsuarioPKMapper.mapper(usuario.getId())  );
+			if(! userExist.isPresent()) {
+				throw new AdministradorUserException(EntityEnum.USUARIO,MethodsAdminUSerEnum.EDITH_USER_SYSTEM, LayerEnum.LOGIC,
+						ErrorConstantes.ERROR_USER_NO_EXIST_FOR_EDITH);
+			}
+			
+			Usuario u = userComponent.BuildUSerForSave(usuario);
+			personaRepository.saveAndFlush(u.getPersona());
+			String token = TokenGenerator.generateToken(u.getEmail());
+			u.setTokenActivate(token);
+			repository.saveAndFlush(u);
+			
+			//#######LOGIC ROL USUARIO########
+				//BUSCAMOS EL ROL DEL USUARIO ANTERIOR Y LO ELIMINAMOS
+				RolesUsuarioPK rolPktoFind = RolesUsuarioPK.builder()
+						 .idSistema(usuario.getRol().getId().getIdSistema())
+						 .idRolSistema(usuario.getRol().getId().getId())
+						 .idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
+						 .numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
+				Optional<RolesUsuario> rolUsuarioExist = rolesUsuarioRepository.findById(rolPktoFind);
+				if(rolUsuarioExist.isPresent()) {
+					rolesUsuarioRepository.delete(rolUsuarioExist.get());
+				}
+				// ####################################################
+				// CREAMOS UN NUEVO ROL
+				RolesUsuarioPK rolPk = RolesUsuarioPK.builder().
+						 idSistema(usuario.getRol().getId().getIdSistema())
+						.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
+						.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
+						.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
+				RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
+				rolesUsuarioRepository.saveAndFlush(rol);
+				// #####################################################
+			//##################################################
+				
+		    //#######LOGIC PERSONA CONTACTO ######
+		   		if( Objects.nonNull(usuario.getPersona().getListPersonaContacto())  && usuario.getPersona().getListPersonaContacto().size() > 0 ) {
+		   			PersonaContactoDTO personaContacto = usuario.getPersona().getListPersonaContacto().get(0);	
+			   // BUSCAMOS SI TIENE DATOS DE CONTACTO Y LOS ELIMINAMOS
+					PersonaContactoPK personaContactoPK = PersonaContactoPKMapper.mapper(personaContacto.getId()) ;
+					Optional<PersonaContacto> personaContactoExis = personaContactoRepository.findById( personaContactoPK);
+					if( personaContactoExis.isPresent()) {
+						personaContactoRepository.delete(personaContactoExis.get());
+					}
+			   //###################################
+			   // CREAMOS EL NUEVO DATO DE CONTACTO
+					personaContactoRepository.save( PersonaContactoMapper.mapper(personaContacto));
+			   //###################################
+		      }
+		    // #####################################
+				
+
+			
+		   	logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.EDITH_USER_SYSTEM, EntityEnum.USUARIO, null,"PROCESO EXITOSO"));
+			UsuarioDTO userU = UsuarioMapper.Mapper(u, false);
+			return userU;
+		} catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.severe(e.getMessage());
+			throw new AdministradorUserException(EntityEnum.USUARIO,MethodsAdminUSerEnum.EDITH_USER_SYSTEM, LayerEnum.LOGIC,
 					ErrorConstantes.ERROR_INTENTAR_GUARDAR);
 		}
 	}

@@ -231,7 +231,24 @@ private Logger logger;
 	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
 		}
 
-	} 
+	}
+	
+	@PostMapping(value = "/edithforsystem/" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> edithforsystem(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
+		logger.info(nameApp + " guardar :: INICIO ");
+		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
+		try {
+			UsuarioDTO user =service.edithUserSystem(json);
+			return new ResponseEntity<Object>(user, HttpStatus.CREATED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }catch (Exception e) {
+	    	logger.severe(e.getMessage());
+	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	}
 	
 	@PostMapping(value = "/confirm/" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> confirmUser(@RequestBody UsuarioDTO json, HttpServletRequest req) {	

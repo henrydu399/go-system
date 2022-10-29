@@ -5,10 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -20,11 +22,14 @@ import com.gosystem.commons.adminUsers.dto.PrivilegiosRolUsuarioDTO;
 import com.gosystem.commons.adminUsers.dto.RolesUsuarioDTO;
 import com.gosystem.commons.adminUsers.dto.UsuarioDTO;
 import com.gosystem.commons.constants.ErrorConstantes;
+import com.gosystem.commons.enums.EntityEnum;
 import com.gosystem.commons.enums.LayerEnum;
 import com.gosystem.commons.enums.MethodsEnum;
 import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.exceptions.HomeException;
+import com.gosystem.commons.utils.UtilsLogs;
 import com.gosystem.home.client.services.IAdministracionClientUsers;
+import com.gosystem.home.services.imp.UserServiceImpl;
 import com.gosystem.home.util.BCryptPasswordEncoder;
 import com.gosystem.home.validations.LoginValidation;
 
@@ -49,9 +54,14 @@ public class LoginController {
 	@Autowired
 	LoginValidation validation;
 	
+	private Logger logger;
+	
 	//@Autowired
 	//RolesUsuarioServiceImpl rolesUsuarioServiceImpl;
+	public LoginController() {
+		logger = UtilsLogs.getLogger(LoginController.class.getName());
 	
+	}
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody UsuarioDTO userIn)  { 
@@ -67,18 +77,15 @@ public class LoginController {
         	if( Objects.nonNull(usuarioOpt) ) { 
         		
 				if(!usuarioOpt.isConfirmado()) {
-
-					
-					return ResponseEntity.status(400)
-    						.body(ErrorConstantes.USUARIO_NO_CONFIRMADO.toString());
+	  				  throw new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.USUARIO_NO_CONFIRMADO);
 				}
         		
         		UsuarioDTO usuario = usuarioOpt;
         		// ** verificar password *** 
         		boolean isPasswordMatch = passwordEncoder.matches(userIn.getPassword(), usuario.getPassword());  		
             	if ( ! isPasswordMatch) {
-    				return ResponseEntity.status(400)
-    						.body(ErrorConstantes.NO_EXISTE_EL_USUARIO_O_CREDECIALES_INVALIDAS.toString());
+  				  throw new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.NO_EXISTE_EL_USUARIO_O_CREDECIALES_INVALIDAS);
+
             	}
         		// ***********
         		
@@ -86,13 +93,13 @@ public class LoginController {
     			
     			  List<RolesUsuarioDTO> roles =  usuario.getListRolesUSuarios();
     			  if( roles == null ||  roles.size() == 0) { 
-    				  return ResponseEntity.status(400).body(ErrorConstantes.NO_EXISTE_ROLES_USUARIOS.toString());
+    				  throw new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.NO_EXISTE_ROLES_USUARIOS);
     				  }
     			  
     			  List<PrivilegiosRolUsuarioDTO> privilegios = usuario.getPrivilegios();
     			  
     			  if(  Objects.isNull(privilegios) || privilegios.size() == 0) {
-    				  return ResponseEntity.status(400).body(ErrorConstantes.NO_EXISTE_PRIVILEGIOS_USUARIOS.toString());
+    				  throw new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.NO_EXISTE_PRIVILEGIOS_USUARIOS);
     			  }
     			 
         		
@@ -116,16 +123,17 @@ public class LoginController {
     		
     		
         	}else {
-        		return ResponseEntity.status(500)
-    					.body(ErrorConstantes.USUARIO_NO_EXISTE.toString());
+        		throw new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.USUARIO_NO_EXISTE);
         	}
         	
-    	}catch (AdministradorUserException e2) {
-    		return ResponseEntity.status(500)
-					.body(e2.getMessage());
+    	}catch (HomeException e2) {
+    		this.logger.info(e2.getMessage());
+    		return new ResponseEntity<Object>(e2.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
-    		return ResponseEntity.status(500)
-					.body(ErrorConstantes.ERROR_GENERAL.toString());
+			e.printStackTrace();
+			this.logger.info(e.getMessage());
+			HomeException nu = new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			return new ResponseEntity<Object>(nu.getMessage(), HttpStatus.BAD_REQUEST);
 		}
     	
     	

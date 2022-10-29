@@ -54,7 +54,7 @@ export class CreateUserComponent implements OnInit {
     apellidos: ['', [Validators.required,Validators.minLength(5), Validators.maxLength(60)]],
     email: ['', [Validators.required , Validators.pattern(environment.patternEmail)]],
     movil: ['',[Validators.required]],
-    fechaNacimiento: [formatDate(new Date(), 'dd/MM/yyyy', 'en'), [Validators.required]],
+    fechaNacimiento: [formatDate(new Date(), 'dd/MM/yyyy', 'en'), []],
     rol: ['',],
     edad: ['',],
     sexo: ['',],
@@ -233,15 +233,20 @@ export class CreateUserComponent implements OnInit {
     }
   }
 
-
+/*
+*    fechaNacimiento: [formatDate(new Date(), 'dd/MM/yyyy', 'en'), [Validators.required]],
+    rol: ['',],
+    edad: ['',],
+    sexo: ['',],
+    estadoCivil: ['',],
+    profesion: ['',],
+    nivelEscolaridad: ['',],
+*/
   public build(){
-
-
     try {
 
       let numeroIdentificacion:string = this.fromUsuario.get('numeroIdentificacion')?.value!;
       let personaPk :PersonaPK = new PersonaPK(numeroIdentificacion,this.tipoIdentificacionSeleccionado.id);
-  
   
       let persona:Persona = new Persona();
       persona.id=personaPk;
@@ -252,6 +257,11 @@ export class CreateUserComponent implements OnInit {
       if( fechaNacimiento !== undefined && fechaNacimiento !== null){
         persona.fechaNacimiento = new Date(fechaNacimiento);
       }
+      persona.edad = parseInt ( this.fromUsuario.get('edad')?.value! ) ;
+      persona.estadoCivil  = this.fromUsuario.get('estadoCivil')?.value!;
+      persona.sexo = this.fromUsuario.get('sexo')?.value!;
+      persona.profesion = this.fromUsuario.get('profesion')?.value!;
+      persona.nivelEscolaridad = this.fromUsuario.get('nivelEscolaridad')?.value!;
   
       console.log( persona.fechaNacimiento);
      
@@ -265,8 +275,7 @@ export class CreateUserComponent implements OnInit {
       personaContacto.idDepartamento = this.departamentoSeleccionado?.id!;
       personaContacto.idCiudad = this.ciudadSeleccionada?.id!.id!;
       personaContacto.idBarrio = this.barrioSeleccionado?.id.id!;
-      personaContacto.direccion = this.fromUsuario.get('direccion')?.value!;
-      
+      personaContacto.direccion = this.fromUsuario.get('direccion')?.value!;     
   
       let usuarioPk = new UsuarioPK(null,this.tipoIdentificacionSeleccionado.id,numeroIdentificacion );
       this.usuario = new Usuario();
@@ -275,16 +284,15 @@ export class CreateUserComponent implements OnInit {
       this.usuario.email = this.fromUsuario.get('email')?.value!;
       this.usuario.movil = this.fromUsuario.get('movil')?.value!;
       this.usuario.rol = this.rolSistemaSeleccionado;
-      this.usuario.personaContacto = personaContacto;
-  
+
+      let listPersonaContacto: PersonaContacto[] = [];
+      listPersonaContacto.push(personaContacto);
+      this.usuario.persona.listPersonaContacto =  listPersonaContacto;
       
     } catch (error) {
       console.log(error)
       this.loader.stop(this.CONS_TASK_METODO_CREAR);
     }
-    
-  
-
 
   }
 

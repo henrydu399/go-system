@@ -40,6 +40,11 @@ public class ErrorConstantes {
 	public static final String NO_SE_ENCONTRO_PERMISOS_USUARIO = "No se encontraron permisos para el usuario , consulte a su administrador";
 	public static final String ERROR_MAPPER_OBJECT = "Error mapeando un  objeto";
 	
+	public static final String ERROR_USER_NO_EXIST_FOR_EDITH = "Error no existe el usuario para editar";
+	
+	
+	
+	
 	//ERRORES GO-PARAMETRIZACION-API
 	public static final String GO_PARAMETRIZACION_API_ERROR_DATOS_DEPARTAMENTO = "Error con los datos del departamento ";
 	public static final String GO_PARAMETRIZACION_API_ERROR_NOMBRE_DEPARTAMENTO = "Error con el nombre del departamento ";
@@ -50,6 +55,10 @@ public class ErrorConstantes {
 	public static final String GO_PARAMETRIZACION_API_ERROR_CARGANDO_CIUDADES = "Error cargando las ciudades";
 	public static final String GO_PARAMETRIZACION_API_ERROR_CARGANDO_BARRIOS = "Error cargando los barrios";
 	//////////////////////////
+	
+	//ERRORES GO-HOME
+	public static final String ERROR_YA_EXISTE_USUARIO_CON_EMAIL = "Error ya existe un usuario con ese email";
+	//
 
 	public static final String GO_PARAMETRIZACION_API_ERROR_GUARDANDO_DEPARTAMENTO = "Error guardando departamento ";
 

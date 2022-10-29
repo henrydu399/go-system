@@ -10,10 +10,12 @@ export const Global = {
 export const environment = {
   url :Global.gateway,
   production: true,
+  findUser:Global.gateway +'/home/usuario/find/',
   confirmUser:Global.gateway +'/home/usuario/confirm/',
   pathRolesSistema: Global.gateway + '/home/rolesSistema/',
   pathUsuarios:Global.gateway +'/home/usuario/',
-  pathUsuariosSystem:Global.gateway +'/home/usuario/saveForSystem/',
+  pathSaveForSystem:Global.gateway  +'/home/usuario/saveForSystem/',
+  pathEdithForSystem:Global.gateway +'/home/usuario/edithForSystem/',
   pathDepartamentos: Global.gateway +'/home/departamento/',
   pathCiudades: Global.gateway +'/home/ciudad/',
   pathBarrios: Global.gateway +'/home/barrio/',

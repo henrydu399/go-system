@@ -48,6 +48,11 @@ export class AdminUserComponent implements OnInit {
     this.router.navigate(['/app/createUser']);
   }
 
+  public editar(usuario:Usuario){
+    let url:string = '/app/editarUser/'+usuario.id?.id+'/'+usuario.id?.idTipoIdentificacion+'/'+usuario.id?.numeroIdentificacion;
+    this.router.navigate([url]);
+  }
+
 
 
   //METODO QUE CONSULTA LOS USUARIOS DEL SISTEMA

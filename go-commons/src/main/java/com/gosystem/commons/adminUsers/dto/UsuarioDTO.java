@@ -8,7 +8,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +16,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -54,6 +55,9 @@ public class UsuarioDTO implements Serializable {
 
 
 	private PersonaDTO persona;
+	
+
+	private String roles;
 	
 	private List<RolesUsuarioDTO> listRolesUSuarios;
 	

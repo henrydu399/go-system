@@ -1,3 +1,4 @@
+import { PersonaContacto } from "./PersonaContacto";
 import { PersonaPK } from "./PersonaPK";
 import { TipoIdentificacion } from "./TipoIdentificacion";
 
@@ -23,7 +24,12 @@ export class Persona{
 
 	 sexo!: string;
 
+	 nivelEscolaridad!:string;
+
      tipoIdentificacion!: TipoIdentificacion;
+
+
+	 listPersonaContacto!: PersonaContacto[];
 
      
 

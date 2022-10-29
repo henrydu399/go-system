@@ -3,12 +3,12 @@
         <div class="row">
 
 
-            <div class="panel panel-default">
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="row">
 
                         <div class="col-md-8" style="padding-top: 8px;">
-                            <h2 class="panel-title">Lista de Usuarios</h2>
+                            <h2 class="panel-title"> <i class="fa fa-users" aria-hidden="true"></i> Lista de Usuarios</h2>
 
                         </div>
 
@@ -74,9 +74,13 @@
                                     </td>
                                     <td>{{item.persona?.nombres}}</td>
                                     <td>{{item.persona?.apellidos}}</td>
-                                    <td>{{item.activo}}</td>
                                     <td>
-                                        <button class="button btn_sm  "><i class="fa fa-pencil fa-lg"
+                                       
+                                        <i *ngIf="item.activo==false" class="fa fa-lock fa-lg" aria-hidden="true"></i>
+                                        <i *ngIf="item.activo==true"  class="fa fa-check-circle fa-lg" aria-hidden="true"></i>
+                                    </td>
+                                    <td>
+                                        <button class="button btn_sm  " (click)="editar(item)"><i class="fa fa-pencil fa-lg"
                                                 aria-hidden="true"></i></button>
                                         &nbsp;
                                         <button class="button btn_sm  "><i class="fa fa-trash fa-lg"

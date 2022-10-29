@@ -224,6 +224,25 @@ private Logger logger;
 
 	}
 	
+	/**
+	 * Metodo que permite editar Usuarios + persona + persona contacto + rol Usuario
+	 * @SEGURIDAD SI 
+	 */
+	@PostMapping(value = "/edithForSystem/" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> edithForSystem(@RequestBody UsuarioDTO json, HttpServletRequest req) {	
+		logger.info(nameApp + " guardar :: INICIO ");
+		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
+		try {
+			service.edithForSystem(json);
+			return new ResponseEntity<Object>(null, HttpStatus.CREATED);
+		}catch (HomeException e) {
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }catch (Exception e) {
+	    	return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	}
+	
 	
 	@PostMapping(value = "/confirm/" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> confirmUser(@RequestBody UsuarioDTO json, HttpServletRequest req) {	

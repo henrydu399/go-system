@@ -66,6 +66,10 @@ public class Persona implements Serializable {
 	@ManyToOne()
 	@JoinColumn(name="ID_TIPO_IDENTIFICACION" , insertable = false , updatable = false)
 	private TipoIdentificacion tipoIdentificacion;
+	
+	
+	@OneToMany(mappedBy="persona")
+	private List<PersonaContacto> listPersonaContacto;
 
 	//bi-directional many-to-one association to Usuario
 	@JsonIgnore
