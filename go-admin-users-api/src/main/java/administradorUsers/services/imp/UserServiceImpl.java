@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 			this.repository.save(usuario);
 			this.repository.flush();
 			
-			this.personaContactoRepository.save(usuario.getPersonaContacto());
+			
 			this.personaContactoRepository.flush();
 			
 			
@@ -350,13 +350,20 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public UsuarioDTO saveUserSystem(UsuarioDTO usuario) throws AdministradorUserException {
-		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.GET_USER_FOR_LOGIN, EntityEnum.USUARIO, usuario));
+		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, usuario));
 		try {
+			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  PERSONA ..."));
 			Usuario u = userComponent.BuildUSerForSave(usuario);
 			personaRepository.saveAndFlush(u.getPersona());
+			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDADO EXITOSO !"));
+			
+			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  USUARIO ..."));
 			String token = TokenGenerator.generateToken(u.getEmail());
 			u.setTokenActivate(token);
-			repository.saveAndFlush(u);
+			repository.saveAndFlush(u);			
+			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));
+			
+			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  ROLES USUARIO ..."));
 			RolesUsuarioPK rolPk = RolesUsuarioPK.builder().
 					 idSistema(usuario.getRol().getId().getIdSistema())
 					.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
@@ -365,9 +372,14 @@ public class UserServiceImpl implements UserService {
 
 			RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
 			rolesUsuarioRepository.saveAndFlush(rol);
+			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));
+			
+			
 			if( Objects.nonNull(usuario.getPersona().getListPersonaContacto())  && usuario.getPersona().getListPersonaContacto().size() > 0 ) {
+				logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO DATOS CONTACTO !"));
 				PersonaContacto personaContacto = PersonaContactoMapper.mapper(usuario.getPersona().getListPersonaContacto().get(0)) ;
 				personaContactoRepository.save(personaContacto);
+				logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));
 			}
 			UsuarioDTO userU = UsuarioMapper.Mapper(u, false);
 			return userU;
@@ -387,7 +399,6 @@ public class UserServiceImpl implements UserService {
 	 * @Params Usuario
 	 * @Return void O AdministradorUserException
 	 */
-	@SuppressWarnings("deprecation")
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public UsuarioDTO edithUserSystem(UsuarioDTO usuario) throws AdministradorUserException {
 		logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.EDITH_USER_SYSTEM, EntityEnum.USUARIO, usuario,null));
@@ -399,7 +410,7 @@ public class UserServiceImpl implements UserService {
 						ErrorConstantes.ERROR_USER_NO_EXIST_FOR_EDITH);
 			}
 			
-			Usuario u = userComponent.BuildUSerForSave(usuario);
+			Usuario u = userComponent.BuildUSerForEdith(usuario);
 			personaRepository.saveAndFlush(u.getPersona());
 			String token = TokenGenerator.generateToken(u.getEmail());
 			u.setTokenActivate(token);

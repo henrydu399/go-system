@@ -21,6 +21,7 @@ import { BarrioComponent } from '../modals/barrio/barrio.component';
 import { FiltroDepartamentoipe } from '../pipes/filtro-departamento.pipe';
 import { FiltroCiudadPipe } from '../pipes/filtro-ciudad.pipe';
 import { FiltroBarrioPipe } from '../pipes/filtro-barrio';
+import { CreatePersonaComponent } from './persona/create-persona/create-persona.component';
 
 
 
@@ -43,7 +44,8 @@ import { FiltroBarrioPipe } from '../pipes/filtro-barrio';
     FiltroBarrioPipe,
     FiltroDepartamentoipe,
     FiltroTipoIdentificacionPipe,
-    FiltroUsuarioPipe
+    FiltroUsuarioPipe,
+    CreatePersonaComponent
   ],
   exports: [
     PagesComponent,

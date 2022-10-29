@@ -65,8 +65,7 @@ public class Usuario implements Serializable {
 	@Transient
 	private RolesUsuario rolUsuario;
 	
-	@Transient
-	private PersonaContacto personaContacto;
+	
 
 	//bi-directional many-to-one association to Persona
 	@ManyToOne()

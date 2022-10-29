@@ -98,12 +98,50 @@ public class UserComponent {
 		u.setMovil(in.getMovil());
 		u.setPassword(in.getPassword());
 		u.setEmail( in.getEmail());		
+		u.setActivo( in.isActivo());
+		u.setConfirmado(in.isConfirmado());
 		return u;
-				
-
-		
+					
 		}
 
+	public Usuario BuildUSerForEdith(UsuarioDTO in) {
+		
+		
+		PersonaPK pkPersona = PersonaPK.builder()
+				.idTipoIdentificacion(in.getPersona().getId().getIdTipoIdentificacion())
+				.numeroIdentificacion(in.getPersona().getId().getNumeroIdentificacion())
+				.build();
+				
+		Persona p = Persona.builder()
+				 .id(pkPersona)
+				 .nombres(in.getPersona().getNombres())
+				.apellidos(in.getPersona().getApellidos())
+				.edad(in.getPersona().getEdad())
+				.estadoCivil(in.getPersona().getEstadoCivil())
+				.fechaNacimiento(in.getPersona().getFechaNacimiento())
+				.nivelEscolaridad(in.getPersona().getNivelEscolaridad())
+				.profesion(in.getPersona().getProfesion())
+				.sexo(in.getPersona().getSexo())
+				.build();
+		
+
+		
+		UsuarioPK usuarioPk =  new UsuarioPK();
+		usuarioPk.setId(in.getId().getId());
+		usuarioPk.setIdTipoIdentificacion( pkPersona.getIdTipoIdentificacion());
+		usuarioPk.setNumeroIdentificacion(pkPersona.getNumeroIdentificacion());
+		
+		Usuario u = new Usuario();
+		u.setId(usuarioPk);
+		u.setPersona(p);
+		u.setMovil(in.getMovil());
+		u.setPassword(in.getPassword());
+		u.setEmail( in.getEmail());		
+		u.setActivo( in.isActivo());
+		u.setConfirmado(in.isConfirmado());
+		return u;
+					
+		}
 
 
 }

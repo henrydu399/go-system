@@ -275,8 +275,16 @@ public class UserServiceImpl  implements IUserService {
 					.build();
 			userForFind = this.clientAdministracionUsers.findUser(userForFind);
 			if( Objects.isNull(userForFind) ) { //BUSCAMOS QUE NO EXISTA UN USUARIO CON ESE EMAIL
-				//CAMBIAMOS EL ESTADO A ACTIVO
-				usuario.getPersonaContacto().setActivo(true);
+				//CAMBIAMOS LOS ESTADOS A ACTIVOS
+				//CAMBIAMOS LOS ESTADOS A ACTIVOS
+				if( Objects.nonNull(usuario.getPersona().getListPersonaContacto()) && usuario.getPersona().getListPersonaContacto().size() > 0  ) {
+					usuario.getPersona().getListPersonaContacto().get(0).setActivo(true);
+				}
+				//###########################
+				
+				usuario.setActivo(false);
+				usuario.setConfirmado(false);
+				
 				//ENCODE PASSWORD 
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 				usuario.setPassword( passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion() ) );
@@ -322,6 +330,12 @@ public class UserServiceImpl  implements IUserService {
 				if( !userForFind.getId().equals(usuario.getId()))
 					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_YA_EXISTE_USUARIO_CON_EMAIL);
 			}
+			
+			//CAMBIAMOS LOS ESTADOS A ACTIVOS
+			if( Objects.nonNull(usuario.getPersona().getListPersonaContacto()) && usuario.getPersona().getListPersonaContacto().size() > 0  ) {
+				usuario.getPersona().getListPersonaContacto().get(0).setActivo(true);
+			}
+			//###########################
 				
 			UsuarioDTO usuarioDto = this.clientAdministracionUsers.edithForSystem(usuario);				
 			logger.info("METODO : edithForSystem() : USUARIO EDITADO CORRECTAMENTE CORRECTAMENTE ....");

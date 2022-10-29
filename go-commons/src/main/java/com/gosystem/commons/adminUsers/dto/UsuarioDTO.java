@@ -51,7 +51,6 @@ public class UsuarioDTO implements Serializable {
 
 	private RolesUsuarioDTO rolUsuario;
 	
-	private PersonaContactoDTO personaContacto;
 
 
 	private PersonaDTO persona;
