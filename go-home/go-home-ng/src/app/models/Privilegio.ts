@@ -6,7 +6,7 @@ export class Privilegio{
 	activo!:boolean;
 	fkIdPrivilegio!:number;
 	url!:string;
-	isVisibleMenu!:boolean;
+	visibleMenu!:boolean;
 	iconoClass!:string;
 	idSistema!:number;
 	fechaCreacion!:Date;

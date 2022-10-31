@@ -59,7 +59,7 @@
                         aria-expanded="true"> <i class="fa fa-user-circle" aria-hidden="true"></i>
                         {{authService.getUser()?.email}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li *ngFor="let item of menuService.getPrivilegios()">
+                        <li *ngFor="let item of menuService.getPrivilegios() | filtroMenu " >
                             <a [routerLink]="item.privilegio.url" (click)="navbarService.change(item)" c>
                                 <i [ngClass]="item.privilegio.iconoClass" aria-hidden="true"></i> <strong>&nbsp;
                                     {{item.privilegio.nombre}}</strong>
@@ -68,7 +68,7 @@
 
                             <ul>
 
-                                <li *ngFor="let subItem of item.listPrivilegios">
+                                <li *ngFor="let subItem of item.listPrivilegios | filtroMenu">
                                     <a [routerLink]="subItem.privilegio.url" (click)="navbarService.change(item)">
                                         &nbsp; <i [ngClass]="subItem.privilegio.iconoClass" aria-hidden="true"></i>
                                         &nbsp;{{subItem.privilegio.nombre}}

@@ -20,6 +20,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CiudadComponent } from './modals/ciudad/ciudad.component';
 import { BarrioComponent } from './modals/barrio/barrio.component';
+import { FiltroMenuPipe } from './pipes/filtro-menu';
 
 
 @NgModule({
@@ -29,6 +30,8 @@ import { BarrioComponent } from './modals/barrio/barrio.component';
     TopbarComponent,
     MessagesComponent,
     HomeComponent,
+
+    FiltroMenuPipe
 
 
   ],
@@ -46,7 +49,9 @@ import { BarrioComponent } from './modals/barrio/barrio.component';
     AuthModule,
 
     NgxUiLoaderModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+
+    
 
     
   ],

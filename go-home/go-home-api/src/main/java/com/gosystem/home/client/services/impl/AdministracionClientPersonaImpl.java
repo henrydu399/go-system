@@ -60,7 +60,7 @@ public class AdministracionClientPersonaImpl implements IAdministracionClientPer
 	@Override
 	public List<PersonaDTO> getAll() throws HomeException {
 		logger.info("METODO : v() -> BUSCANDO USUARIO POR EMAIL.... ");
-		String urlFull = this.urlGateway + this.pathGoAdminUserUsuario;
+		String urlFull = this.urlGateway + this.pathGoAdminUserPersona;
 		URI url = null;
 		try {
 		 url =  new URI(urlFull);
@@ -73,13 +73,12 @@ public class AdministracionClientPersonaImpl implements IAdministracionClientPer
 		try {
 			  HttpHeaders headers = new HttpHeaders();
 		      headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		      HttpEntity <String> entity = new HttpEntity<String>("Consultando usuarios URL : "+urlFull);
-			  ResponseEntity<UsuarioDTO[]> responseEntityStr = restTemplate.getForEntity(url, UsuarioDTO[].class);
+			  ResponseEntity<PersonaDTO[]> responseEntityStr = restTemplate.getForEntity(url, PersonaDTO[].class);
 			  logger.info("METODO : getAll() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
 			  if(     responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
 					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
 					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {
-				  UsuarioDTO[] list =  responseEntityStr.getBody();
+				  PersonaDTO[] list =  responseEntityStr.getBody();
 				  return Arrays.asList(list);
 			  }	  
 		}catch (Exception e) {

@@ -27,6 +27,7 @@ import { CreatePersonaComponent } from './persona/create-persona/create-persona.
 
 
 
+
 @NgModule({
   declarations: [
     PagesComponent,
@@ -40,6 +41,7 @@ import { CreatePersonaComponent } from './persona/create-persona/create-persona.
     BarrioComponent,
 
 
+  
     FiltroCiudadPipe,
     FiltroBarrioPipe,
     FiltroDepartamentoipe,
