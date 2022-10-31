@@ -70,6 +70,7 @@ public class ErrorConstantes {
 	public static final String ERROR_PRIVILEGIOS = "Error el usuario no tiene privilegios para esta operacion";
 	public static final String ERROR_GENERAL_GUARDANDO = "Error general GUARDANDO";
 	public static final String ERROR_PARAMETROS_BUSQUEDA = "ERROR_PARAMETROS_BUSQUEDA";
+	public static final String ERROR_PARAMETROS_INSUFICIENTES = "Parametros insuficienstes para la operacion";
 	
 	public static final String ERROR_CON_URL = "Error con la url :";
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
+
 import java.util.logging.Logger;
 
 import javax.persistence.PersistenceException;
@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService {
 							
 					
 					List<RolesUsuario> listRolesUsuario =  this.rolesUsuarioRepository.findByUsuario(obj);
-					if( Objects.nonNull(listRolesUsuario) ) {
+					if( Objects.nonNull(listRolesUsuario) && listRolesUsuario.size() > 0 ) {
 						listRolesUsuario.get(0).setUsuario(null);
 						u.get().setRoles( UtilGson.SerializeObjet( RolesUsuarioMapper.mapper(listRolesUsuario.get(0))  ) );
 					}
@@ -282,8 +282,80 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void delete(Usuario p) throws AdministradorUserException {
-		// TODO Auto-generated method stub
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
+	public void delete(Usuario usuario) throws AdministradorUserException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE , EntityEnum.USUARIO, usuario,"ELIMINADO USUARIO ..."));
+		try {
+			if(Objects.isNull(usuario) && Objects.isNull(usuario.getId()) ) {
+				throw new AdministradorUserException(EntityEnum.USUARIO, MethodsAdminUSerEnum.GET_USER_FOR_LOGIN,
+						LayerEnum.SERVICE, ErrorConstantes.ERROR_PARAMETROS_INSUFICIENTES);
+			}
+			Optional<Usuario> usuarioFind = this.repository.findById(usuario.getId());
+			if( !usuarioFind.isPresent()) {
+				throw new AdministradorUserException(EntityEnum.USUARIO, MethodsAdminUSerEnum.GET_USER_FOR_LOGIN,
+						LayerEnum.SERVICE, ErrorConstantes.USUARIO_NO_EXISTE);
+			}
+			
+			List<RolesUsuario> listRoles = this.rolesUsuarioRepository.findByUsuario(usuarioFind.get());
+			if( Objects.nonNull(listRoles)  && listRoles.size() > 0) {
+				for( RolesUsuario r : listRoles) {
+					this.rolesUsuarioRepository.delete(r);
+				}
+			}
+			this.repository.delete(usuario);
+			
+			
+			
+			if( Objects.nonNull(usuario.getPersona().getListPersonaContacto()) &&  usuario.getPersona().getListPersonaContacto().size() > 0) {
+				List<PersonaContacto> listPersonaContacto = usuario.getPersona().getListPersonaContacto();
+				for( PersonaContacto pc : listPersonaContacto) {
+					this.personaContactoRepository.delete(pc);
+				}
+			}
+	
+			this.personaRepository.delete(usuarioFind.get().getPersona());
+			
+			
+			
+			
+			logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE , EntityEnum.USUARIO, usuario,"USUARIO ELIMINADO"));
+
+		} catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new AdministradorUserException(EntityEnum.USUARIO, MethodsAdminUSerEnum.GET_USER_FOR_LOGIN,
+					LayerEnum.SERVICE, null);
+		}
+
+	}
+	
+	@Override
+	public void desactivate(Usuario usuario) throws AdministradorUserException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE , EntityEnum.USUARIO, usuario,"DESACTIVANDO USUARIO ..."));
+		try {
+			if(Objects.isNull(usuario) && Objects.isNull(usuario.getId()) ) {
+				throw new AdministradorUserException(EntityEnum.USUARIO, MethodsAdminUSerEnum.GET_USER_FOR_LOGIN,
+						LayerEnum.SERVICE, ErrorConstantes.ERROR_PARAMETROS_INSUFICIENTES);
+			}
+			Optional<Usuario> usuarioFind = this.repository.findById(usuario.getId());
+			if( !usuarioFind.isPresent()) {
+				throw new AdministradorUserException(EntityEnum.USUARIO, MethodsAdminUSerEnum.GET_USER_FOR_LOGIN,
+						LayerEnum.SERVICE, ErrorConstantes.USUARIO_NO_EXISTE);
+			}
+			usuario.setActivo(true);
+			repository.save(usuario);
+			logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE , EntityEnum.USUARIO, usuario,"USUARIO DESACTIVADO"));
+
+		} catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new AdministradorUserException(EntityEnum.USUARIO, MethodsAdminUSerEnum.GET_USER_FOR_LOGIN,
+					LayerEnum.SERVICE, null);
+		}
 
 	}
 
@@ -418,25 +490,27 @@ public class UserServiceImpl implements UserService {
 			
 			//#######LOGIC ROL USUARIO########
 				//BUSCAMOS EL ROL DEL USUARIO ANTERIOR Y LO ELIMINAMOS
-				RolesUsuarioPK rolPktoFind = RolesUsuarioPK.builder()
-						 .idSistema(usuario.getRol().getId().getIdSistema())
-						 .idRolSistema(usuario.getRol().getId().getId())
-						 .idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
-						 .numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
-				Optional<RolesUsuario> rolUsuarioExist = rolesUsuarioRepository.findById(rolPktoFind);
-				if(rolUsuarioExist.isPresent()) {
-					rolesUsuarioRepository.delete(rolUsuarioExist.get());
-				}
+				if( Objects.nonNull(usuario.getRol()) && Objects.nonNull(usuario.getId() )  ) {
+					RolesUsuarioPK rolPktoFind = RolesUsuarioPK.builder()
+							 .idSistema(usuario.getRol().getId().getIdSistema())
+							 .idRolSistema(usuario.getRol().getId().getId())
+							 .idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
+							 .numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
+					Optional<RolesUsuario> rolUsuarioExist = rolesUsuarioRepository.findById(rolPktoFind);
+					if(rolUsuarioExist.isPresent()) {
+						rolesUsuarioRepository.delete(rolUsuarioExist.get());
+					}
 				// ####################################################
 				// CREAMOS UN NUEVO ROL
 				RolesUsuarioPK rolPk = RolesUsuarioPK.builder().
-						 idSistema(usuario.getRol().getId().getIdSistema())
-						.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
-						.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
-						.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
+							 idSistema(usuario.getRol().getId().getIdSistema())
+							.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
+							.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
+							.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
 				RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
 				rolesUsuarioRepository.saveAndFlush(rol);
-				// #####################################################
+					// #####################################################	
+				}
 			//##################################################
 				
 		    //#######LOGIC PERSONA CONTACTO ######

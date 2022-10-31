@@ -2,6 +2,7 @@ package administradorUsers.services.imp;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gosystem.commons.constants.ErrorConstantes;
 import com.gosystem.commons.enums.EntityEnum;
@@ -19,7 +21,17 @@ import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.utils.UtilsLogs;
 
 import administradorUsers.entitys.Persona;
+import administradorUsers.entitys.PersonaContacto;
+import administradorUsers.entitys.Systema;
+import administradorUsers.entitys.Usuario;
+import administradorUsers.enums.MethodsAdminUSerEnum;
+import administradorUsers.mappers.PersonaContactoMapper;
+import administradorUsers.repository.IPersonaContactoRepository;
 import administradorUsers.repository.IPersonaRepository;
+import administradorUsers.repository.IPrivilegiosRolUsuarioRepository;
+import administradorUsers.repository.ISistemaRepository;
+import administradorUsers.repository.IUsuariosRepository;
+import administradorUsers.repository.RolesUsuarioRepository;
 import administradorUsers.services.PersonaService;
 
 
@@ -30,7 +42,23 @@ import administradorUsers.services.PersonaService;
 public  class PersonaServiceImpl implements PersonaService {
 	
 	@Autowired
-	IPersonaRepository repository;
+	private ISistemaRepository sistemaRepository;
+	
+	@Autowired
+	private IPersonaRepository repository;
+	
+	@Autowired
+	private IUsuariosRepository usuarioRepository;
+	
+	@Autowired
+	private IPrivilegiosRolUsuarioRepository privilegiosRolUsuarioRepository;
+	
+	@Autowired
+	private RolesUsuarioRepository rolesUsuarioRepository;
+	
+	
+	@Autowired
+	private IPersonaContactoRepository personaContactoRepository;
 
 
 	private Logger logger;
@@ -44,26 +72,35 @@ public  class PersonaServiceImpl implements PersonaService {
 	@Override
 	public List<Persona> getAll() throws AdministradorUserException {
 		return repository.findAll();
-		
 	}
+	
+	@Override
+	public List<Persona> getAllBySistem(String nameSistem) throws AdministradorUserException {
+		
+		Optional<Systema> sistemaFind = this.sistemaRepository.findBynombre(nameSistem);
+		if(! sistemaFind.isPresent()) {
+			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.SAVE, LayerEnum.DAO , ErrorConstantes.ERROR_SISTEMA_NO_EXISTE_EN_EL_SISTEMA);	
+		}
+		return repository.findBySistemaId(sistemaFind.get().getId().intValue());
+	}
+	
 
 	@Override
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public void save(Persona p) throws AdministradorUserException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p));
-		try {
-			
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p, "Guardando persona..."));
+		try {	
 			Optional<Persona> personaFind = this.repository.findById(p.getId());
-			
 			if( personaFind.isPresent()) {
 				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.SAVE, LayerEnum.DAO , ErrorConstantes.PERSONA_YA_EXISTE);
 			}else {
-				this.repository.save(p);
+				this.repository.saveAndFlush(p);
+				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,null, "persona guardada"));
+				if( Objects.nonNull(p.getListPersonaContacto())  && p.getListPersonaContacto().size() > 0 ) {
+					this.savePersonaContacto(p.getListPersonaContacto());
+				}
+				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p, "proceso finalizado con exito..."));
 			}			
-			
-		}catch (PersistenceException e) {
-			logger.severe(e.getMessage());
-			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.SAVE, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_GUARDAR);
-		
 	    }catch (AdministradorUserException e) {
 	    	logger.severe(e.getMessage());
 	    	throw e;
@@ -77,21 +114,21 @@ public  class PersonaServiceImpl implements PersonaService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public void edith(Persona p) throws AdministradorUserException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,p));
-		
+		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,p, "Editando persona..."));
 		try {
 			Optional<Persona> personaFind = this.repository.findById(p.getId());	
 			if( personaFind.isPresent()) {
-				this.repository.save(p);	
+				this.repository.saveAndFlush(p);
+				logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,null, "persona Editada"));
+				if( Objects.nonNull(p.getListPersonaContacto())  && p.getListPersonaContacto().size() > 0 ) {
+					this.savePersonaContacto(p.getListPersonaContacto());
+				}
+				logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,p, "proceso finalizado con exito..."));
 			}else {
 				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.PERSONA_NO_EXISTE_EN_EL_SISTEMA);
 			}			
-			
-		}catch (PersistenceException e) {
-			logger.severe(e.getMessage());
-			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_MODIFICAR);
-		
 	    }catch (AdministradorUserException e) {
 	    	logger.severe(e.getMessage());
 	    	throw e;
@@ -166,8 +203,60 @@ public  class PersonaServiceImpl implements PersonaService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public void delete(Persona p) throws AdministradorUserException {
-		// TODO Auto-generated method stub
+		logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE, EntityEnum.PERSONA, null, "Eliminando persona..."));
+		try {
+			Optional<Persona> personaFind = this.repository.findById(p.getId());	
+			if( personaFind.isPresent()) {
+				List<PersonaContacto> listPersonaContacto = this.personaContactoRepository.findByPersona(p);
+				if( Objects.nonNull(listPersonaContacto) && listPersonaContacto.size() > 0 ) {
+					for( PersonaContacto pc : listPersonaContacto) {
+						this.personaContactoRepository.delete(pc);
+					}
+				}
+				
+				this.repository.saveAndFlush(p);
+				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,null, "persona Eliminada"));
+				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p, "proceso finalizado con exito..."));
+			}else {
+				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.PERSONA_NO_EXISTE_EN_EL_SISTEMA);
+			}			
+	    }catch (AdministradorUserException e) {
+	    	logger.severe(e.getMessage());
+	    	throw e;
+		}
+		catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+		}		
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
+	public void desactivate(Usuario usuario) throws AdministradorUserException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE, EntityEnum.PERSONA, null, "Desactivando persona..."));
+		try {
+				
+	    }catch (AdministradorUserException e) {
+	    	logger.severe(e.getMessage());
+	    	throw e;
+		}
+		catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+		}	
+		
+	}
+	
+	
+	private void savePersonaContacto(List<PersonaContacto> list) throws AdministradorUserException{
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA, null, "GUARDANDO DATOS CONTACTO !"));
+		for( PersonaContacto pc : list) {
+			personaContactoRepository.save(pc);	
+		}		
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));
 		
 	}
 

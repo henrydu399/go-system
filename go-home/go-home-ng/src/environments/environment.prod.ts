@@ -15,6 +15,8 @@ export const environment = {
   pathRolesSistema: Global.gateway + '/home/rolesSistema/',
   pathUsuarios:Global.gateway +'/home/usuario/',
   pathSaveForSystem:Global.gateway  +'/home/usuario/saveForSystem/',
+  pathDeleteUser:Global.gateway  +'/home/usuario/delete/',
+  pathDesactivateUSer:Global.gateway  +'/home/usuario/desactivate/',
   pathEdithForSystem:Global.gateway +'/home/usuario/edithForSystem/',
   pathDepartamentos: Global.gateway +'/home/departamento/',
   pathCiudades: Global.gateway +'/home/ciudad/',

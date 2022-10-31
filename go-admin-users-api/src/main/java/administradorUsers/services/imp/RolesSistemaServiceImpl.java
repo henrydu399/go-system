@@ -18,6 +18,7 @@ import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.utils.UtilsLogs;
 
 import administradorUsers.entitys.RolesSistema;
+import administradorUsers.entitys.Usuario;
 import administradorUsers.enums.MethodsAdminUSerEnum;
 import administradorUsers.logic.RolesSistemaLogicImpl;
 import administradorUsers.repository.IRoleSistemasRepository;
@@ -198,6 +199,14 @@ public class RolesSistemaServiceImpl implements RolesSistemaService{
 			throw new AdministradorUserException( entity, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC , ErrorConstantes.ERROR_CONSULTANDO);
 		}
     }
+
+
+
+	@Override
+	public void desactivate(Usuario usuario) throws AdministradorUserException {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 	

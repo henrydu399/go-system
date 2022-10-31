@@ -19,6 +19,7 @@ import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.utils.UtilsLogs;
 
 import administradorUsers.entitys.Systema;
+import administradorUsers.entitys.Usuario;
 import administradorUsers.logic.SistemaLogicImpl;
 import administradorUsers.repository.ISistemaRepository;
 import administradorUsers.services.SistemaService;
@@ -197,6 +198,14 @@ public class SistemaServiceImpl implements SistemaService{
 
 	public Optional<Systema> findBynombre(String name) {
 		return this.repository.findBynombre(name);
+	}
+
+
+
+	@Override
+	public void desactivate(Usuario usuario) throws AdministradorUserException {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

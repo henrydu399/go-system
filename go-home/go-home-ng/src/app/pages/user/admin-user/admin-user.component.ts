@@ -35,7 +35,6 @@ export class AdminUserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.getAllUsuarios();
   }
 
@@ -51,6 +50,40 @@ export class AdminUserComponent implements OnInit {
   public editar(usuario:Usuario){
     let url:string = '/app/editarUser/'+usuario.id?.id+'/'+usuario.id?.idTipoIdentificacion+'/'+usuario.id?.numeroIdentificacion;
     this.router.navigate([url]);
+  }
+
+  private CONS_TASK_USER_DELETE: string = "CONS_TASK_USER_DELETE";
+  public delete(usuario:Usuario){
+    this.userService.deleteUser(usuario).subscribe({
+      next: (result) => {
+        this.loader.stop(this.CONS_TASK_USER_DELETE);
+        this.msgService.lanzarAlerta(mensaje.SUCCESS, "Proceso exitoso !",200); 
+        this.getAllUsuarios();
+      },
+      error: (error) => {
+        this.utilHttpService.errorManager(error,this.CONS_TASK_USER_DELETE);
+      },
+      complete: () => {
+        this.loader.stop(this.CONS_TASK_USER_DELETE);
+      }
+    });
+  }
+
+  private CONS_TASK_USER_DESACTIVATE: string = "CONS_TASK_USER_DESACTIVATE";
+  public desactivate(usuario:Usuario){
+    this.userService.desactivateUser(usuario).subscribe({
+      next: (result) => {
+        this.loader.stop(this.CONS_TASK_USER_DESACTIVATE);
+        this.msgService.lanzarAlerta(mensaje.SUCCESS, "Proceso exitoso !",200); 
+        this.getAllUsuarios();
+      },
+      error: (error) => {
+        this.utilHttpService.errorManager(error,this.CONS_TASK_USER_DESACTIVATE);
+      },
+      complete: () => {
+        this.loader.stop(this.CONS_TASK_USER_DESACTIVATE);
+      }
+    });
   }
 
 

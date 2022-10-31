@@ -166,12 +166,30 @@ private Logger logger;
 	
 
 	//DELETE O DESACTIVAR
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Object> desactivar(@PathVariable Long id) {
-		logger.info(nameApp + " DELETE O DESACTIVAR :: INICIO ");
-		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet(id));
-		return new ResponseEntity<Object>(null, HttpStatus.OK);
+	@PostMapping(value = "/delete/")
+	public ResponseEntity<Object> delete(@RequestBody Usuario usuario, HttpServletRequest req) {
+		logger.info(nameApp + " DELETE  :: INICIO ");
+		try {
+			service.delete(usuario);
+			return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }	
 		
+	}
+	
+	//DELETE O DESACTIVAR
+	@PostMapping(value = "/desactivate/")
+	public ResponseEntity<Object> desactivate(@RequestBody Usuario usuario, HttpServletRequest req) {
+		logger.info(nameApp + "  O DESACTIVAR :: INICIO ");
+		try {
+			service.desactivate(usuario);
+			return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }		
 	}
 	
     //=======================================================================

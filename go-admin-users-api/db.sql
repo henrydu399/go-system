@@ -60,6 +60,18 @@ CREATE TABLE `persona_contacto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+CREATE TABLE admin_users.persona_sistema (
+	id_sistema INT NOT NULL,
+	numero_identificacion varchar(30) NOT NULL,
+	id_tipo_identificacion INT NOT NULL,
+	CONSTRAINT persona_sistema_PK PRIMARY KEY (id_sistema,numero_identificacion,id_tipo_identificacion),
+	CONSTRAINT persona_sistema_FK FOREIGN KEY (id_tipo_identificacion,numero_identificacion) REFERENCES admin_users.persona(ID_TIPO_IDENTIFICACION,NUMERO_IDENTIFICACION) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT persona_sistema_FK_1 FOREIGN KEY (id_sistema) REFERENCES admin_users.systema(id) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci;
+
 -- admin_users.privilegios definition
 
 CREATE TABLE `privilegios` (

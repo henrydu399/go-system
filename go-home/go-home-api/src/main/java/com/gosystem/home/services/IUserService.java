@@ -17,5 +17,9 @@ public interface IUserService extends IEntityDao<UsuarioDTO> {
 	 public void saveForSystem(UsuarioDTO usuario) throws HomeException ;
 	 
 	 public void edithForSystem(UsuarioDTO usuario) throws HomeException ;
+	 
+	 public void desactivate(UsuarioDTO p) throws HomeException ;
+	 
+	 public void delete(UsuarioDTO p) throws HomeException ;
 
 }

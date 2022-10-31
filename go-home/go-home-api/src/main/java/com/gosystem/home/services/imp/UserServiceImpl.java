@@ -33,355 +33,367 @@ import com.gosystem.home.streams.RolUsuariosStream;
 import com.gosystem.home.util.BCryptPasswordEncoder;
 import com.gosystem.home.validations.UserValidation;
 
-
-
 @Service
-public class UserServiceImpl  implements IUserService {
-	
-	
+public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private IAdministracionClientUsers clientAdministracionUsers;
-	
+
 	@Autowired
 	private IEmailClientService emailClientService;
-	
-	
-	
+
 	@Autowired
 	private UserValidation userValidation;
-	
-	
+
 	@Autowired
 	private RolUsuariosStream rolUsuariosStream;
-	
-	@Autowired 
+
+	@Autowired
 	private IParametrizacionClientService parametrizacionClientService;
-    
-	
-	
+
 	@Value("${rol.user.normal}")
 	private String rolUSerNormal;
-	
+
 	@Value("${application.name}")
 	private String sistemaName;
-	
-	private Logger logger;
-	
-	private BCryptPasswordEncoder passwordEncoder ;
-	
 
-	
+	private Logger logger;
+
+	private BCryptPasswordEncoder passwordEncoder;
+
 	public UserServiceImpl() {
 		logger = UtilsLogs.getLogger(UserServiceImpl.class.getName());
 		this.passwordEncoder = new BCryptPasswordEncoder();
 	}
-	
-	
+
 	@Override
 	public List<UsuarioDTO> getAll() throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.GETALL, EntityEnum.USUARIO , null));
+		logger.info(UtilsLogs.getInfo(MethodsEnum.GETALL, EntityEnum.USUARIO, null));
 		try {
-			List<UsuarioDTO> out = clientAdministracionUsers.getAll();	
-			for(UsuarioDTO userDto :  out) {
+			List<UsuarioDTO> out = clientAdministracionUsers.getAll();
+			for (UsuarioDTO userDto : out) {
 				userDto.setPassword(null);
 			}
-			return 	out;
-		}catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+			return out;
+		} catch (HomeException e) {
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.GETALL, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
 		}
-		
+
 	}
 
 	@Override
 	public void save(UsuarioDTO usuario) throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
-		try {					
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, usuario));
+		try {
 			logger.info("METODO : save() : REGISTRANDO USUARIO ....");
 			logger.info("METODO : save() : VALIDANDO ....");
 			usuario.setConfirmado(false);
 			usuario.setActivo(true);
 			userValidation.save(usuario);
 			logger.info("METODO : save() : REGISTRANDO USUARIO ....");
-			//ENCODE PASSWORD 
+			// ENCODE PASSWORD
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			usuario.setPassword( passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion() ) );
+			usuario.setPassword(passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion()));
 			///
-			
-			this.clientAdministracionUsers.createUser(usuario);	
-			logger.info("METODO : save() : REGISTRADO CON EXITO ....");	
-		}catch (PersistenceException e) {
+
+			this.clientAdministracionUsers.createUser(usuario);
+			logger.info("METODO : save() : REGISTRADO CON EXITO ....");
+		} catch (PersistenceException e) {
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_GUARDAR);
-		
-	    }catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO,
+					ErrorConstantes.ERROR_INTENTAR_GUARDAR);
+
+		} catch (HomeException e) {
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
 		}
 
-		
 	}
 
 	@Override
 	public List<UsuarioDTO> findAll(UsuarioDTO usuario) throws HomeException {
-		
-		logger.info(UtilsLogs.getInfo(MethodsEnum.FIND_CUSTOM, EntityEnum.USUARIO , usuario));
+
+		logger.info(UtilsLogs.getInfo(MethodsEnum.FIND_CUSTOM, EntityEnum.USUARIO, usuario));
 		try {
-			return null;	
-			
-		}catch (PersistenceException e) {
+			return null;
+
+		} catch (PersistenceException e) {
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.DAO, ErrorConstantes.ERROR_CONSULTANDO);
-		
-	    }catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.DAO,
+					ErrorConstantes.ERROR_CONSULTANDO);
+
+		} catch (HomeException e) {
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
 		}
 	}
-	
-	
+
 	@Override
 	public UsuarioDTO find(UsuarioDTO obj) throws HomeException {
-		
-		logger.info(UtilsLogs.getInfo(MethodsEnum.FIND_CUSTOM, EntityEnum.USUARIO ,obj));
+
+		logger.info(UtilsLogs.getInfo(MethodsEnum.FIND_CUSTOM, EntityEnum.USUARIO, obj));
 		try {
-			UsuarioDTO u =this.clientAdministracionUsers.findUser(obj)	;
-					return u;
-		}catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+			UsuarioDTO u = this.clientAdministracionUsers.findUser(obj);
+			return u;
+		} catch (HomeException e) {
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC , null);
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.FIND_CUSTOM, LayerEnum.LOGIC, null);
 		}
 	}
 
 	@Override
 	public void edith(UsuarioDTO usuario) throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO , usuario));
-		
-		try {	
-			
-			
-			
-		}catch (PersistenceException e) {
-			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO, ErrorConstantes.ERROR_INTENTAR_MODIFICAR);
-		
-	    }catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
-			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
-		}
-	
-		
-	}
+		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO, usuario));
 
+		try {
+
+		} catch (PersistenceException e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO,
+					ErrorConstantes.ERROR_INTENTAR_MODIFICAR);
+
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
+		}
+
+	}
 
 	@Override
 	public void delete(UsuarioDTO p) throws HomeException {
-		// TODO Auto-generated method stub
-		
+		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO, null, "ELIMINANDO USUARIO"));
+		try {
+			this.clientAdministracionUsers.deleteUser(p);
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
+		}
 	}
 
+	@Override
+	public void desactivate(UsuarioDTO p) throws HomeException {
+		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO, null, "DESACTIVANDO USUARIO"));
+		try {
+			this.clientAdministracionUsers.desativateUser(p);
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
+		}
+
+	}
 
 	@Override
 	public Optional<UsuarioDTO> findByEmail(String email) {
-		return null;
+		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.USUARIO, email));
+
+		try {
+			return null;
+		} catch (PersistenceException e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.DAO,
+					ErrorConstantes.ERROR_INTENTAR_MODIFICAR);
+
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
+		}
 	}
-	
-	
-	 //=======================================================================
-    // ----- PUBLIC  -----
-    //=======================================================================
-	
+
+	// =======================================================================
+	// ----- PUBLIC -----
+	// =======================================================================
+
 	/**
 	 * Metodo para registrar Usuarios de rol USER_NORMAL
 	 */
 	@Override
 	public void saveForSystemPublic(UsuarioDTO usuario) throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
-		try {					
-			 logger.info("METODO : saveForSystemPublic() : REGISTRANDO USUARIO ....");
-			 logger.info("METODO : saveForSystemPublic() : VALIDANDO ....");
-			 this.userValidation.save(usuario);
-			 logger.info("METODO : saveForSystemPublic() : VALIDADO CORRECTAMENTE ....");
-			 UsuarioDTO userForFind = UsuarioDTO.builder()
-					.email(usuario.getEmail())
-					.sistema(this.sistemaName)
-					.build();
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, usuario));
+		try {
+			logger.info("METODO : saveForSystemPublic() : REGISTRANDO USUARIO ....");
+			logger.info("METODO : saveForSystemPublic() : VALIDANDO ....");
+			this.userValidation.save(usuario);
+			logger.info("METODO : saveForSystemPublic() : VALIDADO CORRECTAMENTE ....");
+			UsuarioDTO userForFind = UsuarioDTO.builder().email(usuario.getEmail()).sistema(this.sistemaName).build();
 			userForFind = this.clientAdministracionUsers.findUser(userForFind);
-	
-			if( Objects.isNull(userForFind) ) {
-				//ENCODE PASSWORD 
+
+			if (Objects.isNull(userForFind)) {
+				// ENCODE PASSWORD
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-				usuario.setPassword( passwordEncoder.encode(usuario.getPassword() ) );
-				///		
+				usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+				///
 				RolesSistemaDTO rol = rolUsuariosStream.findBySistemName(rolUSerNormal);
-				usuario.setRol(rol);	
+				usuario.setRol(rol);
 				UsuarioDTO usuarioDto = this.clientAdministracionUsers.saveForSystemPublic(usuario);
-				if( Objects.nonNull(usuarioDto) ) {
-					this.sendEmail(usuarioDto );
-				}else {
-					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL);
-				}	
+				if (Objects.nonNull(usuarioDto)) {
+					this.sendEmail(usuarioDto);
+				} else {
+					throw new HomeException(null, MethodsEnum.SAVE, LayerEnum.SERVICE, ErrorConstantes.ERROR_GENERAL);
+				}
 				logger.info("METODO : saveForSystemPublic() : USUARIO CREADO CORRECTAMENTE ....");
-			}else {
-				logger.warning("METODO : saveForSystemPublic() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE );
-				throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
+			} else {
+				logger.warning("METODO : saveForSystemPublic() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
+				throw new HomeException(null, MethodsEnum.SAVE, LayerEnum.SERVICE,
+						ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
 			}
-		}catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
-		}		
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
+		}
 	}
-	
+
 	/**
 	 * Metodo para registrar Usuarios FULL
 	 */
 	@Override
 	public void saveForSystem(UsuarioDTO usuario) throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
-		try {					
-			 logger.info("METODO : saveForSystem() : REGISTRANDO USUARIO ....");
-			 logger.info("METODO : saveForSystem() : VALIDANDO ....");
-			 this.userValidation.save(usuario);
-			 logger.info("METODO : saveForSystem() : VALIDADO CORRECTAMENTE ....");
-			 UsuarioDTO userForFind = UsuarioDTO.builder()
-					.email(usuario.getEmail())
-					.sistema(this.sistemaName)
-					.build();
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, usuario));
+		try {
+			logger.info("METODO : saveForSystem() : REGISTRANDO USUARIO ....");
+			logger.info("METODO : saveForSystem() : VALIDANDO ....");
+			this.userValidation.save(usuario);
+			logger.info("METODO : saveForSystem() : VALIDADO CORRECTAMENTE ....");
+			UsuarioDTO userForFind = UsuarioDTO.builder().email(usuario.getEmail()).sistema(this.sistemaName).build();
 			userForFind = this.clientAdministracionUsers.findUser(userForFind);
-			if( Objects.isNull(userForFind) ) { //BUSCAMOS QUE NO EXISTA UN USUARIO CON ESE EMAIL
-				//CAMBIAMOS LOS ESTADOS A ACTIVOS
-				//CAMBIAMOS LOS ESTADOS A ACTIVOS
-				if( Objects.nonNull(usuario.getPersona().getListPersonaContacto()) && usuario.getPersona().getListPersonaContacto().size() > 0  ) {
+			if (Objects.isNull(userForFind)) { // BUSCAMOS QUE NO EXISTA UN USUARIO CON ESE EMAIL
+				// CAMBIAMOS LOS ESTADOS A ACTIVOS
+				// CAMBIAMOS LOS ESTADOS A ACTIVOS
+				if (Objects.nonNull(usuario.getPersona().getListPersonaContacto())
+						&& usuario.getPersona().getListPersonaContacto().size() > 0) {
 					usuario.getPersona().getListPersonaContacto().get(0).setActivo(true);
 				}
-				//###########################
-				
+				// ###########################
+
 				usuario.setActivo(false);
 				usuario.setConfirmado(false);
-				
-				//ENCODE PASSWORD 
+
+				// ENCODE PASSWORD
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-				usuario.setPassword( passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion() ) );
+				usuario.setPassword(passwordEncoder.encode(usuario.getPersona().getId().getNumeroIdentificacion()));
 				UsuarioDTO usuarioDto = this.clientAdministracionUsers.saveForSystem(usuario);
-				if( Objects.nonNull(usuarioDto) ) {
-					this.sendEmail(usuarioDto );
-				}else {
-					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL);
-				}					
+				if (Objects.nonNull(usuarioDto)) {
+					this.sendEmail(usuarioDto);
+				} else {
+					throw new HomeException(null, MethodsEnum.SAVE, LayerEnum.SERVICE, ErrorConstantes.ERROR_GENERAL);
+				}
 				logger.info("METODO : saveForSystem() : USUARIO CREADO CORRECTAMENTE ....");
-			}else {
-				logger.warning("METODO : saveForSystem() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE );
-				throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
+			} else {
+				logger.warning("METODO : saveForSystem() : MENSSAGE" + ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
+				throw new HomeException(null, MethodsEnum.SAVE, LayerEnum.SERVICE,
+						ErrorConstantes.USUARIO_EMAIL_YA_EXISTE);
 			}
-		}catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
 		}
 	}
-	
+
 	/**
 	 * Metodo para editar Usuarios FULL
 	 */
 	@Override
 	public void edithForSystem(UsuarioDTO usuario) throws HomeException {
-		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO ,usuario));
-		try {					
-			 logger.info("METODO : edithForSystem() : REGISTRANDO USUARIO ....");
-			 logger.info("METODO : edithForSystem() : VALIDANDO ....");
-			 this.userValidation.save(usuario);
-			 logger.info("METODO : edithForSystem() : VALIDADO CORRECTAMENTE ....");
-			 UsuarioDTO userForFind = UsuarioDTO.builder()
-					.email(usuario.getEmail())
-					.sistema(this.sistemaName)
-					.build();
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, usuario));
+		try {
+			logger.info("METODO : edithForSystem() : REGISTRANDO USUARIO ....");
+			logger.info("METODO : edithForSystem() : VALIDANDO ....");
+			this.userValidation.save(usuario);
+			logger.info("METODO : edithForSystem() : VALIDADO CORRECTAMENTE ....");
+			UsuarioDTO userForFind = UsuarioDTO.builder().email(usuario.getEmail()).sistema(this.sistemaName).build();
 			userForFind = this.clientAdministracionUsers.findUser(userForFind);
-			if( Objects.nonNull(userForFind) ) {
-				if( !userForFind.getId().equals(usuario.getId()))
-					throw new HomeException( null, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_YA_EXISTE_USUARIO_CON_EMAIL);
+			if (Objects.nonNull(userForFind)) {
+				if (!userForFind.getId().equals(usuario.getId()))
+					throw new HomeException(null, MethodsEnum.SAVE, LayerEnum.SERVICE,
+							ErrorConstantes.ERROR_YA_EXISTE_USUARIO_CON_EMAIL);
 			}
-			
-			//CAMBIAMOS LOS ESTADOS A ACTIVOS
-			if( Objects.nonNull(usuario.getPersona().getListPersonaContacto()) && usuario.getPersona().getListPersonaContacto().size() > 0  ) {
+
+			// CAMBIAMOS LOS ESTADOS A ACTIVOS
+			if (Objects.nonNull(usuario.getPersona().getListPersonaContacto())
+					&& usuario.getPersona().getListPersonaContacto().size() > 0) {
 				usuario.getPersona().getListPersonaContacto().get(0).setActivo(true);
 			}
-			//###########################
-				
-			UsuarioDTO usuarioDto = this.clientAdministracionUsers.edithForSystem(usuario);				
+			// ###########################
+
+			UsuarioDTO usuarioDto = this.clientAdministracionUsers.edithForSystem(usuario);
 			logger.info("METODO : edithForSystem() : USUARIO EDITADO CORRECTAMENTE CORRECTAMENTE ....");
 
-		}catch (HomeException e) {
-	    	logger.severe(e.getMessage());
-	    	throw e;
-		}
-		catch (Exception e) {
+		} catch (HomeException e) {
+			logger.severe(e.getMessage());
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.severe(e.getMessage());
-			throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			throw new HomeException(EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.LOGIC,
+					ErrorConstantes.ERROR_GENERAL);
 		}
 	}
-	
-	private void sendEmail(UsuarioDTO usuario ) {
-		String[] destinos =  {usuario.getEmail()};
-		
-		
-		String emailSystema =  parametrizacionClientService.getParametro(KeyParametrosConstantes.EMAIL_FROM_GO_HOME);
-		String body = "<P>Bienvenido "+usuario.getPersona().getNombres()+" Tu proceso esta casi listo, revisa tu correo y confirma tu cuenta, gracias</P>";
-		String plantillaName = parametrizacionClientService.getParametro(KeyParametrosConstantes.PLANTILLA_CONFIRM_USER_GO_HOME);
-		
+
+	private void sendEmail(UsuarioDTO usuario) {
+		String[] destinos = { usuario.getEmail() };
+
+		String emailSystema = parametrizacionClientService.getParametro(KeyParametrosConstantes.EMAIL_FROM_GO_HOME);
+		String body = "<P>Bienvenido " + usuario.getPersona().getNombres()
+				+ " Tu proceso esta casi listo, revisa tu correo y confirma tu cuenta, gracias</P>";
+		String plantillaName = parametrizacionClientService
+				.getParametro(KeyParametrosConstantes.PLANTILLA_CONFIRM_USER_GO_HOME);
+
 		HashMap<String, String> parametros = new HashMap<>();
 		parametros.put("{nombres}", usuario.getPersona().getNombres());
-		parametros.put("{idUsuario}", String.valueOf( usuario.getId().getId() )  );
-		parametros.put("{idTipoIdentificacion}", String.valueOf(  usuario.getId().getIdTipoIdentificacion() ) );
-		parametros.put("{numeroIdentificacion}", usuario.getId().getNumeroIdentificacion()  );
+		parametros.put("{idUsuario}", String.valueOf(usuario.getId().getId()));
+		parametros.put("{idTipoIdentificacion}", String.valueOf(usuario.getId().getIdTipoIdentificacion()));
+		parametros.put("{numeroIdentificacion}", usuario.getId().getNumeroIdentificacion());
 		parametros.put("{token}", usuario.getTokenActivate());
-		
 
-				
-		EmailDto mail = EmailDto.builder()
-				.asunto("REGISTRO DE USUARIO GO-HOME")
-				.cuerpo(Base64Util.encode(body))
-				.destinatareos(Arrays.asList(destinos) )
-				.de(emailSystema)
-				.plantilla(plantillaName)
-				.parametersString( UtilGson.SerializeObjet(parametros))
-				//.parameters(parametros)
-				.sistema(this.sistemaName)
-				.isHtml(true)
-				.build();
+		EmailDto mail = EmailDto.builder().asunto("REGISTRO DE USUARIO GO-HOME").cuerpo(Base64Util.encode(body))
+				.destinatareos(Arrays.asList(destinos)).de(emailSystema).plantilla(plantillaName)
+				.parametersString(UtilGson.SerializeObjet(parametros))
+				// .parameters(parametros)
+				.sistema(this.sistemaName).isHtml(true).build();
 		try {
 			emailClientService.send(mail);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 

@@ -60,6 +60,9 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 	private String pathSaveUserSystem;
 	private String pathEdithUserSystem;
 	
+	private String pathDeleteUser;
+	private String pathDesactiveUser;
+	
 	
 	private String pathGetUserForLogin;
 	private String pathGetRolesBySistemaNamen;
@@ -88,6 +91,9 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 		this. pathSaveUserSystemPublic = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_SYSTEM_PUBLIC);
 		this. pathSaveUserSystem = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_SAVE_FOR_SYSTEM);
 		this. pathEdithUserSystem = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_EDITH_FOR_SYSTEM);
+		
+		this. pathDeleteUser = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_DELETE);
+		this. pathDesactiveUser = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ADMIN_USER_USUARIO_DESACTIVATE);
 	
 		this. pathGetUserForLogin = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GET_USER_FOR_LOGIN);
 		this. pathGetRolesBySistemaNamen = parametrizacionService.getParametro(KeyParametrosConstantes.PATH_GO_ROLES_USERS_BY_SISTEMA_NAME);
@@ -292,14 +298,61 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 
 	@Override
 	public void deleteUser(UsuarioDTO user) throws AdministradorUserException {
-		// TODO Auto-generated method stub
+		logger.info("METODO : savePublic() -> CREANDO USUARIO.... ");
+		String urlFull = this.urlGateway+ this.pathDeleteUser;
+		logger.info("METODO : savePublic() -> URL : "+urlFull);
+		this.restTemplate  = new RestTemplate();;
+		try {
+			  HttpHeaders headers = new HttpHeaders();
+		      headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+              HttpEntity<UsuarioDTO> request =  new HttpEntity<UsuarioDTO>(user, headers);		    
+			  ResponseEntity<UsuarioDTO> responseEntityStr = restTemplate. postForEntity(urlFull, request, UsuarioDTO.class);
+			  logger.info("METODO : savePublic() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
+			  if( responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
+					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
+					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {
+				  logger.info("METODO : savePublic() -> RESPUESTA OK: ");
+			  }else {
+				  if( Objects.nonNull(responseEntityStr.getBody())  ) {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,UtilGson.SerializeObjet( responseEntityStr.getBody() ));
+				  }else {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,ErrorConstantes.ERROR_GENERAL_GUARDANDO );
+				  }
+			  }	  
+		}catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
+		}
 		
 	}
 
 	@Override
 	public void desativateUser(UsuarioDTO user) throws AdministradorUserException {
-		// TODO Auto-generated method stub
-		
+		logger.info("METODO : desativateUser() -> Desactivando  USUARIO.... ");
+		String urlFull = this.urlGateway+ this.pathDesactiveUser;
+		logger.info("METODO : desativateUser() -> URL : "+urlFull);
+		this.restTemplate  = new RestTemplate();;
+		try {
+			  HttpHeaders headers = new HttpHeaders();
+		      headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+              HttpEntity<UsuarioDTO> request =  new HttpEntity<UsuarioDTO>(user, headers);		    
+			  ResponseEntity<UsuarioDTO> responseEntityStr = restTemplate. postForEntity(urlFull, request, UsuarioDTO.class);
+			  logger.info("METODO : desativateUser() -> RESPONSE  : "+ UtilGson.SerializeObjet(responseEntityStr));
+			  if( responseEntityStr.getStatusCode() == HttpStatus.ACCEPTED ||  
+					  responseEntityStr.getStatusCode() == HttpStatus.CREATED ||
+					  responseEntityStr.getStatusCode() == HttpStatus.OK ) {
+				  logger.info("METODO : desativateUser() -> RESPUESTA OK: ");
+			  }else {
+				  if( Objects.nonNull(responseEntityStr.getBody())  ) {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,UtilGson.SerializeObjet( responseEntityStr.getBody() ));
+				  }else {
+						throw new HomeException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE ,ErrorConstantes.ERROR_GENERAL_GUARDANDO );
+				  }
+			  }	  
+		}catch (Exception e) {
+			logger.severe(e.getMessage());
+			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
+		}	
 	}
 
 	@Override
@@ -329,8 +382,7 @@ public class ClientAdministracionUserImpl implements IAdministracionClientUsers 
 		}catch (Exception e) {
 			logger.severe(e.getMessage());
 			throw new ParametrizacionException( EntityEnum.USUARIO, MethodsEnum.SAVE, LayerEnum.SERVICE , ErrorConstantes.ERROR_GENERAL_GUARDANDO);
-		}	
-		
+		}		
 	}
 	
 	

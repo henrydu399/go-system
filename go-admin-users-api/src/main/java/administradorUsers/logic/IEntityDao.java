@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.gosystem.commons.exceptions.AdministradorUserException;
 
+import administradorUsers.entitys.Usuario;
+
 
 
 
@@ -22,6 +24,8 @@ public interface IEntityDao<T> {
 	List<T>  findAll(T p) throws AdministradorUserException;
 	
 	void  delete(T p) throws AdministradorUserException;
+	
+	public void desactivate(Usuario usuario) throws AdministradorUserException ;
 		
 	
 	

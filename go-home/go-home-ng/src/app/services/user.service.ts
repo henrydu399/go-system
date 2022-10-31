@@ -51,6 +51,16 @@ export class UserService {
     return this.http.post<any>(environment.findUser, body, { 'headers': lstHeaders });
   }
 
+  public deleteUser(usuario: Usuario): Observable<any> {
+    let body = JSON.stringify(usuario).toString();
+    return this.http.post<any>(environment.pathDeleteUser, body, { 'headers': lstHeaders });
+  }
+
+  public desactivateUser(usuario: Usuario): Observable<any> {
+    let body = JSON.stringify(usuario).toString();
+    return this.http.post<any>(environment.pathDesactivateUSer, body, { 'headers': lstHeaders });
+  }
+
 
  /*  public getActive(): Observable<any> {
     return this.http.get<any>(environment.urlConciliacionResultado + 'active/');

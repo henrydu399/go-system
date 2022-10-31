@@ -92,6 +92,15 @@ public class PersonaController {
 
 	} 
 	
+	//GET ALL 
+	@GetMapping(value = "/sistema/{sistemaName}")
+	public ResponseEntity<Object> getAllBySistem(@PathVariable String sistemaName) {
+		logger.info(nameApp + "  getAllBySistem :: INICIO ");	
+		List<Persona> listPersonas =  personaService.getAllBySistem(sistemaName);
+		return new ResponseEntity<Object>(listPersonas, HttpStatus.OK);
+
+	} 
+	
 	//FIND CUSTUM 
 	@PostMapping(value = "/find" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> find(@RequestBody Persona json) {
