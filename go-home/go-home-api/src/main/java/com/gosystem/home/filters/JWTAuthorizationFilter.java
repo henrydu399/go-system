@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
 import com.gosystem.commons.enums.EntityEnum;
 import com.gosystem.commons.enums.MethodsEnum;
 import com.gosystem.commons.utils.UtilsLogs;
@@ -36,49 +35,52 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	private final String HEADER = "Authorization";
 	private final String PREFIX = "Bearer ";
-	
-	
-	
+
 	@Value("${jwt.key}")
 	private String secretKey;
-	
+
 	private Logger logger;
-	
-	
+
 	public JWTAuthorizationFilter() {
 		logger = UtilsLogs.getLogger(UserServiceImpl.class.getName());
 	}
-	
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
 		try {
-			
-			String pathInfo = request.getRequestURL().toString(); 
-			if( pathInfo.contains("home") ) {
-				if(!pathInfo.contains("public") || !pathInfo.contains("login") || !pathInfo.contains("confirm")   ) {
-					if (existeJWTToken(request, response)) {
-						Claims claims = validateToken(request);
-						if (Objects.nonNull(claims) && claims.get("authorities") != null) {
-							setUpSpringAuthentication(claims);
+
+			String pathInfo = request.getRequestURL().toString();
+			if (pathInfo.contains("home")) {
+				if (!pathInfo.contains("public")) {
+
+					if (!pathInfo.contains("login") || !pathInfo.contains("confirm")) {
+
+						if (existeJWTToken(request, response)) {
+							Claims claims = validateToken(request);
+							if (Objects.nonNull(claims) && claims.get("authorities") != null) {
+								setUpSpringAuthentication(claims);
+							} else {
+								SecurityContextHolder.clearContext();
+								logger.info("EL TOKEN NO TIENE LA PROPIEDAD authorities ,");
+							}
 						} else {
+							logger.info("NO EXISTE TOKEN Y EL RECURSO NO ES LOGIN NI HOME ,");
 							SecurityContextHolder.clearContext();
-							logger.info("EL TOKEN NO TIENE LA PROPIEDAD authorities ,");
 						}
-					} else {
-						logger.info("NO EXISTE TOKEN Y EL RECURSO NO ES LOGIN NI HOME ,");
-							SecurityContextHolder.clearContext();
 					}
 				}
 			}
 
 			chain.doFilter(request, response);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
+			logger.info("ERROR CON EL TOKEN " );
+			logger.severe(e.getMessage());
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 			return;
 		}
-	}	
+	}
 
 	private Claims validateToken(HttpServletRequest request) {
 		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");

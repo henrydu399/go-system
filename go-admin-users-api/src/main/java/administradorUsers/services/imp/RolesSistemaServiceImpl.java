@@ -202,8 +202,12 @@ public class RolesSistemaServiceImpl implements RolesSistemaService{
 
 
 
+	
+
+
+
 	@Override
-	public void desactivate(Usuario usuario) throws AdministradorUserException {
+	public void desactivate(RolesSistema usuario) throws AdministradorUserException {
 		// TODO Auto-generated method stub
 		
 	}

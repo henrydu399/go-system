@@ -15,6 +15,7 @@ export class AuthService {
 
   private  TOKEN_KEY:string = 'auth-token';
   private  USER_KEY:string = 'auth-user';
+  private  TOKEN_EXPIRE:string = 'auto-token-expire';
 
 
 
@@ -29,12 +30,18 @@ export class AuthService {
   login(usuario: Usuario) {
     
     this.menuService.createMenu(usuario);
-
-    //localStorage.setItem(this.PRIVILEGIES, '');
+    
     this.saveToken(usuario.token!);
     usuario.token = null;
     usuario.privilegios = [];
     this.saveUser(usuario);
+
+
+    let tokenString  =  JSON.parse(atob(this.getToken()!.split('.')[1]));
+
+    this.saveTokenExpire(tokenString.exp);
+
+ 
     
     //localStorage.setItem(this.TOKEN_KEY, usuario.token!);
     //localStorage.setItem(this.USER_KEY,  JSON.stringify(usuario));
@@ -58,8 +65,6 @@ export class AuthService {
   }
 
 
-
-
   public saveToken(token: string) {
     window.sessionStorage.removeItem(this.TOKEN_KEY);
     window.sessionStorage.setItem(this.TOKEN_KEY, token);
@@ -80,6 +85,16 @@ export class AuthService {
     let s:string = window.sessionStorage.getItem(this.USER_KEY)!;
     let u:Usuario = JSON.parse(s);
     return u;
+  }
+
+  public saveTokenExpire(_token_expire:number){
+    window.sessionStorage.removeItem(this.TOKEN_EXPIRE);
+    window.sessionStorage.setItem(this.TOKEN_EXPIRE, JSON.stringify(String(_token_expire) ));
+  }
+
+
+  public getTokenExpire():number{
+    return JSON.parse(sessionStorage.getItem(this.TOKEN_EXPIRE)!);
   }
 
 

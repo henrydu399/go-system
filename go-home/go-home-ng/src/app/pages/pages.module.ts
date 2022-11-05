@@ -22,6 +22,9 @@ import { FiltroDepartamentoipe } from '../pipes/filtro-departamento.pipe';
 import { FiltroCiudadPipe } from '../pipes/filtro-ciudad.pipe';
 import { FiltroBarrioPipe } from '../pipes/filtro-barrio';
 import { CreatePersonaComponent } from './persona/create-persona/create-persona.component';
+import { AdminPersonaComponent } from './persona/admin-persona/admin-persona.component';
+import { FiltroPersonaPipe } from '../pipes/filtro-persona';
+import { EdithPersonaComponent } from './persona/edith-persona/edith-persona.component';
 
 
 
@@ -47,7 +50,10 @@ import { CreatePersonaComponent } from './persona/create-persona/create-persona.
     FiltroDepartamentoipe,
     FiltroTipoIdentificacionPipe,
     FiltroUsuarioPipe,
-    CreatePersonaComponent
+    CreatePersonaComponent,
+    AdminPersonaComponent,
+    FiltroPersonaPipe,
+    EdithPersonaComponent
   ],
   exports: [
     PagesComponent,

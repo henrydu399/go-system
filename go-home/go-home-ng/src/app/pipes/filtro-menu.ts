@@ -9,12 +9,14 @@ import { Usuario } from '../models/User';
 })
 export class FiltroMenuPipe implements PipeTransform {
 
-  transform(aliados: PrivilegioRolUsuario[]): PrivilegioRolUsuario[] {
+  transform(aliados: PrivilegioRolUsuario[]): PrivilegioRolUsuario[]  {
   
-    const filteredAliados = aliados.filter( (obj) => obj.privilegio.visibleMenu );
-
-
-    return filteredAliados;
+    if( aliados !== undefined  && aliados !== null){
+       const filteredAliados = aliados.filter( (obj) => obj.privilegio.visibleMenu );
+       return filteredAliados
+    }  
+    let out:PrivilegioRolUsuario[]=[];
+   return out;
   }
 
 }

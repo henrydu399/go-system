@@ -92,6 +92,14 @@ private Logger logger;
 		List<CiudadDTO> list =   this.ubicacionService.getAllCiudades();
 		return new ResponseEntity<Object>(list, HttpStatus.OK);
 	} 
+	
+	//GET ALL 
+	@GetMapping(value = "/public/")
+	public ResponseEntity<Object> consultarPublicAll() {
+		logger.info(nameApp + " GET ALL :: INICIO ");	
+		List<CiudadDTO> list =   this.ubicacionService.getAllCiudades();
+		return new ResponseEntity<Object>(list, HttpStatus.OK);
+	}
 		
 	//FIND CUSTUM 
 	@PostMapping(value = "/find/" , produces = MediaType.APPLICATION_JSON_VALUE)

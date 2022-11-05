@@ -24,6 +24,7 @@ import com.gosystem.commons.utils.UtilGson;
 import com.gosystem.commons.utils.UtilsLogs;
 
 import administradorUsers.entitys.Persona;
+import administradorUsers.entitys.Usuario;
 import administradorUsers.services.PersonaService;
 
 @RestController
@@ -102,15 +103,13 @@ public class PersonaController {
 	} 
 	
 	//FIND CUSTUM 
-	@PostMapping(value = "/find" , produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/find/" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> find(@RequestBody Persona json) {
 		logger.info(nameApp + " FIND CUSTUM :: INICIO ");
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
-
 		try {
 			Persona persona = personaService.find(json);
-			return new ResponseEntity<Object>(persona, HttpStatus.OK);
-			
+			return new ResponseEntity<Object>(persona, HttpStatus.OK);	
 		}catch (AdministradorUserException e) {
 			logger.severe(e.getMessage());
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -124,7 +123,7 @@ public class PersonaController {
 	
 	
 	//FIND ALL CUSTUM 
-	@PostMapping(value = "/findAll" , produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/findAll/" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> findAll(@RequestBody Persona json) {
 		logger.info(nameApp + " FIND CUSTUM :: INICIO ");
 		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet( json));
@@ -157,12 +156,30 @@ public class PersonaController {
 	
 
 	//DELETE O DESACTIVAR
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Object> desactivar(@PathVariable Long id) {
-		logger.info(nameApp + " DELETE O DESACTIVAR :: INICIO ");
-		logger.info(nameApp + " Request ::  " + UtilGson.SerializeObjet(id));
-		return new ResponseEntity<Object>(null, HttpStatus.OK);
+	@PostMapping(value = "/delete/")
+	public ResponseEntity<Object> delete(@RequestBody Persona persona, HttpServletRequest req) {
+		logger.info(nameApp + " DELETE  :: INICIO ");
+		try {
+			personaService.delete(persona);
+			return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }	
 		
+	}
+	
+	//DELETE O DESACTIVAR
+	@PostMapping(value = "/desactivate/")
+	public ResponseEntity<Object> desactivate(@RequestBody Persona persona, HttpServletRequest req) {
+		logger.info(nameApp + "  O DESACTIVAR :: INICIO ");
+		try {
+			personaService.desactivate(persona);
+			return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+		}catch (AdministradorUserException e) {
+			logger.severe(e.getMessage());
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }		
 	}
 
 }

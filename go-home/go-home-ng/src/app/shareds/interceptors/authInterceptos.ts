@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { AutentificacionService } from 'src/app/services/autentificacion.service';
 import { NavbarService } from 'src/app/services/navbar.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 
@@ -12,7 +13,7 @@ const PRIVILEGIO_HEADER_KEY = 'privilegio';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
-    private authService: AutentificacionService,
+    private authService: AuthService,
     private navbarService:NavbarService
   )
   { }

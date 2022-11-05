@@ -25,7 +25,7 @@ public interface IEntityDao<T> {
 	
 	void  delete(T p) throws AdministradorUserException;
 	
-	public void desactivate(Usuario usuario) throws AdministradorUserException ;
+	public void desactivate(T usuario) throws AdministradorUserException ;
 		
 	
 	

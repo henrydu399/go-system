@@ -202,8 +202,11 @@ public class SistemaServiceImpl implements SistemaService{
 
 
 
+
+
+
 	@Override
-	public void desactivate(Usuario usuario) throws AdministradorUserException {
+	public void desactivate(Systema usuario) throws AdministradorUserException {
 		// TODO Auto-generated method stub
 		
 	}

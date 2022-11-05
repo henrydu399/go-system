@@ -21,6 +21,8 @@ public interface IEntityDao<T> {
 	List<T>  findAll(T p) throws HomeException;
 	
 	void  delete(T p) throws HomeException;
+	
+	void desactivate(T p) throws HomeException;
 		
 	
 	

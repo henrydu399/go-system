@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { mensaje } from 'src/app/constants/menssagesConstants';
 import { Barrio } from 'src/app/models/Barrio';
@@ -25,13 +25,13 @@ import { UserService } from 'src/app/services/user.service';
 import { UtilHttpService } from 'src/app/utils/utilHttp.service';
 import { environment } from 'src/environments/environment.prod';
 
-
 @Component({
-  selector: 'app-create-persona',
-  templateUrl: './create-persona.component.html',
-  styleUrls: ['./create-persona.component.css']
+  selector: 'app-edith-persona',
+  templateUrl: './edith-persona.component.html',
+  styleUrls: ['./edith-persona.component.css']
 })
-export class CreatePersonaComponent implements OnInit {
+export class EdithPersonaComponent implements OnInit {
+
   public tipoIdentificacionSeleccionado!:TipoIdentificacion;
   public departamentoSeleccionado!:Departamento | null;
   public ciudadSeleccionada!:Ciudad | null;
@@ -45,7 +45,9 @@ export class CreatePersonaComponent implements OnInit {
 
   public listRolesSistema!:RolSistema[];
   public submitted:boolean = false;
+
   private persona!:Persona ;
+  private personaPk!: PersonaPK;
  
 
  public fromUsuario = this.formBuilder.group({
@@ -76,13 +78,102 @@ export class CreatePersonaComponent implements OnInit {
    private formBuilder: FormBuilder,
    private rolSistemaService:RolSistemaService,
    private cacheService :CacheService,
+   private route: ActivatedRoute,
  ) { }
 
+
+ TASK_EDITH_PERSONA_INIT= "TASK_EDITH_PERSONA_INIT";
  ngOnInit(): void {
    this.getAllRolesSistema();
    this.listCiudad =  this.cacheService.getCiudades();
    this.listDepartamentos = this.cacheService.getDepartamentos();
    this.listBarrios = this.cacheService.getBarrios();
+
+
+
+   this.route.paramMap.subscribe((params) => {
+    if (params.has('idTipoIdentificacion')) {
+      try {
+        let idTipoIdentificacion: number = parseInt(params.get('idTipoIdentificacion')!) ;
+        let numeroIdentificacion: string = params.get('numeroIdentificacion')!;
+
+        let pk: PersonaPK = new PersonaPK( numeroIdentificacion , idTipoIdentificacion);
+
+        this.persona =  new Persona();
+        this.persona.id = pk;
+
+
+        this.personaService.findCustom(this.persona).subscribe({
+          next: (result) => {
+            this.loader.stop(this.TASK_EDITH_PERSONA_INIT);
+            
+              let personaFind:Persona = result; 
+              if( personaFind === undefined || personaFind === null){
+                this.msgService.lanzarAlerta(mensaje.ERROR, 'No se encontro una persona con la informacion entrante' , 0);
+              }
+
+              this.personaPk = personaFind.id!;
+             
+
+              this.tipoIdentificacionSeleccionado = personaFind?.tipoIdentificacion!;
+              this.fromUsuario.get('tipoIdentificacion')?.setValue(this.tipoIdentificacionSeleccionado.nombre);
+              this.fromUsuario.get('numeroIdentificacion')?.setValue(personaFind?.id.numeroIdentificacion!);
+              this.fromUsuario.get('nombres')?.setValue(personaFind?.nombres!);
+              this.fromUsuario.get('apellidos')?.setValue(personaFind?.apellidos!);
+
+
+           
+              if( personaFind?.fechaNacimiento !== undefined && personaFind?.fechaNacimiento  !== null){
+                let fecha :string =  personaFind?.fechaNacimiento.toString()!;
+                this.fromUsuario.get('fechaNacimiento')?.setValue( formatDate(personaFind?.fechaNacimiento!, 'yyyy-MM-dd', 'en') );
+              }
+
+
+              this.fromUsuario.get('edad')?.setValue( ""+ personaFind?.edad!);
+              this.fromUsuario.get('sexo')?.setValue(personaFind?.sexo!);
+              this.fromUsuario.get('estadoCivil')?.setValue(personaFind?.estadoCivil!);
+              this.fromUsuario.get('profesion')?.setValue(personaFind?.profesion!);
+              this.fromUsuario.get('nivelEscolaridad')?.setValue(personaFind?.nivelEscolaridad!);
+
+              
+              if(personaFind?.listPersonaContacto !== undefined && 
+                personaFind.listPersonaContacto !== null  && 
+                personaFind.listPersonaContacto.length > 0
+                ){
+                 let barrio : Barrio | undefined = this.listBarrios.find( elemento => elemento.id.id = personaFind!.listPersonaContacto[0]!.idBarrio!  );
+                this.updateBarrio(barrio!);
+                this.fromUsuario.get('direccion')?.setValue(personaFind!.listPersonaContacto[0].direccion);
+              }
+
+
+
+              console.log(result);
+      
+          },
+          error: (error) => {
+            this.utilHttpService.errorManager(error,this.TASK_EDITH_PERSONA_INIT);
+          },
+          complete: () => {
+            this.loader.stop(this.TASK_EDITH_PERSONA_INIT);
+          }
+        });
+    
+
+
+  
+        
+      } catch (error) {
+        this.loader.stop(this.TASK_EDITH_PERSONA_INIT);
+        console.log(error);
+      }
+    }else{
+      this.loader.stop(this.TASK_EDITH_PERSONA_INIT);
+      this.msgService.lanzarAlerta(mensaje.ERROR, 'error no se ha seleccionado un  Usuario verifique Url' , 0);
+    }
+    
+  });
+
+
  }
 
 
@@ -195,7 +286,7 @@ export class CreatePersonaComponent implements OnInit {
 
    this.build();
 
-   this.personaService.save(this.persona).subscribe({
+   this.personaService.edith(this.persona ).subscribe({
      next: (result) => {
        this.loader.stop(this.CONS_TASK_METODO_CREAR);
        this.msgService.lanzarAlerta(mensaje.SUCCESS, "Proceso exitoso !",200); 

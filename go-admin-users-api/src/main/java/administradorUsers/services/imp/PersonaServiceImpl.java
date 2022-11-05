@@ -1,6 +1,7 @@
 package administradorUsers.services.imp;
 
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -89,15 +90,22 @@ public  class PersonaServiceImpl implements PersonaService {
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public void save(Persona p) throws AdministradorUserException {
 		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p, "Guardando persona..."));
+		PersonaContacto pcTemp = null;
 		try {	
+			if( Objects.nonNull(p.getListPersonaContacto())  && p.getListPersonaContacto().size() > 0 ) {
+				 pcTemp = p.getListPersonaContacto().get(0);
+				 p.setListPersonaContacto(null);
+			}
+			
 			Optional<Persona> personaFind = this.repository.findById(p.getId());
 			if( personaFind.isPresent()) {
 				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.SAVE, LayerEnum.DAO , ErrorConstantes.PERSONA_YA_EXISTE);
 			}else {
 				this.repository.saveAndFlush(p);
 				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,null, "persona guardada"));
-				if( Objects.nonNull(p.getListPersonaContacto())  && p.getListPersonaContacto().size() > 0 ) {
-					this.savePersonaContacto(p.getListPersonaContacto());
+				
+				if( Objects.nonNull(pcTemp) ) {
+					this.savePersonaContacto(pcTemp,p);
 				}
 				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p, "proceso finalizado con exito..."));
 			}			
@@ -117,13 +125,19 @@ public  class PersonaServiceImpl implements PersonaService {
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
 	public void edith(Persona p) throws AdministradorUserException {
 		logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,p, "Editando persona..."));
+		PersonaContacto pcTemp = null;
 		try {
+			if( Objects.nonNull(p.getListPersonaContacto())  && p.getListPersonaContacto().size() > 0 ) {
+				 pcTemp = p.getListPersonaContacto().get(0);
+				 p.setListPersonaContacto(null);
+			}
+			
 			Optional<Persona> personaFind = this.repository.findById(p.getId());	
 			if( personaFind.isPresent()) {
 				this.repository.saveAndFlush(p);
 				logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,null, "persona Editada"));
-				if( Objects.nonNull(p.getListPersonaContacto())  && p.getListPersonaContacto().size() > 0 ) {
-					this.savePersonaContacto(p.getListPersonaContacto());
+				if( Objects.nonNull(pcTemp) ) {
+					this.savePersonaContacto(pcTemp,p);
 				}
 				logger.info(UtilsLogs.getInfo(MethodsEnum.EDITH, EntityEnum.PERSONA ,p, "proceso finalizado con exito..."));
 			}else {
@@ -180,18 +194,11 @@ public  class PersonaServiceImpl implements PersonaService {
 			Persona persona = (Persona) p;	
 			Example<Persona> personaByFind =  Example.of(persona); 
 			List<Persona> listPersonas = this.repository.findAll(personaByFind);	
-			
-			
 			if( listPersonas != null && listPersonas.size() > 0) {
 				return listPersonas.get(0);
 			}else {
 				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.FIND_CUSTOM, LayerEnum.DAO , ErrorConstantes.NO_SE_ECONTRARON_REGISTRO);
 			}			
-			
-		}catch (PersistenceException e) {
-			logger.severe(e.getMessage());
-			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.FIND_CUSTOM, LayerEnum.DAO, null);
-		
 	    }catch (AdministradorUserException e) {
 	    	logger.severe(e.getMessage());
 	    	throw e;
@@ -216,7 +223,7 @@ public  class PersonaServiceImpl implements PersonaService {
 					}
 				}
 				
-				this.repository.saveAndFlush(p);
+				this.repository.delete(p);
 				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,null, "persona Eliminada"));
 				logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA ,p, "proceso finalizado con exito..."));
 			}else {
@@ -227,15 +234,21 @@ public  class PersonaServiceImpl implements PersonaService {
 	    	throw e;
 		}
 		catch (Exception e) {
-			logger.severe(e.getMessage());
-			throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			if( e instanceof SQLIntegrityConstraintViolationException) {
+				logger.severe(e.getMessage());
+				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.ERROR_ELIMINANDO_EXISTE_DEPENDECIA);
+			}else {
+				logger.severe(e.getMessage());
+				throw new AdministradorUserException( EntityEnum.PERSONA, MethodsEnum.EDITH, LayerEnum.LOGIC , ErrorConstantes.ERROR_GENERAL);
+			}
+
 		}		
 	}
 
 
 	@Override
 	@Transactional(rollbackFor = { PersistenceException.class, AdministradorUserException.class, Exception.class })
-	public void desactivate(Usuario usuario) throws AdministradorUserException {
+	public void desactivate(Persona persona) throws AdministradorUserException {
 		logger.info(UtilsLogs.getInfo(MethodsEnum.DELETE, EntityEnum.PERSONA, null, "Desactivando persona..."));
 		try {
 				
@@ -251,13 +264,25 @@ public  class PersonaServiceImpl implements PersonaService {
 	}
 	
 	
-	private void savePersonaContacto(List<PersonaContacto> list) throws AdministradorUserException{
+	private void saveAllPersonaContacto(List<PersonaContacto> list) throws AdministradorUserException{
 		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA, null, "GUARDANDO DATOS CONTACTO !"));
 		for( PersonaContacto pc : list) {
 			personaContactoRepository.save(pc);	
 		}		
-		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));
-		
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));	
+	}
+	
+	private void savePersonaContacto(PersonaContacto pc, Persona p) throws AdministradorUserException{
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.PERSONA, null, "GUARDANDO DATOS CONTACTO !"));
+		List<PersonaContacto> listPersona = this.personaContactoRepository.findByPersona(p);
+		if( Objects.nonNull(listPersona) && listPersona.size() > 0 ) {
+			for( PersonaContacto subpc :listPersona) {
+				subpc.setActivo(false);
+				this.personaContactoRepository.save(subpc);
+			}
+		}
+		this.personaContactoRepository.save(pc);			
+		logger.info(UtilsLogs.getInfo(MethodsEnum.SAVE, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));	
 	}
 
 

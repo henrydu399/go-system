@@ -61,8 +61,10 @@ public class RolesUsuarioServiceImpl implements IRolesUsuarioService {
 
 	}
 
+
+
 	@Override
-	public void desactivate(Usuario usuario) throws AdministradorUserException {
+	public void desactivate(RolesUsuario usuario) throws AdministradorUserException {
 		// TODO Auto-generated method stub
 		
 	}

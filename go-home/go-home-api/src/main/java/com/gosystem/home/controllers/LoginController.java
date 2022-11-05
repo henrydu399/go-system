@@ -4,7 +4,6 @@ package com.gosystem.home.controllers;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -25,11 +24,11 @@ import com.gosystem.commons.constants.ErrorConstantes;
 import com.gosystem.commons.enums.EntityEnum;
 import com.gosystem.commons.enums.LayerEnum;
 import com.gosystem.commons.enums.MethodsEnum;
-import com.gosystem.commons.exceptions.AdministradorUserException;
+
 import com.gosystem.commons.exceptions.HomeException;
 import com.gosystem.commons.utils.UtilsLogs;
 import com.gosystem.home.client.services.IAdministracionClientUsers;
-import com.gosystem.home.services.imp.UserServiceImpl;
+
 import com.gosystem.home.util.BCryptPasswordEncoder;
 import com.gosystem.home.validations.LoginValidation;
 

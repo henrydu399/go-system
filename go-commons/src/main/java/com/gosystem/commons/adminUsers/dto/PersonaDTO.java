@@ -28,7 +28,7 @@ public class PersonaDTO implements Serializable {
 
 	private String apellidos;
 
-	private int edad;
+	private Integer edad;
 	
 	private String estadoCivil;
 	

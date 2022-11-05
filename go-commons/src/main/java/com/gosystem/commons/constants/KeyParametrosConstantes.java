@@ -34,6 +34,10 @@ public class KeyParametrosConstantes {
 	public static final String PATH_GO_ADMIN_USER_USUARIO_SYSTEM_PUBLIC = "PATH_GO_ADMIN_USER_USUARIO_SYSTEM_PUBLIC";
 	public static final String PATH_GO_ADMIN_USER_USUARIO_SYSTEM = "PATH_GO_ADMIN_USER_USUARIO_SYSTEM";
 	public static final String PATH_GO_ADMIN_USER_PERSONA = "PATH_GO_ADMIN_USER_PERSONA";
+	public static final String PATH_GO_ADMIN_USER_PERSONA_DELETE = "PATH_GO_ADMIN_USER_PERSONA_DELETE";
+	public static final String PATH_GO_ADMIN_PERSONA_FIND = "PATH_GO_ADMIN_PERSONA_FIND";
+	
+
 	
 	
 	

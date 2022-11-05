@@ -1,0 +1,106 @@
+<main id="rooms_block_view">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="row">
+
+                        <div class="col-md-8" style="padding-top: 8px;">
+                            <h2 class="panel-title"> <i class="fa fa-users" aria-hidden="true"></i> Lista de Personas</h2>
+
+                        </div>
+
+                        <div class="col-md-3">
+                          
+                            <div class="sidebar">
+                                <aside class="widget">
+                                    <div class="search">
+                                        <form method="get" class="widget_search">
+                                            
+                                            <input type="search" placeholder="Start Searching..."  [(ngModel)]="wordSearhPersona"  name="wordSearhPersona"  id="wordSearhPersona" >
+                                            <button class="search_btn"  type="button">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </aside>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-1" style="padding-top: 8px;">
+                            <button class="button btn_sm btn_yellow"  (click)="crear()"><i class="fa fa-plus" aria-hidden="true"></i>
+                                &nbsp;Crear</button>
+                        </div>
+
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="panel-body">
+
+                    <!-- TABLE -->
+                    <div class="table-responsive">
+                        <table class="table table-hover" style="size: 20px;">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">Tipo</th>
+                                    <th style="width: 12%;"># Identificacion</th>
+                                    <th>Nombres</th>
+                                    <th>Apellidos</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr   *ngFor="let item of listPersona | filtroPersona:wordSearhPersona | paginate: {
+                                    id: 'conexionPagination',
+                                    itemsPerPage: 5,
+                                    currentPage: pages,
+                                    totalItems: total } ">
+                                    <td>{{item.tipoIdentificacion.nombre}}</td>
+                                    <td>{{item.id.numeroIdentificacion}}</td>
+
+                                    <td>{{item.nombres}}</td>
+                                    <td>{{item.apellidos}}</td>
+
+                                    <td>
+                                        <button class="button btn_sm  " (click)="editar(item)"><i class="fa fa-pencil fa-lg"
+                                                aria-hidden="true"></i></button>
+                                        &nbsp;
+                                        <button class="button btn_sm  " (click)="delete(item)"><i class="fa fa-trash fa-lg"
+                                                aria-hidden="true"></i></button>
+                                        &nbsp;
+                                  
+
+                                    </td>
+                                </tr>
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <div *ngIf="listPersona != null && listPersona.length > 0">
+                        <pagination-controls id="conexionPagination" (pageChange)="pages = $event"
+                            style="text-align: right;" nextLabel="" previousLabel=""></pagination-controls>
+                    </div>
+                    <!-- #####3 -->
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</main>

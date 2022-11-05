@@ -39,8 +39,9 @@ public class ErrorConstantes {
 	public static final String NO_SE_ENCONTRO_USUARIO_REGISTRADO_EN_EL_SYSTEMA = "No se encotro el usuario registrado en el sistema";
 	public static final String NO_SE_ENCONTRO_PERMISOS_USUARIO = "No se encontraron permisos para el usuario , consulte a su administrador";
 	public static final String ERROR_MAPPER_OBJECT = "Error mapeando un  objeto";
-	
 	public static final String ERROR_USER_NO_EXIST_FOR_EDITH = "Error no existe el usuario para editar";
+	
+	public static final String ERROR_ELIMINANDO_EXISTE_DEPENDECIA= "Error Intentado eliminar , existe una dependecia ";
 	
 	
 	
