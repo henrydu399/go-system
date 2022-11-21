@@ -1,5 +1,6 @@
 import { PersonaContacto } from "./PersonaContacto";
 import { PersonaPK } from "./PersonaPK";
+import { PersonaSistema } from "./PersonaSistema";
 import { TipoIdentificacion } from "./TipoIdentificacion";
 
 export class Persona{
@@ -30,6 +31,8 @@ export class Persona{
 
 
 	 listPersonaContacto!: PersonaContacto[];
+
+	 personaSistema!:PersonaSistema;
 
      
 

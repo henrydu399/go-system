@@ -35,6 +35,7 @@ public class ErrorConstantes {
 	public static final String ERROR_NO_CARGARON_PARAMETRICAS = "No se han podido cargar las paramtricas ";
 	
 	public static final String NO_SE_ECONTRARON_REGISTRO = "No se encontraron registros para esta busqueda";
+	public static final String NO_SE_ECONTRARON_REGISTRO_PARA_OPERAR = "No se encontraron registros para para realizar la operacion";
 	//ERRORES ADMIN-USERS-API
 	public static final String NO_SE_ENCONTRO_USUARIO_REGISTRADO_EN_EL_SYSTEMA = "No se encotro el usuario registrado en el sistema";
 	public static final String NO_SE_ENCONTRO_PERMISOS_USUARIO = "No se encontraron permisos para el usuario , consulte a su administrador";

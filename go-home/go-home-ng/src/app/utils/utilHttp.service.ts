@@ -34,14 +34,14 @@ export class UtilHttpService {
         
         if(error.error !== undefined && error.error !== null){
 
-          if( error.error.message !== undefined || error.error.message !== null){
+          if( error.error.message !== undefined && error.error.message !== null){
             this.msgService.lanzarAlerta(mensaje.ERROR, error.error.message,0);
           }else{
-            this.msgService.lanzarAlerta(mensaje.ERROR, error.error,0);
+            this.msgService.lanzarAlerta(mensaje.ERROR, "Error con el servidor",0);
           }
          
         }else{
-          this.msgService.lanzarAlerta(mensaje.ERROR, error.message,500);
+          this.msgService.lanzarAlerta(mensaje.ERROR, "Error con el servidor",500);
         }
       }
 

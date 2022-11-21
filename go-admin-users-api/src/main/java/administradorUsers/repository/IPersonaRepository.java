@@ -15,7 +15,7 @@ import administradorUsers.entitys.PersonaSistema;
 public interface IPersonaRepository extends JpaRepository<Persona, PersonaPK> {
 	
 	
-	List<Persona> findByPersonaSistema(PersonaSistema personaSistema);
+	//List<Persona> findByPersonaSistema(PersonaSistema personaSistema);
 	
 	
 	@Transactional(readOnly = true)

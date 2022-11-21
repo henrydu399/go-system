@@ -1,4 +1,4 @@
-package administradorUsers.controllers;
+package com.gosystem.home.controllers;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -19,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gosystem.commons.adminUsers.dto.RolesUsuarioDTO;
 import com.gosystem.commons.exceptions.AdministradorUserException;
 import com.gosystem.commons.utils.UtilGson;
 import com.gosystem.commons.utils.UtilsLogs;
+import com.gosystem.home.client.services.IRolesUsuarioClientService;
+import com.gosystem.home.services.IRolesUsuarioService;
 
-import administradorUsers.entitys.Persona;
-import administradorUsers.entitys.RolesUsuario;
-import administradorUsers.services.IRolesUsuarioService;
+
+
+
 
 
 
@@ -49,7 +52,7 @@ public class RolesUsuariosController {
 	
 	// METODO SAVE
 	@PostMapping(value = "/" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> guardar(@RequestBody RolesUsuario json, HttpServletRequest req) {	
+	public ResponseEntity<Object> guardar(@RequestBody RolesUsuarioDTO json, HttpServletRequest req) {	
 		logger.info(nameApp + "guardar :: INICIO ");
 			try {
 				rolesUsuarioService.save(json);
@@ -66,7 +69,7 @@ public class RolesUsuariosController {
 	
 	// EDITAR
 	@PutMapping(value = "/" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> editar(@RequestBody RolesUsuario json, HttpServletRequest req) {
+	public ResponseEntity<Object> editar(@RequestBody RolesUsuarioDTO json, HttpServletRequest req) {
 		logger.info(nameApp + "Editar :: INICIO ");	
 		logger.info(nameApp + "Request ::  " + UtilGson.SerializeObjet( json));
 		try {
@@ -94,13 +97,13 @@ public class RolesUsuariosController {
 		@GetMapping(value = "/sistema/{sistemaName}")
 		public ResponseEntity<Object> getAllBySistem(@PathVariable String sistemaName) {
 			logger.info(nameApp + "  getAllBySistem :: INICIO ");	
-			List<RolesUsuario> list =  rolesUsuarioService.getAllSistemaByName(sistemaName);
+			List<RolesUsuarioDTO> list =  rolesUsuarioService.getAllSistemaByName(sistemaName);
 			return new ResponseEntity<Object>(list, HttpStatus.OK);
 		} 
 	
 	//FIND CUSTUM 
-	@PostMapping(value = "/findCustom/" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> findCustom(@RequestBody RolesUsuario json) {
+	@PostMapping(value = "/findCustom" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> findCustom(@RequestBody RolesUsuarioDTO json) {
 		logger.info(nameApp + "FIND CUSTUM :: INICIO ");
 		logger.info(nameApp + "Request ::  " + UtilGson.SerializeObjet( json));
 		return new ResponseEntity<Object>(null, HttpStatus.OK);
@@ -108,9 +111,9 @@ public class RolesUsuariosController {
 	
 	//FIND BY ID  
 	@PostMapping(value = "/findById/" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> findById(@RequestBody RolesUsuario json) {
+	public ResponseEntity<Object> findById(@RequestBody RolesUsuarioDTO json) {
 		logger.info(nameApp + "FIND BY ID :: INICIO ");
-		RolesUsuario out = this.rolesUsuarioService.findById(json);
+		RolesUsuarioDTO out = this.rolesUsuarioService.findById(json);
 		logger.info(nameApp + "Request ::  " + UtilGson.SerializeObjet( json));
 		return new ResponseEntity<Object>(out, HttpStatus.OK);
 	} 

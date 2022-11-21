@@ -12,6 +12,7 @@ import { Persona } from 'src/app/models/Persona';
 import { PersonaContacto } from 'src/app/models/PersonaContacto';
 import { PersonaContactoPK } from 'src/app/models/PersonaContactoPK';
 import { PersonaPK } from 'src/app/models/PersonaPK';
+import { PersonaSistema } from 'src/app/models/PersonaSistema';
 import { RolSistemaPK } from 'src/app/models/RolesSistemaPK';
 import { RolesUsuario } from 'src/app/models/RolesUsuario';
 import { RolesUsuarioPK } from 'src/app/models/RolesUsuarioPK';
@@ -52,6 +53,8 @@ export class EdithUserComponent implements OnInit {
   public usuarioPk!:UsuarioPK;
   public activo:boolean=false;
   public confirmado:boolean=false;
+
+  private personaSistema!:PersonaSistema;
  
 
  public fromUsuario = this.formBuilder.group({
@@ -113,6 +116,8 @@ export class EdithUserComponent implements OnInit {
               if( usuarioFind === undefined || usuarioFind === null){
                 this.msgService.lanzarAlerta(mensaje.ERROR, 'No se encontro un usuario con la informacion entrante' , 0);
               }
+
+              this.personaSistema =  usuarioFind.persona?.personaSistema!;
 
               this.usuarioPk = usuarioFind.id!;
               this.activo = usuarioFind.activo;
@@ -359,6 +364,7 @@ export class EdithUserComponent implements OnInit {
 
     let persona:Persona = new Persona();
     persona.id=personaPk;
+    persona.personaSistema = this.personaSistema;
     persona.nombres = this.fromUsuario.get('nombres')?.value!;
     persona.apellidos = this.fromUsuario.get('apellidos')?.value!;
     
@@ -381,7 +387,8 @@ export class EdithUserComponent implements OnInit {
     personaContacto.idDepartamento = this.departamentoSeleccionado?.id!;
     personaContacto.idCiudad = this.ciudadSeleccionada?.id!.id!;
     personaContacto.idBarrio = this.barrioSeleccionado?.id.id!;
-    personaContacto.direccion = this.fromUsuario.get('direccion')?.value!;     
+    personaContacto.direccion = this.fromUsuario.get('direccion')?.value!;  
+    personaContacto.activo = true;   
 
    
     this.usuario.id= this.usuarioPk;

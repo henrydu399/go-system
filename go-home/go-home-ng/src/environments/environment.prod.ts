@@ -10,6 +10,9 @@ export const Global = {
 export const environment = {
   url :Global.gateway,
   production: true,
+  pathRolUsuario:Global.gateway +'/home/rolesUsuarios/',
+  findRolUsuarioBySystemaName : Global.gateway +'/home/rolesUsuarios/sistema/',
+  findRolUsuarioById: Global.gateway +'/home/rolesUsuarios/findById/',
   pathPersonas:Global.gateway +'/home/persona/',
   findPersonas:Global.gateway +'/home/persona/find/',
   findUser:Global.gateway +'/home/usuario/find/',

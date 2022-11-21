@@ -9,6 +9,8 @@ public enum MethodsAdminUSerEnum  {
 	
 	FIND_ROL_SISTEM_BY_SYSTEMA_NAME("FIND_ROL_SISTEM_BY_SYSTEMA_NAME"),
 	
+	GET_ALL_BY_SYSTEMA("getAllSistemaByName()"),
+	
 	USER_CONFIRM ("USER_CONFIRM");
 	
 	private String valueName;

@@ -23,7 +23,7 @@ public class PersonaSistemaPK implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="id_sistema" )
-	private Integer idSistema;
+	private int idSistema;
 	
 	@Column(name="NUMERO_IDENTIFICACION" )
 	private String numeroIdentificacion;

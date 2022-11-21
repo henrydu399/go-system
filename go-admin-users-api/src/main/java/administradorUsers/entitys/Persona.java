@@ -74,9 +74,9 @@ public class Persona implements Serializable {
 	
 	//@OneToOne(mappedBy="persona")
 	//private List<PersonaSistema> listPersonaSistema;
-	@JsonIgnore
-	@OneToOne(mappedBy="persona")
-	private PersonaSistema personaSistema;
+	//@JsonIgnore
+	//@OneToOne(mappedBy="persona" )
+	//private PersonaSistema personaSistema;
 	
 
 	//bi-directional many-to-one association to Usuario

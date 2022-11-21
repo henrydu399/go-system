@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,16 +35,27 @@ public class PersonaSistema  implements Serializable{
 	private PersonaSistemaPK id;
 	
 	
-	@ManyToOne()
-	@JoinColumns({
-		@JoinColumn(name="ID_TIPO_IDENTIFICACION", referencedColumnName="ID_TIPO_IDENTIFICACION" , insertable = false , updatable = false),
-		@JoinColumn(name="NUMERO_IDENTIFICACION",  referencedColumnName="NUMERO_IDENTIFICACION" ,  insertable = false , updatable = false)
-		})
-	private Persona persona;
+	
+	/*
+	 * @JsonIgnore
+	 * 
+	 * @OneToOne()
+	 * 
+	 * @JoinColumns({
+	 * 
+	 * @JoinColumn(name="ID_TIPO_IDENTIFICACION",
+	 * referencedColumnName="ID_TIPO_IDENTIFICACION" , insertable = false ,
+	 * updatable = false),
+	 * 
+	 * @JoinColumn(name="NUMERO_IDENTIFICACION",
+	 * referencedColumnName="NUMERO_IDENTIFICACION" , insertable = false , updatable
+	 * = false) }) private Persona persona;
+	 */
 	
 	
-	@ManyToOne()
-	@JoinColumn(name="id_sistema" , insertable = false , updatable = false)
+	  @JsonIgnore
+	  @ManyToOne()
+	  @JoinColumn(name="id_sistema" , insertable = false , updatable = false)
 	private Systema systema;
 	
 	

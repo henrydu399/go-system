@@ -4,9 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gosystem.commons.adminUsers.dto.RolesSistemaDTO;
-import com.gosystem.commons.adminUsers.dto.RolesUsuarioDTO;
-import com.gosystem.commons.adminUsers.dto.RolesUsuarioPKDTO;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="roles_sistemas")
-@NamedQuery(name="RolesSistema.findAll", query="SELECT r FROM RolesSistema r")
+@Table(name="roles_sistema")
 public class RolesSistema implements Serializable {
 	private static final long serialVersionUID = 1L;
 

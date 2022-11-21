@@ -57,20 +57,21 @@ CREATE TABLE `persona_contacto` (
   PRIMARY KEY (`id`,`id_tipo_identificacion`,`numero_identificacion`),
   KEY `persona_contacto_FK` (`id_tipo_identificacion`,`numero_identificacion`),
   CONSTRAINT `persona_contacto_FK` FOREIGN KEY (`id_tipo_identificacion`, `numero_identificacion`) REFERENCES `persona` (`ID_TIPO_IDENTIFICACION`, `NUMERO_IDENTIFICACION`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+
+
+-- admin_users.persona_sistema definition
+
+CREATE TABLE `persona_sistema` (
+  `id_sistema` int(11) NOT NULL,
+  `numero_identificacion` varchar(30) NOT NULL,
+  `id_tipo_identificacion` int(11) NOT NULL,
+  PRIMARY KEY (`id_sistema`,`numero_identificacion`,`id_tipo_identificacion`),
+  KEY `persona_sistema_FK` (`id_tipo_identificacion`,`numero_identificacion`),
+  CONSTRAINT `persona_sistema_FK` FOREIGN KEY (`id_tipo_identificacion`, `numero_identificacion`) REFERENCES `persona` (`ID_TIPO_IDENTIFICACION`, `NUMERO_IDENTIFICACION`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `persona_sistema_FK_1` FOREIGN KEY (`id_sistema`) REFERENCES `systema` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-CREATE TABLE admin_users.persona_sistema (
-	id_sistema INT NOT NULL,
-	numero_identificacion varchar(30) NOT NULL,
-	id_tipo_identificacion INT NOT NULL,
-	CONSTRAINT persona_sistema_PK PRIMARY KEY (id_sistema,numero_identificacion,id_tipo_identificacion),
-	CONSTRAINT persona_sistema_FK FOREIGN KEY (id_tipo_identificacion,numero_identificacion) REFERENCES admin_users.persona(ID_TIPO_IDENTIFICACION,NUMERO_IDENTIFICACION) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT persona_sistema_FK_1 FOREIGN KEY (id_sistema) REFERENCES admin_users.systema(id) ON DELETE RESTRICT ON UPDATE CASCADE
-)
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_general_ci;
 
 -- admin_users.privilegios definition
 
@@ -91,7 +92,7 @@ CREATE TABLE `privilegios` (
   KEY `privilegios_FK_1` (`id_sistema`),
   CONSTRAINT `privilegios_FK` FOREIGN KEY (`fk_id_privilegio`) REFERENCES `privilegios` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `privilegios_FK_1` FOREIGN KEY (`id_sistema`) REFERENCES `systema` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 
 -- admin_users.roles_sistema definition
@@ -124,7 +125,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`ID`,`ID_TIPO_IDENTIFICACION`,`NUMERO_IDENTIFICACION`),
   KEY `usuario_FK` (`ID_TIPO_IDENTIFICACION`,`NUMERO_IDENTIFICACION`),
   CONSTRAINT `usuario_FK` FOREIGN KEY (`ID_TIPO_IDENTIFICACION`, `NUMERO_IDENTIFICACION`) REFERENCES `persona` (`ID_TIPO_IDENTIFICACION`, `NUMERO_IDENTIFICACION`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4;
 
 
 -- admin_users.roles_usuario definition
@@ -138,13 +139,14 @@ CREATE TABLE `roles_usuario` (
   `id_rol_sistema` bigint(20) NOT NULL,
   `nombre_rol_sistema` varchar(100) NOT NULL,
   `fecha_creacion` timestamp NULL DEFAULT current_timestamp(),
+  `estado` bit(1) DEFAULT b'1',
   PRIMARY KEY (`id`,`id_tipo_identificacion`,`numero_identificacion`,`id_usuario`,`id_sistema`,`id_rol_sistema`,`nombre_rol_sistema`),
   KEY `roles_usuario_FK` (`id_usuario`,`id_tipo_identificacion`,`numero_identificacion`),
   KEY `roles_usuario_FK_1` (`id`,`id_sistema`,`nombre_rol_sistema`),
   KEY `roles_usuario_FK_2` (`id_rol_sistema`,`id_sistema`,`nombre_rol_sistema`),
   CONSTRAINT `roles_usuario_FK` FOREIGN KEY (`id_usuario`, `id_tipo_identificacion`, `numero_identificacion`) REFERENCES `usuario` (`ID`, `ID_TIPO_IDENTIFICACION`, `NUMERO_IDENTIFICACION`) ON UPDATE CASCADE,
   CONSTRAINT `roles_usuario_FK_2` FOREIGN KEY (`id_rol_sistema`, `id_sistema`, `nombre_rol_sistema`) REFERENCES `roles_sistema` (`id`, `id_sistema`, `NOMBRE_ROL`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4;
 
 
 -- admin_users.privilegios_rol_usuario definition
@@ -162,8 +164,8 @@ CREATE TABLE `privilegios_rol_usuario` (
   `crear` bit(1) NOT NULL DEFAULT b'1',
   `editar` bit(1) NOT NULL DEFAULT b'1',
   `buscar` bit(1) NOT NULL DEFAULT b'1',
-  `getAll` bit(1) NOT NULL DEFAULT b'0',
-  `getNormal` bit(1) NOT NULL DEFAULT b'1',
+  `get_all` bit(1) NOT NULL DEFAULT b'0',
+  `get_normal` bit(1) NOT NULL DEFAULT b'1',
   `desactivar` bit(1) NOT NULL DEFAULT b'1',
   `eliminar` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id_rol_usuario`,`id_tipo_identificacion`,`numero_identificacion`,`id_usuario`,`id_sistema`,`id_rol_sistema`,`nombre_rol_sistema`,`id_privilegio`),

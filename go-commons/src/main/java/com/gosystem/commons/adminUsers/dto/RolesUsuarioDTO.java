@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,12 +29,16 @@ public class RolesUsuarioDTO implements Serializable {
 
 	private Date fechaCreacion;
 
+	
+	private SystemaDTO systema;
 
 	private RolesSistemaDTO rolesSistema1;
 
 
 	private RolesSistemaDTO rolesSistema2;
+	
+	private UsuarioDTO usuario;
 
-
+	private boolean estado;
 
 }

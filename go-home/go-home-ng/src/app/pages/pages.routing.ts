@@ -8,9 +8,21 @@ import { EdithUserComponent } from './user/edith-user/edith-user.component';
 import { CreatePersonaComponent } from './persona/create-persona/create-persona.component';
 import { AdminPersonaComponent } from './persona/admin-persona/admin-persona.component';
 import { EdithPersonaComponent } from './persona/edith-persona/edith-persona.component';
+import { AdminRolUsuarioComponent } from './rol-usuario/admin-rol-usuario/admin-rol-usuario.component';
+import { EdithRolUsuarioComponent } from './rol-usuario/edith-rol-usuario/edith-rol-usuario.component';
 
 
 
+
+/*
+  let id: number = parseInt(params.get('id')!);
+          let idRolSistema: number = parseInt(params.get('idRolSistema')!);
+          let idSistema: number = parseInt(params.get('idSistema')!);
+          let nombreRol: string = params.get('nombreRol')!;
+          let idUsuario: number = parseInt(params.get('idUsuario')!);
+          let idTipoIdentificacion: number = parseInt(params.get('idTipoIdentificacion')!);
+          let numeroIdentificacion: string = params.get('numeroIdentificacion')!;
+*/
 const routes: Routes = [
   {
     path: 'app',
@@ -24,7 +36,10 @@ const routes: Routes = [
       { path: 'createPersona' , component: CreatePersonaComponent},
       { path: 'editarPersona/:idTipoIdentificacion/:numeroIdentificacion' , component: EdithPersonaComponent},
       
-         
+
+      { path: 'adminRolUsuario' , component: AdminRolUsuarioComponent},
+      { path: 'editarRolUsuario/:id/:idRolSistema/:idSistema/:nombreRol/:idUsuario/:idTipoIdentificacion/:numeroIdentificacion' , component: EdithRolUsuarioComponent},
+
     ],
     canActivate:[],
     canActivateChild:[]

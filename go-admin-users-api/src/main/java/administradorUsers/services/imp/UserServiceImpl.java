@@ -442,7 +442,7 @@ public class UserServiceImpl implements UserService {
 					.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
 					.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
 
-			RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
+			RolesUsuario rol = RolesUsuario.builder().id(rolPk).build();
 			rolesUsuarioRepository.saveAndFlush(rol);
 			logger.info(UtilsLogs.getInfo(MethodsAdminUSerEnum.SAVE_USER_SYSTEM, EntityEnum.USUARIO, null, "GUARDANDO  EXITOSO !"));
 			
@@ -483,7 +483,9 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			Usuario u = userComponent.BuildUSerForEdith(usuario);
-			personaRepository.saveAndFlush(u.getPersona());
+			Persona p = u.getPersona();
+			personaRepository.save(p);
+			personaRepository.flush();
 			String token = TokenGenerator.generateToken(u.getEmail());
 			u.setTokenActivate(token);
 			repository.saveAndFlush(u);
@@ -507,7 +509,7 @@ public class UserServiceImpl implements UserService {
 							.idRolSistema(usuario.getRol().getId().getId()).nombreRol(usuario.getRol().getId().getNombreRol())
 							.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
 							.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
-				RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
+				RolesUsuario rol = RolesUsuario.builder().id(rolPk).build();
 				rolesUsuarioRepository.saveAndFlush(rol);
 					// #####################################################	
 				}
@@ -566,7 +568,7 @@ public class UserServiceImpl implements UserService {
 					.idTipoIdentificacion(u.getId().getIdTipoIdentificacion())
 					.numeroIdentificacion(u.getId().getNumeroIdentificacion()).idUsuario(u.getId().getId()).build();
 
-			RolesUsuario rol = RolesUsuario.builder().idPk(rolPk).build();
+			RolesUsuario rol = RolesUsuario.builder().id(rolPk).build();
 
 			rolesUsuarioRepository.save(rol);
 			rolesUsuarioRepository.flush();

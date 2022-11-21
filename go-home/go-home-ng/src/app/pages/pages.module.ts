@@ -25,6 +25,10 @@ import { CreatePersonaComponent } from './persona/create-persona/create-persona.
 import { AdminPersonaComponent } from './persona/admin-persona/admin-persona.component';
 import { FiltroPersonaPipe } from '../pipes/filtro-persona';
 import { EdithPersonaComponent } from './persona/edith-persona/edith-persona.component';
+import { CreateRolUsuarioComponent } from './rol-usuario/create-rol-usuario/create-rol-usuario.component';
+import { EdithRolUsuarioComponent } from './rol-usuario/edith-rol-usuario/edith-rol-usuario.component';
+import { AdminRolUsuarioComponent } from './rol-usuario/admin-rol-usuario/admin-rol-usuario.component';
+import { FiltroRolUsuarioPipe } from '../pipes/filtro-rol-usuario';
 
 
 
@@ -50,10 +54,15 @@ import { EdithPersonaComponent } from './persona/edith-persona/edith-persona.com
     FiltroDepartamentoipe,
     FiltroTipoIdentificacionPipe,
     FiltroUsuarioPipe,
+    FiltroRolUsuarioPipe,
+
     CreatePersonaComponent,
     AdminPersonaComponent,
     FiltroPersonaPipe,
-    EdithPersonaComponent
+    EdithPersonaComponent,
+    CreateRolUsuarioComponent,
+    EdithRolUsuarioComponent,
+    AdminRolUsuarioComponent
   ],
   exports: [
     PagesComponent,

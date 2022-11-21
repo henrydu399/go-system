@@ -275,7 +275,8 @@ export class CreateUserComponent implements OnInit {
       personaContacto.idDepartamento = this.departamentoSeleccionado?.id!;
       personaContacto.idCiudad = this.ciudadSeleccionada?.id!.id!;
       personaContacto.idBarrio = this.barrioSeleccionado?.id.id!;
-      personaContacto.direccion = this.fromUsuario.get('direccion')?.value!;     
+      personaContacto.direccion = this.fromUsuario.get('direccion')?.value!; 
+      personaContacto.activo = true;      
   
       let usuarioPk = new UsuarioPK(null,this.tipoIdentificacionSeleccionado.id,numeroIdentificacion );
       this.usuario = new Usuario();

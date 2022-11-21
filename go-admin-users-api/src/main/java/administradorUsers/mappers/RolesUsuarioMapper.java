@@ -29,7 +29,7 @@ public class RolesUsuarioMapper {
 							
 							
 			out = RolesUsuario.builder()
-					.idPk(rolUsuarioPk)
+					.id(rolUsuarioPk)
 					.fechaCreacion(in.getFechaCreacion())
 					.build();
 		
@@ -44,13 +44,13 @@ public class RolesUsuarioMapper {
 		RolesUsuarioPKDTO pk = null;
 		try {	
 			pk = RolesUsuarioPKDTO.builder()
-							.id(in.getIdPk().getId())
-							.idRolSistema(in.getIdPk().getIdRolSistema())
-							.idSistema(in.getIdPk().getIdSistema())
-							.idTipoIdentificacion(in.getIdPk().getIdTipoIdentificacion())
-							.idUsuario(in.getIdPk().getIdUsuario())
-							.nombreRol(in.getIdPk().getNombreRol())
-							.numeroIdentificacion(in.getIdPk().getNumeroIdentificacion())
+							.id(in.getId().getId())
+							.idRolSistema(in.getId().getIdRolSistema())
+							.idSistema(in.getId().getIdSistema())
+							.idTipoIdentificacion(in.getId().getIdTipoIdentificacion())
+							.idUsuario(in.getId().getIdUsuario())
+							.nombreRol(in.getId().getNombreRol())
+							.numeroIdentificacion(in.getId().getNumeroIdentificacion())
 							.build();
 							
 							

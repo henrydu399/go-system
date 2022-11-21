@@ -12,6 +12,7 @@ import administradorUsers.entitys.Persona;
 import administradorUsers.entitys.PersonaPK;
 import administradorUsers.entitys.Usuario;
 import administradorUsers.entitys.UsuarioPK;
+import administradorUsers.mappers.PersonaSistemaMapper;
 import administradorUsers.repository.IPersonaRepository;
 import administradorUsers.repository.IUsuariosRepository;
 
@@ -83,6 +84,7 @@ public class UserComponent {
 				.nivelEscolaridad(in.getPersona().getNivelEscolaridad())
 				.profesion(in.getPersona().getProfesion())
 				.sexo(in.getPersona().getSexo())
+				//.personaSistema( PersonaSistemaMapper.mapper(in.getPersona().getPersonaSistema()) )
 				.build();
 		
 		long idUsuario= userRepository.findUltimoId();
@@ -122,6 +124,7 @@ public class UserComponent {
 				.nivelEscolaridad(in.getPersona().getNivelEscolaridad())
 				.profesion(in.getPersona().getProfesion())
 				.sexo(in.getPersona().getSexo())
+				//.personaSistema( PersonaSistemaMapper.mapper(in.getPersona().getPersonaSistema()) )
 				.build();
 		
 
